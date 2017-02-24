@@ -10,6 +10,6 @@ session.run("LOAD CSV WITH HEADERS FROM {} AS csvline", {"https://docs.google.co
 
 # Create a new object for each line from the csv
 for line in csvline:
-    session.run("CREATE (a:Activity { id: toInt(csvLine.id), name: line.name})")
+    session.run("CREATE (a:Activity { name: line.name, placeId: line.placeid, label: line.label, tag1: line.tag_1, tag2: line.tag_2, borough: line.borough, indoors/outdoors: line.indoors/outdoors, priceRange: line.price_range})")
 
 session.close()
