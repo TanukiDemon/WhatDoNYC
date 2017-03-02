@@ -1,8 +1,8 @@
 # examples: https://neo4j.com/developer/python/
-from neo4j.v1 import GraphDatabase, basic_auth
+from neo4j.v1 import GraphDatabase
 
 # Get the Python driver and create a session to issue Cypher queries
-driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", "neo4j"))
+driver = GraphDatabase.driver("bolt://52.33.222.241:7473")
 session = driver.session()
 
 # Import the csv and read it into a vector
