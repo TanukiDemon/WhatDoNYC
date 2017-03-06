@@ -1,0 +1,5 @@
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM
+'file:///activities.csv' AS line WITH line
+
+CREATE (activity:Activity {name: line.Name, placeid: TOINT(line.`Place ID`), label: line.Label, tag1: line.`Tag 1`, tag2: line.`Tag 2`, borough: line.Borough, inORout: line.`Indoors/Outdoors`, price: line.Price, priceRange: line.`Price Range`, link: line.Link});
