@@ -9,7 +9,6 @@ def isValidInteger(form, field):
     except ValueError:
         raise ValidationError('Field must be of valid zipcode format')
 
-
 def validateDateFormat(form, field):
     try:
         datetime.datetime.strptime(field.data, '%Y-%m-%d')
@@ -18,12 +17,12 @@ def validateDateFormat(form, field):
         raise ValidationError('Date must be in yyyy-mm-dd format')
 
 
-class SearchForm(Form):
-    zipcode = StringField('zipcode', validators=[InputRequired(), Length(min=5, max=7), isValidInteger])
+class registerForm(Form):
+    username = StringField('username', validator=[InputRequired(), Length(min=1, max=15)])
 
-    startDate = StringField('startDate', validators=[InputRequired(), validateDateFormat])
+    password = StringField('password', validator=[InputRequired(), :ength(min=1, max15)])
 
-    endDate = StringField('endDate', validators=[InputRequired(), validateDateFormat])
 
-    categories = SelectMultipleField('categories')
+class SurveyForm(Form):
+    # Multiple choice form
     
