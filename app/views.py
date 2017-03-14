@@ -30,7 +30,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('recommendations.html', title='Recomendations', form=form, username)
+    return render_template('recommendations.html', title='Recomendations', form=form)
 
 @app.route('/recommendations', methods=['GET'])
 def recommendations(username):
