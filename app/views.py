@@ -4,10 +4,15 @@ from app import app
 #from .forms import SearchForm
 from datetime import datetime
 import requests
+import ConfigParser
 
 def startSession():
+    config = ConfigParser.ConfigParser()
+    config.read(config_file)
+    neo4j-password = config.get('Global', 'neo4j_password')
+
     uri = "bolt://localhost:7687"
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "password"))
+    driver = GraphDatabase.driver(uri, auth=("neo4j", neo4j-password))
     return driver.session()
 
 @app.route('/')
