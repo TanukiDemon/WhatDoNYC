@@ -25,4 +25,5 @@ class registerForm(Form):
 
 class SurveyForm(Form):
     # Multiple choice form
+
     

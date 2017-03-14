@@ -2,6 +2,11 @@ from neo4j.v1 import GraphDatabase
 
 from app import app
 
+def startSession():
+    uri = "bolt://localhost:7687"
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "password"))
+    return driver.session()
+
 @app.route('/')
 
 @app.route('/index')
@@ -19,15 +24,20 @@ def register():
         return recommendationResults(form)
     return render_template('recommendations.html', title='Recommendations', form=form)
 
-    uri = "bolt://localhost:7687"
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "password"))
-    session = driver.session()
+    session = startSession()
     session.run("CREATE (a:Person {username: {uname}, password: {pword}, surveyAnswers: {answers}})",
             {"uname": form.username, "pword": form.password, "answers": form.answers})
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return "Login here for your recommendations"
+    return render_template('recommendations.html', title='Recomendations', form=form, username)
 
 @app.route('/recommendations', methods=['GET'])
+def recommendations(username):
+    form = SurveyForm(requests.form)
+    if not form.validate_on_submit():
+        return render_template('recommendations.html', title='Recommendations', form=form)
 
+    session = startSession()
+    user = session.run('MATCH (n:Person) WHERE n.username={uname}', {"uname": username})
+    session.run('match {user}-[r]-()', {"user": user})
