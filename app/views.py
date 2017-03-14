@@ -12,7 +12,7 @@ def startSession():
 
 @app.route('/')
 
-@app.route('/index')
+@app.route('/index', methods=['GET'])
 def index():
     return render_template('index.html', title='Welcome')
     #return "Hello, World!"
