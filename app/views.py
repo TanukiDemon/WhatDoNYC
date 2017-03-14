@@ -1,6 +1,9 @@
 from neo4j.v1 import GraphDatabase
-
+from flask import render_template, redirect, flash, request
 from app import app
+#from .forms import SearchForm
+from datetime import datetime
+import requests
 
 def startSession():
     uri = "bolt://localhost:7687"
@@ -11,7 +14,8 @@ def startSession():
 
 @app.route('/index')
 def index():
-    return "Hello, World!"
+    return render_template('index.html', title='Welcome')
+    #return "Hello, World!"
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -30,7 +34,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('recommendations.html', title='Recomendations', form=form, username)
+    return render_template('recommendations.html', title='Recomendations', form=form)
 
 @app.route('/recommendations', methods=['GET'])
 def recommendations(username):

@@ -20,10 +20,4 @@ def validateDateFormat(form, field):
 class registerForm(Form):
     username = StringField('username', validator=[InputRequired(), Length(min=1, max=15)])
 
-    password = StringField('password', validator=[InputRequired(), :ength(min=1, max15)])
-
-
-class SurveyForm(Form):
-    # Multiple choice form
-
-    
+#    password = StringField('password', validator=[InputRequired(), :ength(min=1, max15)])   
