@@ -22,7 +22,6 @@ def startSession():
 @app.route('/index', methods=['GET'])
 def index():
     return render_template('index.html', title='Welcome')
-    #return "Hello, World!"
 
 '''
 @app.route('/register', methods=['POST'])
@@ -47,11 +46,25 @@ def login():
 '''
 
 @app.route('/recommendations', methods=['GET'])
-def recommendations(username):
+def recommendations():
+    return render_template('recs.html', title='Recommendations')
+'''
     form = SurveyForm(requests.form)
     if not form.validate_on_submit():
-        return render_template('recommendations.html', title='Recommendations', form=form)
+        return render_template('recs.html', title='Recommendations', username=uname)
 
     session = startSession()
     user = session.run('MATCH (n:Person) WHERE n.username={uname}', {"uname": username})
     session.run('match {user}-[r]-()', {"user": user})
+'''
+@app.route('/questions')
+def questions():
+    return render_template('questions.html', title="Daily Questions")
+
+@app.route('/spotlight')
+def spotlight():
+    return render_template('spotlight.html', title="Spotlight")
+
+@app.route('/survey')
+def survey():
+    return render_template('survey.html', title="Survey")
