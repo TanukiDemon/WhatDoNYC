@@ -3,3 +3,4 @@ editConfig.sh
 saveiptablerules.sh
 algo-picture.jpg
 /app/config.ini
+/app/apiKey.properties
