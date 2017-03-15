@@ -1,8 +1,6 @@
 from neo4j.v1 import GraphDatabase
 from flask import render_template, redirect, flash, request
 from app import app
-#from .forms import SearchForm
-from datetime import datetime
 import requests
 import configparser
 import os
