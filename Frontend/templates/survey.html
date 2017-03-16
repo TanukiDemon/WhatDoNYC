@@ -1,21 +1,21 @@
-<!doctype html5>
+<!doctype html>
+<!-- Website Template by freewebsitetemplates.com -->
 <html>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>What Do NYC: Login</title>
+	<title>What Do NYC</title>
 	<link rel="stylesheet" type="text/css" href="../static/style.css">
 	<link rel="stylesheet" type="text/css" href="../static/mobile.css" media="screen and (max-width : 568px)">
-	<script type="text/javascript" src="js/mobile.js"></script>
+	<script type="text/javascript" src="../static/mobile.js"></script>
 </head>
 <body>
-	
 	<div id="header">
 		<br></br>
-		<a href="index.html" class="logo"><img src="../images/logo.png" alt="What Do NYC logo"></a>
+		<a href="index.html" class="logo"><img src="../static/logo.png" alt="What Do NYC logo"></a>
 		<ul id="navigation">
 			<li><a href="index.html">home</a></li>
-			<li class="selected"><a href="login.html">recommendation</a></li>
+			<li class="selected"><a href="login.html">recommendations</a></li>
 			<li><a href="spotlight.html">spotlight</a></li>
 		</ul>
 	</div>
@@ -27,13 +27,58 @@
 	
 	<div id="wouldyourather">
 		<form action="" method="post">
-			
-			<input type="submit" name="submit" id="submit" value="Submit">
+			<figure>
+				<img src="../static/food.png" alt="">
+				<figcaption><input type="radio" name="foodVSsci" value="food">sample foods with a famous chef?</figcaption>
+			</figure>
+			<figure>
+				<img src="../static/science.png" alt="">
+				<figcaption><input type="radio" name="foodVSsci" value="sci">conduct a science experiment with a famous scientist?</figcaption>
+			</figure>
+			<br><br><br>
+			<figure>
+				<img src="../static/art.png" alt="">
+				<figcaption><input type="radio" name="artVShistory" value="art">spend time with your favorite artist (alive or deceased)?</figcaption>
+			</figure>
+			<figure>
+				<img src="../static/history.png" alt="">
+				<figcaption><input type="radio" name="artVShistory" value="history">go back in time to any place and year?</figcaption>
+			</figure>
+			<br><br><br>
+			<figure>
+				<img src="../static/outdoor.png" alt="">
+				<figcaption><input type="radio" name="outdoorVSsports" value="outdoor">spend time walking around a beautiful garden?</figcaption>
+			</figure>
+			<figure>
+				<img src="../static/sports.png" alt="">
+				<figcaption><input type="radio" name="outdoorVSsports" value="sports">hike a breathtaking trail?</figcaption>
+			</figure>		
+			<br><br><br>
+			<figure>
+				<img src="../static/entertainment.png" alt="">
+				<figcaption><input type="radio" name="entertainmentVSmusic" value="entertainment">spend the night in a comdey club?</figcaption>
+			</figure>
+			<figure>
+				<img src="../static/music.png" alt="">
+				<figcaption><input type="radio" name="entertainmentVSmusic" value="music">spend the night listening to live music?</figcaption>
+			</figure>			
+
+			<br><br><br>
+
+			<input type="submit" name="submit" id="submit" value="Submit"><br><br>
 		</form>
 	</div>
 	
 	<div id="footer">
-		
+		<div>
+			<h3>What Do NYC</h3>
+			<p>we choose, you do</p>
+			<ul>
+				<li><a href="index.html">home</a></li>
+				<li><a href="login.html">recommendations</a></li>
+				<li><a href="spotlight.html">spotlight</a></li>
+			</ul>
+		</div>
 	</div>
 	
 </body>
