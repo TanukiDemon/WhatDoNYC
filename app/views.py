@@ -16,6 +16,8 @@ def startSession():
     return driver.session()
 
 @app.route('/')
+def home():
+    return "<h1 style='color:blue'>Hello There!</h1>"
 
 @app.route('/index', methods=['GET'])
 def index():

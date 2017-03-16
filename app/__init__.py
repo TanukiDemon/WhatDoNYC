@@ -15,3 +15,6 @@ app.config['STORMPATH_APPLICATION'] = 'WhatDoNYC'
 
 stormpath_manager = StormpathManager(app)
 stormpath_manager.login_view = '.login'
+
+if __name__ == "__main__":
+  app.run(host='0.0.0.0')
