@@ -11,10 +11,13 @@ app = Flask(__name__)
 configPar = configparser.ConfigParser()
 confIni = os.path.join(os.path.dirname(__file__), 'config.ini')
 configPar.read(confIni)
-app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = configPar['global']['secret_key'] 
+app.config['SECRET_KEY'] = 'fufiKrWRcTwxYZSPNukVwOywFA0qz59C/DgsDd3pjW4'
+#app.config['STORMPATH_API_KEY_FILE'] = os.path.join(os.path.dirname(__file__), 'apiKey.properties')
+app.config['STORMPATH_API_KEY_FILE'] = expanduser('~/WhatDoNYC/app/apiKey.properties')
+app.config['STORMPATH_APPLICATION'] = 'WhatDoNYC'
 
-db = SQLAlchemy(app)
+stormpath_manager = StormpathManager(app)
+stormpath_manager.login_view = '.login'
 
 def startSession():
     config = confiparser.ConfigParser()

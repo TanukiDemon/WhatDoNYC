@@ -1,3 +1,3 @@
 #!/usr/bin/python3
-from app import app
+from app.wdnyc import app
 app.run(debug=True)
