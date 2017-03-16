@@ -103,6 +103,11 @@ p a:hover {
 
 #grid img {
 	border: 3px solid #666666;
+	opacity: .9;
+}
+
+#grid img:hover {
+	opacity: 1;
 }
 
 #body > div {
@@ -115,6 +120,7 @@ p a:hover {
 	border: 2px solid #292929;
 	margin: 24px 0 0;
 	padding: 0;
+	opacity: .8;
 }
 
 #body > div .article {
@@ -380,6 +386,14 @@ p a:hover {
 	padding-left: 75px;
 }
 
+#wouldyourather {
+	text-align: center;
+}
+
+figure {
+	display: inline-block;
+}
+
 #footer {
 	background: #666666;
 	margin: 0;
@@ -418,6 +432,8 @@ p a:hover {
 	color: #0000cc;
 	text-decoration: none;
 }
+
+
 
 
 
