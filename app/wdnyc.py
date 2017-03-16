@@ -1,10 +1,21 @@
-from neo4j.v1 import GraphDatabase
-from flask import render_template, redirect, flash, request
-from app import app
-import requests
+from flask_stormpath import StormpathManager
 import configparser
 import os
+from neo4j.v1 import GraphDatabase
+from flask import Flask, render_template, redirect, flash, request
+import requests
 
+app = Flask(__name__)
+
+configPar = configparser.ConfigParser()
+confIni = os.path.join(os.path.dirname(__file__), 'config.ini')
+configPar.read(confIni)
+app.config['SECRET_KEY'] = configPar['global']['sp_secret_key']
+app.config['STORMPATH_API_KEY_FILE'] = os.path.join(os.path.dirname(__file__), 'apiKey.properties')
+app.config['STORMPATH_APPLICATION'] = 'WhatDoNYC'
+
+stormpath_manager = StormpathManager(app)
+stormpath_manager.login_view = '.login'
 
 
 def startSession():
@@ -70,3 +81,8 @@ def spotlight():
 @app.route('/survey')
 def survey():
     return render_template('survey.html', title="Survey")
+
+
+
+if __name__ == "__main__":
+  app.run(host='0.0.0.0')

@@ -1,4 +1,4 @@
-from app.wdnyc-app import app
+from app.wdnyc import app
 
 if __name__ == "__main__":
     app.run()
