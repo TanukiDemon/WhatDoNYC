@@ -4,10 +4,13 @@ from neo4j.v1 import GraphDatabase
 from flask import Flask, render_template, redirect, flash, request
 import requests
 from os.path import expanduser
+import models
 
 app = Flask(__name__)
 
-def startSession():
+session = models.get_session()
+
+def startNeo4JSession():
     config = confiparser.ConfigParser()
     fn = os.path.join(os.path.dirname(__file__), 'config.ini')
     config.read('config.ini')
@@ -25,23 +28,27 @@ def home():
 def index():
     return render_template('index.html', title='Welcome')
 
-'''
+
 @app.route('/register', methods=['POST'])
 def register():
     form = registerForm(request.form)
-    # Let Storm Path handle things here
-
-    # Serve "Would You Rather" survey
-    form = WouldYouRatherForm(request.form)
     if form.validate_on_submit():
-        return recommendationResults(form)
-    return render_template('recommendations.html', title='Recommendations', form=form)
+        # Check if user is already in database
+        if (session.query(models.User).filter(models.User.username==form.username).first() != None):
+            # User already exists. Return register.html with errors
+            return render_template('register.html')
+        else if (session.query(models.User).filter(models.User.password==form.password))
+
+
+        # Then render survey.html
+        return render_template('survey.html', title='What You Rather')
+    return render_template('register.html', title='Recommendations', form=form)
 
     session = startSession()
     session.run("CREATE (a:Person {username: {uname}, password: {pword}, surveyAnswers: {answers}})",
             {"uname": form.username, "pword": form.password, "answers": form.answers})
 
-
+'''
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('recommendations.html', title='Recomendations', form=form)
@@ -50,15 +57,7 @@ def login():
 @app.route('/recommendations', methods=['GET'])
 def recommendations():
     return render_template('recs.html', title='Recommendations')
-'''
-    form = SurveyForm(requests.form)
-    if not form.validate_on_submit():
-        return render_template('recs.html', title='Recommendations', username=uname)
 
-    session = startSession()
-    user = session.run('MATCH (n:Person) WHERE n.username={uname}', {"uname": username})
-    session.run('match {user}-[r]-()', {"user": user})
-'''
 @app.route('/questions')
 def questions():
     return render_template('questions.html', title="Daily Questions")
