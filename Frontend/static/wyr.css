@@ -51,17 +51,6 @@ body {
 	line-height: 0;
 }
 
-#preferences {
-	text-align: center;
-	line-height: 0;
-}
-
-#title2 {
-	padding-top: 20px;
-	padding-left: 25px;
-	text-align: left;
-}
-
 h2 {
 	padding-top: 100px;
 	padding-left: 25px;
@@ -81,17 +70,7 @@ figcaption {
 	font-size: 18px;
 }
 
-#submit {
-	background-color: blue;
-	color: #ffffff;
-	width: 75px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	border-color: blue;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-bottom: 10px;
-}
+
 
 
 
