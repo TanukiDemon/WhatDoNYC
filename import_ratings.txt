@@ -1,0 +1,7 @@
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM
+'file:///Emma_Ratings.csv' AS line WITH line
+
+MATCH (user:User {name:"Emma"})
+MATCH (activity:Activity {name: line.Name})
+CREATE (user)-[r:HAS_BEEN_TO{rating:TOINTEGER(line.Ratings)}]->(activity)
