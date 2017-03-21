@@ -37,7 +37,8 @@ def register():
         if (session.query(models.User).filter(models.User.username==form.username).first() != None):
             # User already exists. Return register.html with errors
             return render_template('register.html')
-        else if (session.query(models.User).filter(models.User.password==form.password))
+        else if (session.query(models.User).filter(models.User.email==form.email)):
+            return render_template('register.html')
 
 
         # Then render survey.html
