@@ -12,9 +12,9 @@ def get_session():
 class User(Base): #inherits Base
     __tablename__="users"
 
-    id = Column(Integer, primary_key=True)
-    device = Column(String(120))
-    accel_readings = relationship('Accelerometer', backref='user', lazy='dynamic')
-    keyboard_readings = relationship('Keyboard', backref='user', lazy='dynamic')
+    username = Column(String, primary_key=True)
+    password = Column(String)
+    email = Column(String)
+    firstName = Column(String)
     def __repr__(self):
         return '<User "%d">' % (self.id)
