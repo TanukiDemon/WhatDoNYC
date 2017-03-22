@@ -5,10 +5,10 @@ from flask import Flask, render_template, redirect, flash, request
 import requests
 from os.path import expanduser
 import models
+import sqlite3 as lite
+import sys
 
 app = Flask(__name__)
-
-session = models.get_session()
 
 def startNeo4JSession():
     config = confiparser.ConfigParser()
@@ -20,9 +20,18 @@ def startNeo4JSession():
     driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
     return driver.session()
 
+def checkIfUserExists(session, username, email):
+    return (session.query(models.User).filter(models.User.username==form.username).first() != None) or (session.query(models.User).filter(models.User.email==form.email).first() != None)
+
+def loginUser(username, password):
+    models.get_session()
+    return (session.query(models.User).filter(models.User.username=username).first()) && (session.query(models.User).filter(models.User.username==password).first())  
+
+
 @app.route('/')
 def home():
     return "<h1 style='color:blue'>Hello There!</h1>"
+
 
 @app.route('/index', methods=['GET'])
 def index():
@@ -34,43 +43,48 @@ def register():
     form = registerForm(request.form)
     if form.validate_on_submit():
         # Check if user is already in database
-        if (session.query(models.User).filter(models.User.username==form.username).first() != None):
-            # User already exists. Return register.html with errors
+        session = models.get_session()
+        if (checkIfUserExists(session)):
+            # If so, return register.html again
             return render_template('register.html')
-        else if (session.query(models.User).filter(models.User.email==form.email)):
-            return render_template('register.html')
+
+        # Otheriswe, insert the user in mysql database and render survey.html
+        else:
+            newUser = models.User(username=form.username, password=form.password, email=form.email, form.name=firstName)
+            session.add(newUser)
+            session.commit()
+            return render_template('survey.html', title='What You Rather')
+    else:
+        return render_template('register.html', title='Recommendations', form=form)
 
 
-        # Then render survey.html
-        return render_template('survey.html', title='What You Rather')
-    return render_template('register.html', title='Recommendations', form=form)
-
-    session = startSession()
-    session.run("CREATE (a:Person {username: {uname}, password: {pword}, surveyAnswers: {answers}})",
-            {"uname": form.username, "pword": form.password, "answers": form.answers})
-
-'''
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('recommendations.html', title='Recomendations', form=form)
-'''
+    form = loginForm(request.form)
+    if form.validate_on_submit() && loginUser(form.username, form.password):
+        return render_template('recommendations.html', title='Recomendations', form=form)
+    else:
+        return render_template('login.html', title="Login")
+
 
 @app.route('/recommendations', methods=['GET'])
 def recommendations():
     return render_template('recs.html', title='Recommendations')
 
+
 @app.route('/questions')
 def questions():
     return render_template('questions.html', title="Daily Questions")
+
 
 @app.route('/spotlight')
 def spotlight():
     return render_template('spotlight.html', title="Spotlight")
 
+
 @app.route('/survey')
 def survey():
     return render_template('survey.html', title="Survey")
-
 
 
 if __name__ == "__main__":
