@@ -6,6 +6,7 @@ import requests
 from os.path import expanduser
 import sqlite3 as lite
 import sys
+from .forms import registerForm, loginForm
 
 app = Flask(__name__)
 
