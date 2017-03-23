@@ -6,7 +6,7 @@ import requests
 from os.path import expanduser
 import sqlite3 as lite
 import sys
-from .forms import registerForm, loginForm
+from .forms import signupForm, loginForm
 from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
@@ -41,15 +41,15 @@ def index():
     return render_template('index.html', title='Welcome')
 
 
-@app.route('/register', methods=['POST'])
-def register():
-    form = registerForm(request.form)
+@app.route('/signup', methods=['POST'])
+def signup():
+    form = signupForm(request.form)
     if form.validate_on_submit():
         # Check if user is already in database
         session = models.get_session()
         if (checkIfUserExists(session)):
             # If so, return register.html again
-            return render_template('register.html')
+            return render_template('signup.html', form=form)
 
         # Otheriswe, insert the user in mysql database and render survey.html
         else:
@@ -57,7 +57,7 @@ def register():
             session.add(newUser)
             session.commit()
             return render_template('survey.html', title='What You Rather')
-    return render_template('register.html', title='Recommendations', form=form)
+    return render_template('signup.html', title='Recommendations', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
