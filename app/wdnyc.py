@@ -4,7 +4,6 @@ from neo4j.v1 import GraphDatabase
 from flask import Flask, render_template, redirect, flash, request
 import requests
 from os.path import expanduser
-import models
 import sqlite3 as lite
 import sys
 
@@ -21,11 +20,11 @@ def startNeo4JSession():
     return driver.session()
 
 def checkIfUserExists(session, username, email):
-    return (session.query(models.User).filter(models.User.username==form.username).first() != None) or (session.query(models.User).filter(models.User.email==form.email).first() != None)
+    return (session.query(models.User).filter(models.User.username==form.username).first()) and (session.query(models.User).filter(models.User.email==form.email).first()) 
 
 def loginUser(username, password):
     models.get_session()
-    return (session.query(models.User).filter(models.User.username=username).first()) && (session.query(models.User).filter(models.User.username==password).first())  
+    return (session.query(models.User).filter(models.User.username == username).first() != None) and (session.query(models.User).filter(models.User.username == password).first() != None)  
 
 
 @app.route('/')
@@ -50,7 +49,7 @@ def register():
 
         # Otheriswe, insert the user in mysql database and render survey.html
         else:
-            newUser = models.User(username=form.username, password=form.password, email=form.email, form.name=firstName)
+            newUser = models.User(username=form.username, password=form.password, email=form.email, firstName=form.name)
             session.add(newUser)
             session.commit()
             return render_template('survey.html', title='What You Rather')
@@ -61,7 +60,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = loginForm(request.form)
-    if form.validate_on_submit() && loginUser(form.username, form.password):
+    if form.validate_on_submit() and loginUser(form.username, form.password):
         return render_template('recommendations.html', title='Recomendations', form=form)
     else:
         return render_template('login.html', title="Login")
