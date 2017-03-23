@@ -7,8 +7,11 @@ from os.path import expanduser
 import sqlite3 as lite
 import sys
 from .forms import registerForm, loginForm
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
+app.secret_key = 'myverylongsecretkey'
+#csrf = CSRFProtect(app)
 
 def startNeo4JSession():
     config = confiparser.ConfigParser()
@@ -54,8 +57,7 @@ def register():
             session.add(newUser)
             session.commit()
             return render_template('survey.html', title='What You Rather')
-    else:
-        return render_template('register.html', title='Recommendations', form=form)
+    return render_template('register.html', title='Recommendations', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -63,8 +65,8 @@ def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and loginUser(form.username, form.password):
         return render_template('recommendations.html', title='Recomendations', form=form)
-    else:
-        return render_template('login.html', title="Login")
+    
+    return render_template('login.html', title="Login", form=form)
 
 
 @app.route('/recommendations', methods=['GET'])
