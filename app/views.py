@@ -5,6 +5,11 @@ import requests
 import configparser
 import os
 
+from flaskr import app
+from flask import render_template, g
+
+my_view = Blueprint('my_view', __name__)
+
 def findNewEvents(uname, thold):
     username = uname
     threshold = thold
