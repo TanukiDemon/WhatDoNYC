@@ -1,7 +1,7 @@
 import configparser
 import os
 from neo4j.v1 import GraphDatabase
-from flask import Flask, render_template, redirect, flash, request
+from flask import Flask, render_template, redirect, flash, request, session
 import requests
 from os.path import expanduser
 import sqlite3 as lite
