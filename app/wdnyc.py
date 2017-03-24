@@ -56,7 +56,9 @@ def signup():
             newUser = models.User(username=form.username, password=form.password, email=form.email, firstName=form.name)
             session.add(newUser)
             session.commit()
-            return render_template('survey.html', title='What You Rather')
+      
+            session['username'] = form.username
+            return redirect('/WouldYouRather')
     return render_template('signup.html', title='Recommendations', form=form)
 
 
@@ -64,10 +66,30 @@ def signup():
 def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and loginUser(form.username, form.password):
-        return render_template('recommendations.html', title='Recomendations', form=form)
+        session['username'] = form.username.data
+        return redirect('/WouldYouRather')
     
     return render_template('login.html', title="Login", form=form)
 
+
+@app.route('/WouldYouRather', methods=['POST']
+def addUserToGraph():
+# Serve "Would You Rather" survey
+    form = wouldYouRatherForm(request.form)
+    if 'username' in session:
+        username = session['username'] # Get current user's username
+    else
+        return render_template('login.html') # User not logged in
+    if form.validate_on_submit():
+        # Add user and their preferences to Neo4j database
+        session = startSession()
+        session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
+                    "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
+                    {"uname": username, "t1": form.foodOrScience,
+                     "t2": form.artOrHistory, "t3": form.outdoorsOrSports,
+                     "t4": form.entertainmentOrMusic})
+        return redirect('/recommendations')
+return render_template('wyr.html')
 
 @app.route('/recommendations', methods=['GET'])
 def recommendations():
