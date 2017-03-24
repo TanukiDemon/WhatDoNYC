@@ -1,3 +1,3 @@
-#!/opt/anaconda/bin/python
-from app import app
+#!/usr/bin/python3
+from app.wdnyc import app
 app.run(debug=True)

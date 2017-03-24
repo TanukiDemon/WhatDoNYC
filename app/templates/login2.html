@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>What Do NYC</title>
+	<link rel="stylesheet" type="text/css" href="/static/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
+	<script type="text/javascript" src="/static/mobile.js"></script>
+</head>
+{% block content %}
+<body>
+	<div id="header">
+		<br></br>
+		<a href="index.html" class="logo"><img src="/static/logo.png" alt="What Do NYC logo"></a>
+		<ul id="navigation">
+			<li><a href="index.html">home</a></li>
+			<li class="selected"><a href="login.html">recommendations</a></li>
+			<li><a href="spotlight.html">spotlight</a></li>
+		</ul>
+	</div>
+
+	<div id="login">
+          {{ form.hidden_tag() }}
+		<h2>Login Below</h2>
+		<h2>No account? No problem! <a href="signup.html">Sign up here.</a></h2>
+		<form action="" method="post">
+			<!-- <input type="text" name="username" id="username" placeholder="username"> -->
+                        Enter username:
+			<br>{{ form.username(size=25) }}<br>
+			Enter password:
+			<br>{{ form.password(size=25) }}<br>
+			<input type="submit" name="submit" id="submit" value="Sign In">
+		</form>
+	</div>
+	
+	<div id="footer">
+		
+	</div>
+	
+</body>
+{% endblock %}
+</html>
