@@ -1,48 +1,39 @@
-<!doctype html>
-<!-- Website Template by freewebsitetemplates.com -->
 <html>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>What Do NYC</title>
-	<link rel="stylesheet" type="text/css" href="/static/style.css">
+	<title>What Do NYC Sign Up</title>
+	<link rel="stylesheet" type="text/css" href="/static/signup.css">
 	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
 	<script type="text/javascript" src="/static/mobile.js"></script>
 </head>
-{% block content %}
 <body>
 	<div id="header">
-		<br></br>
-		<a href="index.html" class="logo"><img src="/static/logo.png" alt="What Do NYC logo"></a>
+		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
 			<li><a href="index.html">home</a></li>
+			<li>|</li>
 			<li class="selected"><a href="login.html">recommendations</a></li>
+			<li>|</li>
 			<li><a href="spotlight.html">spotlight</a></li>
+			<li>|</li>
+			<li><a href="about.html">about</a></li>
 		</ul>
 	</div>
-	
+	<br><br><br><br><br><br><br><br>
 	<div id="signup">
-          {{ form.hidden_tag() }}
-		<h2>Create a WhatDoNYC Account</h2>
-		<h2>Already have an account? <a href="login.html">Login here.</a></h2>
+		<h2>Create a What Do NYC Account</h2><br>
 		<form action="" method="post">
-			<input type="text" name="name" id="name" placeholder="full name">
-                        Enter name:<br>
-                        {{ form.name(size=25) }}<br>
-			Enter email:<br>
-                        {{ form.email(size=25) }}<br>
-                        Enter desired username:<br>
-                        {{ form.username(size=25) }}<br>
-                        Enter desired password:<br>
-                        {{ form.password(size=25) }}<br>
-			<input type="submit" name="submit" id="submit" value="Sign Up">
+			<input type="text" name="name" id="name" placeholder="First name"><br><br>
+			<input type="text" name="email" id="email" placeholder="Email"><br><br>
+			<input type="text" name="username" id="username" placeholder="Username"><br><br>
+			<input type="text" name="password" id="password" placeholder="Password"><br><br><br>
+			<input type="submit" name="submit" id="submit" value="Sign Up"><br><br><br>
 		</form>
+		<div id="gotologin">
+			<br>
+			<p>Already have an account? <a href="login.html">Login</a></p>
+		</div>
 	</div>
-	
-	<div id="footer">
-		
-	</div>
-	
 </body>
-{% endblock %}
 </html>
