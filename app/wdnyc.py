@@ -72,13 +72,13 @@ def login():
     return render_template('login.html', title="Login", form=form)
 
 
-@app.route('/WouldYouRather', methods=['POST']
+@app.route('/wyr', methods=['POST'])
 def addUserToGraph():
 # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
     if 'username' in session:
         username = session['username'] # Get current user's username
-    else
+    else:
         return render_template('login.html') # User not logged in
     if form.validate_on_submit():
         # Add user and their preferences to Neo4j database
@@ -88,12 +88,8 @@ def addUserToGraph():
                     {"uname": username, "t1": form.foodOrScience,
                      "t2": form.artOrHistory, "t3": form.outdoorsOrSports,
                      "t4": form.entertainmentOrMusic})
-        return redirect('/recommendations')
-return render_template('wyr.html')
-
-@app.route('/recommendations', methods=['GET'])
-def recommendations():
-    return render_template('recs.html', title='Recommendations')
+        return redirect('/wyr')
+    return render_template('wyr.html')
 
 
 @app.route('/questions')

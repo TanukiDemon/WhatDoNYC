@@ -17,7 +17,7 @@ class loginForm(FlaskForm):
 
     password = StringField('password', validators=[InputRequired(), Length(min=1, max=15)])
 
-class wouldYouRatherForm(Form):
+class wouldYouRatherForm(FlaskForm):
     foodOrScience = RadioField('foodVSsci', choices = [('food', 'Food/Drink'), ('sci', 'Science')])
     artOrHistory = RadioField('artVShistory', choices = [('art', 'Arts'), ('history', 'History')])
     outdoorsOrSports = RadioField('outVSsports', choices=[('out', 'Outdoor'), ('sports', 'Sports')])
