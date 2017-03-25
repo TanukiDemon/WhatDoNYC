@@ -22,12 +22,9 @@ def startNeo4JSession(config):
     driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
     return driver.session()
 
-def checkIfUserExists(session, username, email):
-    return (session.query(models.User).filter(models.User.username==form.username).first()) and (session.query(models.User).filter(models.User.email==form.email).first()) 
-
-def loginUser(username, password):
-    models.get_session()
-    return (session.query(models.User).filter(models.User.username == username).first() != None) and (session.query(models.User).filter(models.User.username == password).first() != None)  
+def checkIfUserExists(form):
+    session = models.get_session()
+    return (session.query(models.User).filter(and_(models.User.username == form.username, models.User.password == form.password)))
 
 
 @app.route('/')
@@ -45,8 +42,7 @@ def signup():
     form = signupForm(request.form)
     if form.validate_on_submit():
         # Check if user is already in database
-        session = models.get_session()
-        if (checkIfUserExists(session)):
+        if (checkIfUserExists(form)):
             # If so, return register.html again
             return render_template('signup.html', form=form)
 
@@ -64,7 +60,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = loginForm(request.form)
-    if form.validate_on_submit() and loginUser(form.username, form.password):
+    if form.validate_on_submit() and checkIfUserExists(form):
         session['username'] = form.username.data
         return redirect('/WouldYouRather')
     
