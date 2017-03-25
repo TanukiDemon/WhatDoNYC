@@ -9,16 +9,15 @@ import sys
 from .forms import signupForm, loginForm
 from flask_wtf.csrf import CSRFProtect
 
+config = configparser.ConfigParser()
+fn = os.path.join(os.path.dirname(__file__), 'config.ini')
+config.read('config.ini')
+
 app = Flask(__name__)
-app.secret_key = 'myverylongsecretkey'
-#csrf = CSRFProtect(app)
+app.secret_key = config['global']['secret_key']
 
-def startNeo4JSession():
-    config = confiparser.ConfigParser()
-    fn = os.path.join(os.path.dirname(__file__), 'config.ini')
-    config.read('config.ini')
+def startNeo4JSession(config):
     neo_pw = config['global']['neo4j_password']
-
     uri = "bolt://localhost:7687"
     driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
     return driver.session()
@@ -100,12 +99,6 @@ def questions():
 @app.route('/spotlight')
 def spotlight():
     return render_template('spotlight.html', title="Spotlight")
-
-
-@app.route('/survey')
-def survey():
-    return render_template('survey.html', title="Survey")
-
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0')
