@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
 	<script type="text/javascript" src="/static/mobile.js"></script>
 </head>
+{% block content %}
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
@@ -22,10 +23,13 @@
 	</div>
 	<br><br><br><br><br><br><br><br><br><br>
 	<div id="login">
+          {{ form.hidden_tag() }}
 		<h2>Log in to What Do NYC</h2><br>
 		<form action="" method="post">
-			<input type="text" name="username" id="username" placeholder="Username"><br><br>
-			<input type="password" name="password" id="password" placeholder="Password"><br><br><br>
+                  Enter username:
+                  <br>{{ form.username(size=25) }}<br>
+		  Enter password:
+                  <br>{{ form.password(size=25) }}<br>
 			<input type="submit" name="submit" id="submit" value="Sign In"><br><br><br>
 		</form>
 
@@ -35,4 +39,5 @@
 		</div>
 	</div>
 </body>
+{% endblock %}
 </html>
