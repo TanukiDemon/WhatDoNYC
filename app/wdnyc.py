@@ -1,18 +1,15 @@
 import configparser
-import os
+from os import path
 from neo4j.v1 import GraphDatabase
 from flask import Flask, render_template, redirect, flash, request, session
-import requests
-from os.path import expanduser
 import sqlite3 as lite
-import sys
-from .forms import signupForm, loginForm
+from .forms import signupForm, loginForm, wouldYouRatherForm
 from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-fn = os.path.join(os.path.dirname(__file__), 'config.ini')
+fn = path.join(path.dirname(__file__), 'config.ini')
 config.read(fn)
 app.secret_key = config.get('global', 'secret_key')
 
@@ -68,7 +65,7 @@ def login():
 
 
 @app.route('/wyr', methods=['POST'])
-def addUserToGraph():
+def wyr():
 # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
     if 'username' in session:

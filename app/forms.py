@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectMultipleField, RadioField
 from wtforms.validators import InputRequired, Length, ValidationError
-import datetime
 
 class signupForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
