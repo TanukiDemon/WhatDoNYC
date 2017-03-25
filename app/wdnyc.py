@@ -9,12 +9,12 @@ import sys
 from .forms import signupForm, loginForm
 from flask_wtf.csrf import CSRFProtect
 
+app = Flask(__name__)
+
 config = configparser.ConfigParser()
 fn = os.path.join(os.path.dirname(__file__), 'config.ini')
-config.read('config.ini')
-
-app = Flask(__name__)
-app.secret_key = config['global']['secret_key']
+config.read(fn)
+app.secret_key = config.get('global', 'secret_key')
 
 def startNeo4JSession(config):
     neo_pw = config['global']['neo4j_password']
@@ -29,7 +29,7 @@ def checkIfUserExists(form):
 
 @app.route('/')
 def home():
-    return "<h1 style='color:blue'>Hello There!</h1>"
+    return render_template('index.html', title='Welcome')
 
 
 @app.route('/index', methods=['GET'])
