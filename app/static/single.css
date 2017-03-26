@@ -1,0 +1,27 @@
+body {
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+}
+
+h1 {
+	text-align: center;
+}
+
+#place {
+	text-align: center;
+}
+
+a {
+	color: blue;
+	text-decoration: none;	
+}
+
+img {
+	height: 200px;
+	width: auto;
+}
+
+#des {
+	text-align: center;
+	padding-left: 35px;
+	padding-right: 35px;
+}
