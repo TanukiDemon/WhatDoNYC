@@ -1,7 +1,5 @@
 from neo4j.v1 import GraphDatabase
-from flask import render_template, redirect, flash, request, g, Blueprint
-import requests
-import os
+from flask import render_template, redirect, flash, request, Blueprint
 from .wdnyc import app
 from .forms import signupForm, loginForm, wouldYouRatherForm
 
