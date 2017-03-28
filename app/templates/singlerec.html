@@ -5,21 +5,10 @@
 	<title>Recommendations</title>
 	<link rel="stylesheet" type="text/css" href="../static/singlerec.css">
 	<link rel="stylesheet" type="text/css" href="../static/mobile.css" media="screen and (max-width : 568px)">
+	<script type="text/javascript" src="../static/recs.js"></script>
 	<script type="text/javascript" src="../static/mobile.js"></script>
 </head>
 <body>
-	<div id="header">
-		<h1 id="name">What Do NYC</h1>
-		<ul id="navigation">
-			<li><a href="index.html">home</a></li>
-			<li>|</li>
-			<li class="selected"><a href="login.html">recommendations</a></li>
-			<li>|</li>
-			<li><a href="spotlight.html">spotlight</a></li>
-			<li>|</li>
-			<li><a href="about.html">about</a></li>
-		</ul>
-	</div>
 
 	<!--
 		<h2>Activity Name</h2>
@@ -29,18 +18,27 @@
 	-->
 
 	<div id="second">
-		<h3>Tell Us What You Think</h3>
-		<p>The more feedback you give, the better your recommendations will be!</p>
+		<h3>So, are you going to go?</h3>
 
-		<form id="feedback">
-			<input name="rating" type="radio" value="1">I would never go.</input><br>
-			<input name="rating" type="radio" value="2">I probably wouldn't go.</input><br>
-			<input name="rating" type="radio" value="3">I'm not sure.</input><br>
-			<input name="rating" type="radio" value="4">I might go.</input><br>
-			<input name="rating" type="radio" value="5">I definitely want to go.</input><br>
+		<form name="feedback" id="feedback" onSubmit="validate()" method="post">
+			<div class="radio-box">
+				<input name="rating" type="radio" value="1"><label>No</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="2"><label>Unlikely</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="3"><label>Undecided</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="4"><label>Probably</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="5"><label>Definitely</label>
+			</div>
 
 			<br><br>
-			<input type="submit" name="submit" id="submit" value="Back"></input>
+			<input type="submit" name="submit" id="submit" value="Close" onSubmit="validate()"></input>
 		</form>
 	</div>
 
