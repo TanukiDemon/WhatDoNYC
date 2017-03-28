@@ -21,3 +21,7 @@ function spotBH() {
 function spotLI() {
 	myWindow=window.open("LI.html", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
 }
+
+function winClose() {
+	window.close();
+}
