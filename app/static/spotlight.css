@@ -44,7 +44,7 @@ body {
 }
 
 #rec {
-	padding-top: 75px;
+	padding-top: 60px;
 	padding-left: 15px;
 	color: white;
 }
@@ -88,10 +88,6 @@ body {
 #spot {
 	cursor: pointer;
 }
-
-
-
-
 
 
 
