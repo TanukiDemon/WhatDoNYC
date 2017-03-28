@@ -5,6 +5,7 @@ from .forms import signupForm, loginForm, wouldYouRatherForm
 
 my_view = Blueprint('my_view', __name__)
 
+# Used in the signup and login routes
 def checkIfUserExists(form):
     session = models.get_session()
     return (session.query(models.User).filter(and_(models.User.username == form.username, models.User.password == form.password)))
@@ -12,6 +13,7 @@ def checkIfUserExists(form):
 
 @app.route('/')
 def home():
+    # Route to the index page
     return render_template('index.html', title='Welcome')
 
 
@@ -29,14 +31,14 @@ def signup():
             # If so, return register.html again
             return render_template('signup.html', form=form)
 
-        # Otheriswe, insert the user in mysql database and render survey.html
+        # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
             newUser = models.User(username=form.username, password=form.password, email=form.email, firstName=form.name)
             session.add(newUser)
             session.commit()
       
             session['username'] = form.username
-            return redirect('/WouldYouRather')
+            return redirect('/wyr')
     return render_template('signup.html', title='Recommendations', form=form)
 
 
@@ -52,7 +54,7 @@ def login():
 
 @app.route('/wyr', methods=['POST'])
 def wyr():
-# Serve "Would You Rather" survey
+    # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
     if 'username' in session:
         username = session['username'] # Get current user's username

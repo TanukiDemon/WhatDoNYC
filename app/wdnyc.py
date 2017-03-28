@@ -14,6 +14,7 @@ app.secret_key = config.get('global', 'secret_key')
 
 from .views import *
 
+# Start a new neo4j session to execute Cypher queries
 def startNeo4JSession(config):
     neo_pw = config['global']['neo4j_password']
     uri = "bolt://localhost:7687"
