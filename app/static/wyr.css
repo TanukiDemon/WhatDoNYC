@@ -47,28 +47,18 @@ body {
 	padding-left: 25px;
 }
 
-#wouldyourather {
-	line-height: 0;
+/* WOULD YOU RATHER FORM */
+
+.wouldyourather {
 	text-align: center;
 }
 
-h2 {
-	padding-top: 100px;
-	padding-left: 25px;
-}
-
-figure {
+.wouldyourather input{
 	display: inline-block;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-}
 
-figcaption {
-	text-align: center;
-	padding-top: 20px;
-	font-size: 18px;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
 }
 
 #submit {
@@ -78,17 +68,129 @@ figcaption {
 	float: right;
 }
 
+/* WOULD YOU RATHER: FOOD VS SCI */
 
+.food{background-image:url(wyrpics/food.jpg);}
+.sci{background-image:url(wyrpics/science.jpg);}
 
+.wouldyourather input:active +.foodVSsci{opacity: 1;}
+.wouldyourather input:checked +.foodVSsci{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
 
+.foodVSsci{
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 450px;
+    height: 305px;
+    
+    -webkit-filter: opacity(.8);
+       -moz-filter: opacity(.8);
+            filter: opacity(.8);
+}
 
+.foodVSsci:hover{
+    -webkit-filter: opacity(1);
+       -moz-filter: opacity(1);
+            filter: opacity(1);
+}
 
+/* WOULD YOU RATHER: ART VS HISTORY */
 
+.art{background-image:url(wyrpics/art.jpg);}
+.history{background-image:url(wyrpics/history.jpg);}
 
+.wouldyourather input:active +.artVShistory{opacity: 1;}
+.wouldyourather input:checked +.artVShistory{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
 
+.artVShistory{
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 450px;
+    height: 305px;
+    
+    -webkit-filter: opacity(.8);
+       -moz-filter: opacity(.8);
+            filter: opacity(.8);
+}
 
+.artVShistory:hover{
+    -webkit-filter: opacity(1);
+       -moz-filter: opacity(1);
+            filter: opacity(1);
+}
 
+/* WOULD YOU RATHER: OUT VS SPORTS */
 
+.out{background-image:url(wyrpics/outdoors.jpg);}
+.sports{background-image:url(wyrpics/sports.jpg);}
+
+.wouldyourather input:active +.outVSsports{opacity: 1;}
+.wouldyourather input:checked +.outVSsports{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.outVSsports{
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 450px;
+    height: 305px;
+    
+    -webkit-filter: opacity(.8);
+       -moz-filter: opacity(.8);
+            filter: opacity(.8);
+}
+
+.outVSsports:hover{
+    -webkit-filter: opacity(1);
+       -moz-filter: opacity(1);
+            filter: opacity(1);
+}
+
+/* WOULD YOU RATHER: ENT VS MUSIC */
+
+.ent{background-image:url(wyrpics/comedy.jpg);}
+.music{background-image:url(wyrpics/music.jpg);}
+
+.wouldyourather input:active +.entVSmusic{opacity: 1;}
+.wouldyourather input:checked +.entVSmusic{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.entVSmusic{
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 450px;
+    height: 305px;
+    
+    -webkit-filter: opacity(.8);
+       -moz-filter: opacity(.8);
+            filter: opacity(.8);
+}
+
+.entVSmusic:hover{
+    -webkit-filter: opacity(1);
+       -moz-filter: opacity(1);
+            filter: opacity(1);
+}
 
 
 
