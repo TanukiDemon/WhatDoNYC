@@ -43,8 +43,19 @@ body {
 	font-weight: bold;
 }
 
+#rec {
+	padding-top: 75px;
+	padding-left: 15px;
+	color: white;
+}
+
+#rec a {
+	color: blue;
+	text-decoration: none;
+}
+
 #grid {
-	padding-top: 100px;
+	padding-top: 10px;
 	left: 0;
 	right: 0;
 	margin: 0;
@@ -77,21 +88,6 @@ body {
 #spot {
 	cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
