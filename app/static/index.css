@@ -43,19 +43,8 @@ body {
 	font-weight: bold;
 }
 
-#rec {
-	padding-top: 60px;
-	padding-left: 15px;
-	color: white;
-}
-
-#rec a {
-	color: blue;
-	text-decoration: none;
-}
-
 #grid {
-	padding-top: 10px;
+	padding-top: 85px;
 	left: 0;
 	right: 0;
 	margin: 0;
