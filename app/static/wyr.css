@@ -64,9 +64,8 @@ body {
 
 #submit {
 	padding-top: 10px;
-	padding-bottom: 50px;
-	padding-right: 80px;
-	float: right;
+	padding-left: 375px;
+	text-align: center;
 }
 
 /* WOULD YOU RATHER: FOOD VS SCI */
