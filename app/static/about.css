@@ -49,21 +49,21 @@ body {
 }
 
 #content {
-	margin-top: 100px;
-	margin-left: 200px;
-	margin-right: 200px;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	padding-left: 125px;
-	padding-right: 125px;
-	background-color: #ffffff;
-	border-style: solid;
-	border-width: .5px;
-	border-color: #ffffff;
-	border-radius: 15px;
-	opacity: 0.8;
+	margin: auto;
+	margin-top: 200px;
+	vertical-align: center;
+	padding: 25px;
+	width: 50%;
 	text-align: center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #666666;
+	border-radius: 15px;
+	background-color: #ffffff;
+	opacity: 0.9;
 }
+
+
 
 
 
