@@ -7,8 +7,7 @@ from .models import *
 my_view = Blueprint('my_view', __name__)
 
 # Used in the signup and login routes
-def checkIfUserExists(form):
-    session = get_session()
+def checkIfUserExists(session, form):
     return (session.query(User).filter(and_(User.username == form.username.data, User.password == form.password.data)))
 
 
@@ -34,7 +33,9 @@ def signup():
     print(form.errors)
 
     if form.validate_on_submit():
-        if (checkIfUserExists(form)):
+        print("WORKED")
+        #if (checkIfUserExists(session, form)):
+        if (1 == 2):
             # If so, return register.html again
             return render_template('signup.html', title="User already exists", form=form)
 
