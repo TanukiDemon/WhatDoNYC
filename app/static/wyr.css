@@ -70,8 +70,8 @@ body {
 
 /* WOULD YOU RATHER: FOOD VS SCI */
 
-.food{background-image:url(wyrpics/food.png);}
-.sci{background-image:url(wyrpics/science.png);}
+.food{background-image:url(/static/wyrpics/food.png);}
+.sci{background-image:url(/static/wyrpics/science.png);}
 
 .wouldyourather input:active + .foodVSsci {
   opacity: 1;
@@ -108,8 +108,8 @@ body {
 
 /* WOULD YOU RATHER: ART VS HISTORY */
 
-.art{background-image:url(wyrpics/art.png);}
-.history{background-image:url(wyrpics/history.png);}
+.art{background-image:url(/static/wyrpics/art.png);}
+.history{background-image:url(/static/wyrpics/history.png);}
 
 .wouldyourather input:active + .artVShistory {
   opacity: 1;
@@ -146,8 +146,8 @@ body {
 
 /* WOULD YOU RATHER: OUT VS SPORTS */
 
-.out{background-image:url(wyrpics/outdoors.png);}
-.sports{background-image:url(wyrpics/sports.png);}
+.out{background-image:url(/static/wyrpics/outdoors.png);}
+.sports{background-image:url(/static/wyrpics/sports.png);}
 
 .wouldyourather input:active + .outVSsports { 
   opacity: 1;
@@ -184,8 +184,8 @@ body {
 
 /* WOULD YOU RATHER: ENT VS MUSIC */
 
-.ent{background-image:url(wyrpics/comedy.png);}
-.music{background-image:url(wyrpics/music.png);}
+.ent{background-image:url(/static/wyrpics/comedy.png);}
+.music{background-image:url(/static/wyrpics/music.png);}
 
 .wouldyourather input:active + .entVSmusic {
   opacity: 1;
