@@ -29,7 +29,9 @@
                   <br>{{ form.password(size=25) }}<br>
 			<input type="submit" name="submit" id="submit" value="Sign In"><br><br><br>
 		</form>
-
+                {% if form.errors %}
+                  {{ form.errors }}
+                {% endif %}
 		<div id="makeaccount">	
 			<br>
 			<p>Don't have an account yet? <a href="signup.html">Register</a></p><br>
