@@ -7,7 +7,6 @@
 	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
 	<script type="text/javascript" src="/static/mobile.js"></script>
 </head>
-{% block content %}
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
@@ -25,14 +24,10 @@
 	<div id="signup">
 		<h2>Create a What Do NYC Account</h2><br>
 		<form action="" method="post">
-                  Enter name:
-                  <br>{{ form.name(size=25) }}<br>
-                  Enter email:
-		  <br>{{ form.email(size=25) }}<br>
-                  Enter username:
-                  <br>{{ form.username(size=25) }}<br>
-		  Enter password:
-                  <br>{{ form.password(size=25) }}<br>
+			<input type="text" name="name" id="name" placeholder="First name"><br><br>
+			<input type="text" name="email" id="email" placeholder="Email"><br><br>
+			<input type="text" name="username" id="username" placeholder="Username"><br><br>
+			<input type="text" name="password" id="password" placeholder="Password"><br><br><br>
 			<input type="submit" name="submit" id="submit" value="Sign Up"><br><br><br>
 		</form>
 		<div id="gotologin">
@@ -41,5 +36,4 @@
 		</div>
 	</div>
 </body>
-{% endblock %}
 </html>

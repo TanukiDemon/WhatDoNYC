@@ -2,44 +2,50 @@ from neo4j.v1 import GraphDatabase
 from flask import render_template, redirect, flash, request, Blueprint
 from .wdnyc import app
 from .forms import signupForm, loginForm, wouldYouRatherForm
+from .models import *
 
 my_view = Blueprint('my_view', __name__)
 
 # Used in the signup and login routes
 def checkIfUserExists(form):
-    session = models.get_session()
-    return (session.query(models.User).filter(and_(models.User.username == form.username, models.User.password == form.password)))
+    session = get_session()
+    return (session.query(User).filter(and_(User.username == form.username.data, User.password == form.password.data)))
 
 
 @app.route('/')
 def home():
     # Route to the index page
-    return render_template('index.html', title='Welcome')
+    return render_template('about.html', title='Welcome')
 
 
 @app.route('/index', methods=['GET'])
 def index():
-    return render_template('index.html', title='Welcome')
+    return render_template('about.html', title='Welcome')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    session = get_session()
     form = signupForm(request.form)
+
+    if form.validate():
+        print("valid")
+
+    print(form.errors)
+
     if form.validate_on_submit():
-        # Check if user is already in database
         if (checkIfUserExists(form)):
             # If so, return register.html again
-            return render_template('signup.html', form=form)
+            return render_template('signup.html', title="User already exists", form=form)
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
-            newUser = models.User(username=form.username, password=form.password, email=form.email, firstName=form.name)
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data)
             session.add(newUser)
             session.commit()
       
-            session['username'] = form.username
-            return redirect('/wyr')
-    return render_template('signup.html', title='Recommendations', form=form)
+            return render_template('wyr.html', title='Would You Rather', form=form)
+    return render_template('signup.html', title='Join us!', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])

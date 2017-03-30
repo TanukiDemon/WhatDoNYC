@@ -11,25 +11,20 @@ def get_session():
   return Session()
 
 class User(Base): #inherits Base
-    __tablename__="userAuthen"
+    __tablename__="User"
 
     username = Column(String, primary_key=True)
     password = Column(String)
     email = Column(String)
-    firstName = Column(String)
+    name = Column(String)
 
-    def __init__(self, username, passowrd, email, firstName):
-        self.username = username
-        self.set_password(password)
-        self.email = email
-        self.firstname = firstname
+    def __init__(self, username, password, email, name):
+        self.username = str(username)
+        self.password= str(password)
+        self.email = str(email)
+        self.name = str(name)
 
-    def set_password(self, password):
-        self.pw_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.pw_hash password)
-
+   
 
     def __repr__(self):
         return '<User "%d">' % (self.id)
