@@ -1,7 +1,7 @@
 from neo4j.v1 import GraphDatabase
-from flask import render_template, redirect, flash, request, Blueprint
+from flask import render_template, redirect, request, Blueprint
 from .wdnyc import app
-from .forms import signupForm, loginForm, wouldYouRatherForm
+from .forms import *
 from .models import *
 
 my_view = Blueprint('my_view', __name__)
