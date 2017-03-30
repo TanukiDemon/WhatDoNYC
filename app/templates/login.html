@@ -20,10 +20,10 @@
 	</div>
 	<br><br><br><br><br><br><br><br><br><br>
 	<div id="login">
-          {{ form.hidden_tag() }}
 		<h2>Log in to What Do NYC</h2><br>
 		<form action="" method="post">
-                  Enter username:
+       	          {{ form.hidden_tag() }}
+		  Enter username:
                   <br>{{ form.username(size=25) }}<br>
 		  Enter password:
                   <br>{{ form.password(size=25) }}<br>
