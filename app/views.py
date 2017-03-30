@@ -8,13 +8,12 @@ my_view = Blueprint('my_view', __name__)
 
 # Used in the signup and login routes
 def checkIfUserExists(session, form):
-    return (session.query(User).filter(and_(User.username == form.username.data, User.password == form.password.data)))
+    return (session.query(User).filter(User.username == form.username.data))
 
 
 @app.route('/')
 def home():
-    # Route to the index page
-    return render_template('about.html', title='Welcome')
+    return redirect('/index')
 
 
 @app.route('/index', methods=['GET'])
@@ -54,7 +53,7 @@ def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and checkIfUserExists(form):
         session['username'] = form.username.data
-        return redirect('/WouldYouRather')
+        return redirect('/wyr')
     
     return render_template('login.html', title="Login", form=form)
 

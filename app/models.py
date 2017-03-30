@@ -10,6 +10,7 @@ Session = sessionmaker(bind = engine)
 def get_session():
   return Session()
 
+# User class which stores user authentication information
 class User(Base): #inherits Base
     __tablename__="User"
 

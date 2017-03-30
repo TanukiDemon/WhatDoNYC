@@ -18,6 +18,9 @@ class loginForm(FlaskForm):
 
 class wouldYouRatherForm(FlaskForm):
     foodOrScience = RadioField('foodVSsci', choices = [('food', 'Food/Drink'), ('sci', 'Science')])
+    
     artOrHistory = RadioField('artVShistory', choices = [('art', 'Arts'), ('history', 'History')])
+    
     outdoorsOrSports = RadioField('outVSsports', choices=[('out', 'Outdoor'), ('sports', 'Sports')])
+    
     entertainmentOrMusic = RadioField('entVSmusic', choices=[('ent', 'Entertainment'), ('music', 'Music')])
