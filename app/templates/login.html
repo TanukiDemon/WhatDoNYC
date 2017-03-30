@@ -4,28 +4,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>What Do NYC Login</title>
 	<link rel="stylesheet" type="text/css" href="/static/login.css">
-	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
-	<script type="text/javascript" src="/static/mobile.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/mobile-login.css" media="screen and (max-width : 750px)">
 </head>
+{% block content %}
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li><a href="index.html">home</a></li>
-			<li>|</li>
 			<li class="selected"><a href="login.html">recommendations</a></li>
 			<li>|</li>
-			<li><a href="spotlight.html">spotlight</a></li>
+			<li><a href="index.html">spotlight</a></li>
 			<li>|</li>
 			<li><a href="about.html">about</a></li>
 		</ul>
 	</div>
 	<br><br><br><br><br><br><br><br><br><br>
 	<div id="login">
+          {{ form.hidden_tag() }}
 		<h2>Log in to What Do NYC</h2><br>
 		<form action="" method="post">
-			<input type="text" name="username" id="username" placeholder="Username"><br><br>
-			<input type="text" name="password" id="password" placeholder="Password"><br><br><br>
+                  Enter username:
+                  <br>{{ form.username(size=25) }}<br>
+		  Enter password:
+                  <br>{{ form.password(size=25) }}<br>
 			<input type="submit" name="submit" id="submit" value="Sign In"><br><br><br>
 		</form>
 
@@ -35,4 +36,5 @@
 		</div>
 	</div>
 </body>
+{% endblock %}
 </html>

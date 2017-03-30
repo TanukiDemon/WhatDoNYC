@@ -1,26 +1,20 @@
-html { 
-  background: url(nyc.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
 body {
 	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-	font-size: 18px;
-	color: #000000;
+	background-color: #000000;
 }
 
 #header {
-	padding-top: 5px;
+	background-color: #000000;
+	color: #ffffff;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
 }
 
-#logo {
+#name {
 	display: inline-block;
 	padding-left: 20px;
-	width: 50%;
-	height: auto;
 }
 
 #navigation {
@@ -28,6 +22,7 @@ body {
 	display: inline-block;
 	vertical-align: middle;
 	padding-right: 50px;
+	padding-top: 15px;
 	float: right;
 }
 
@@ -40,12 +35,50 @@ body {
 }
 
 #header ul li a {
-	color: #000000;
+	color: #ffffff;
 	text-decoration: none;
 }
 
 #header ul li a:hover, #header ul li.selected a {
 	font-weight: bold;
 }
+
+#grid {
+	padding-top: 85px;
+	left: 0;
+	right: 0;
+	margin: 0;
+	list-style-type: none;
+	line-height: 0;
+}
+
+#grid > * {
+	float: left;
+}
+
+#grid ul li {
+	margin: 0;
+	padding: 0;
+}
+
+#grid ul li a {
+	display: inline-block;
+}
+
+#grid img {
+	border: 3px solid #ffffff;
+	opacity: .9;
+}
+
+#grid img:hover {
+	opacity: 1;
+}
+
+#spot {
+	cursor: pointer;
+}
+
+
+
 
 
