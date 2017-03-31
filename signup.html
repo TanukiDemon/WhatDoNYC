@@ -1,0 +1,55 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>What Do NYC Sign Up</title>
+	<link rel="stylesheet" type="text/css" href="/static/signup.css">
+	<link rel="stylesheet" type="text/css" href="/static/mobile-signup.css" media="screen and (max-width : 750px)">
+</head>
+{% block content %}
+<body>
+	<div id="header">
+		<h1 id="name">What Do NYC</h1>
+		<ul id="navigation">
+			<li class="selected"><a href="login.html">recommendations</a></li>
+			<li>|</li>
+			<li><a href="index.html">spotlight</a></li>
+			<li>|</li>
+			<li><a href="about.html">about</a></li>
+		</ul>
+	</div>
+	<br><br><br><br><br><br><br>
+	<div id="signup">
+		<h2>Create a What Do NYC Account</h2><br>
+		<form action="" method="post">
+                  {{ form.csrf_token }}
+                  Enter name:
+                  <br>{{ form.name(size=25) }}<br>
+                  Enter email:
+		  <br>{{ form.email(size=25) }}<br>
+                  Enter username:
+                  <br>{{ form.username(size=25) }}<br>
+		  Enter password:
+                  <br>{{ form.password(size=25) }}<br>
+		
+		<p>Select and answer one of the security questions below.</p>
+			<select name="secques">
+				<option value="1">What was the last name of your fourth grade teacher?</option>
+  	 			<option value="2">What were the last four digits of your childhood telephone number?</option>
+    				<option value="3">What was the name of the street you grew up on as a child?</option>
+  		</select><br><br>
+		<input type="text" name="secans" id="secans" placeholder="Answer"><br><br><br>
+			
+			<input type="submit" name="submit" id="submit" value="Sign Up"><br><br><br>
+		</form>
+                {% if form.errors %}
+                  {{ form.errors }}
+                {% endif %}
+		<div id="gotologin">
+			<br>
+			<p>Already have an account? <a href="login.html">Login</a></p>
+		</div>
+	</div>
+</body>
+{% endblock %}
+</html>
