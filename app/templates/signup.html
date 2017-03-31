@@ -18,7 +18,7 @@
 			<li><a href="about.html">about</a></li>
 		</ul>
 	</div>
-	<br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br>
 	<div id="signup">
 		<h2>Create a What Do NYC Account</h2><br>
 		<form action="" method="post">
@@ -31,6 +31,15 @@
                   <br>{{ form.username(size=25) }}<br>
 		  Enter password:
                   <br>{{ form.password(size=25) }}<br>
+		
+		<p>Select and answer one of the security questions below.</p>
+			<select name="secques">
+				<option value="1">What is your mother's maiden name?</option>
+  	 			<option value="2">What was the name of your primary/elementary school?</option>
+    				<option value="3">What was the neame of your first pet?</option>
+  		</select><br>
+		<input type="text" name="secans" id="secans" placeholder="Answer"><br><br><br>
+			
 			<input type="submit" name="submit" id="submit" value="Sign Up"><br><br><br>
 		</form>
                 {% if form.errors %}
