@@ -21,9 +21,15 @@ class User(Base): #inherits Base
 
     def __init__(self, username, password, email, name):
         self.username = str(username)
-        self.password= str(password)
+        self.set_password(str(password))
         self.email = str(email)
         self.name = str(name)
 
+    def set_password(self, password):
+        self.pw_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.pw_hash, password)
+    
     def __repr__(self):
         return '<User "%d">' % (self.id)
