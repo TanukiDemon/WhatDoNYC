@@ -18,7 +18,7 @@ def home():
 
 @app.route('/index', methods=['GET'])
 def index():
-    return render_template('about.html', title='Welcome')
+    return render_template('index.html', title='Welcome')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -78,11 +78,6 @@ def wyr():
     return render_template('wyr.html')
 
 
-@app.route('/questions')
-def questions():
-    return render_template('questions.html', title="Daily Questions")
-
-
-@app.route('/spotlight')
-def spotlight():
-    return render_template('spotlight.html', title="Spotlight")
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')
