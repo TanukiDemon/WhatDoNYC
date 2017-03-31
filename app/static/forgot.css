@@ -43,7 +43,7 @@ body {
 	font-weight: bold;
 }
 
-#fgtpw {
+#form {
 	margin: auto;
 	padding: 10px;
 	width: 50%;
@@ -56,7 +56,7 @@ body {
 	opacity: 0.9;
 }
 
-#fgtpw input {
+#form input {
 	font-size: 14px;
 }
 
