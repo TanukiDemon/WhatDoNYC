@@ -22,6 +22,11 @@ body {
 	font-size: 12px;
 }
 
+#name {
+	display: inline-block;
+	padding-left: 20px;
+}
+
 #signup {
 	margin: auto;
 	padding: 10px;
