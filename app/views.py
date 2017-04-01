@@ -13,21 +13,18 @@ def startNeo4JSession(config):
     driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
     return driver.session()
 
-
 # Used in the signup and login routes
 def checkIfUserExists(session, form):
-    return (session.query(User).filter(User.username == form.username.data))
+    return (session.query(User).filter(User.username == form.username.data).first())
 
 
 @app.route('/')
 def home():
     return redirect('/index')
 
-
 @app.route('/index', methods=['GET'])
 def index():
     return render_template('index.html', title='Welcome')
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -58,7 +55,6 @@ def signup():
             return render_template('wyr.html', title='Would You Rather', form=form)
     return render_template('signup.html', title='Join us!', form=form)
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = loginForm(request.form)
@@ -67,7 +63,6 @@ def login():
         return redirect('/wyr')
     
     return render_template('login.html', title="Login", form=form)
-
 
 @app.route('/wyr', methods=['POST'])
 def wyr():
@@ -88,14 +83,12 @@ def wyr():
         return redirect('/wyr')
     return render_template('wyr.html')
 
-
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPassword():
     if checkIfUserExists(get_session(), form):
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
-
 
 @app.route('/about', methods=['GET'])
 def about():

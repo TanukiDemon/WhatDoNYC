@@ -2,6 +2,7 @@ import os
 from app.wdnyc import *
 import unittest
 import tempfile
+from app.models import *
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -39,4 +40,4 @@ class FlaskrTestCase(unittest.TestCase):
     def test_signup(self):
         rv = self.signup('new', 'user', 'fake@com', 'fakename', 'fakeQ', 'fakeA')
         assert b'You were registered' in rv.data
-        # Remove user from database here
+        # Remove user from database here        
