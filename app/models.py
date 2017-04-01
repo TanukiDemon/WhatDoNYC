@@ -10,7 +10,6 @@ Session = sessionmaker(bind = engine)
 def get_session():
   return Session()
 
-# User class which stores user authentication information
 class User(Base): #inherits Base
     __tablename__="User"
 
@@ -18,18 +17,24 @@ class User(Base): #inherits Base
     password = Column(String)
     email = Column(String)
     name = Column(String)
+    securityQnumber = Column(String)
+    securityQ = Column(String)
 
-    def __init__(self, username, password, email, name):
+    def __init__(self, username, password, email, name, securityQ, securityQnumber):
         self.username = str(username)
         self.set_password(str(password))
         self.email = str(email)
         self.name = str(name)
+        self.securityQ = str(securityQ)
+        self.securityQanswer = str(answer)
+
 
     def set_password(self, password):
         self.pw_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.pw_hash, password)
-    
+
+
     def __repr__(self):
         return '<User "%d">' % (self.id)
