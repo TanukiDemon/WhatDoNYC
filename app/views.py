@@ -40,7 +40,7 @@ def signup():
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data)
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, securityQanswer=form.securityQanswer.data)
             session.add(newUser)
             session.commit()
       
@@ -76,6 +76,14 @@ def wyr():
                      "t4": form.entertainmentOrMusic})
         return redirect('/wyr')
     return render_template('wyr.html')
+
+
+@app.route('/forgot', methods=['GET', 'POST'])
+def forgotPassword():
+    if checkIfUserExists(get_session(), form):
+        return redirect('/secques')
+    else:
+        return render_template('forgot.html', title="Username does not exist", form=form)
 
 
 @app.route('/about', methods=['GET'])
