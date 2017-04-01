@@ -1,5 +1,5 @@
 import os
-from .wdnyc import *
+from app.wdnyc import *
 import unittest
 import tempfile
 

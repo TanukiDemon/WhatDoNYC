@@ -6,6 +6,14 @@ from .models import *
 
 my_view = Blueprint('my_view', __name__)
 
+# Start a new neo4j session to execute Cypher queries
+def startNeo4JSession(config):
+    neo_pw = config['global']['neo4j_password']
+    uri = "bolt://localhost:7687"
+    driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
+    return driver.session()
+
+
 # Used in the signup and login routes
 def checkIfUserExists(session, form):
     return (session.query(User).filter(User.username == form.username.data))
@@ -29,10 +37,13 @@ def signup():
     if form.validate():
         print("valid")
 
+    print(checkIfUserExists(session, form))
+
     print(form.errors)
 
     if form.validate_on_submit():
         print("WORKED")
+        print(checkIfUserExists(session,form))
         #if (checkIfUserExists(session, form)):
         if (1 == 2):
             # If so, return register.html again
