@@ -12,11 +12,11 @@
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li><a href="{{ redirect(url_for('login')) }}">recommendations</a></li>
+			<li><a "{{ redirect(url_for('login')) }}">recommendations</a></li>
 			<li>|</li>
-			<li class="selected"><a href="{{ url_for('index') }}">spotlight</a></li>
+			<li class="selected"><a "{{ url_for('index') }}">spotlight</a></li>
 			<li>|</li>
-			<li><a href="{{ url_for('about') }}">about</a></li>
+			<li><a "{{ url_for('about') }}">about</a></li>
 		</ul>
 	</div>
 
