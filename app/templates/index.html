@@ -12,7 +12,7 @@
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li><a href="{{ url_for('login') }}">recommendations</a></li>
+			<li><a href="{{ redirect(url_for('login')) }}">recommendations</a></li>
 			<li>|</li>
 			<li class="selected"><a href="{{ url_for('index') }}">spotlight</a></li>
 			<li>|</li>
