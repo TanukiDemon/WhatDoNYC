@@ -47,16 +47,6 @@ body {
 	padding-left: 25px;
 }
 
-#bottom {
-	text-align: center;
-	left: 50%;
-}
-
-#bottom p {
-	text-align: center;
-	display: inline-block;
-}
-
 #try {
 	display: inline-block;
 	background-color: blue;
@@ -64,6 +54,42 @@ body {
 	width: 75px;
 	padding-top: 3px;
 	padding-bottom: 3px;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+form {
+	width: 100%;
+	text-align: center;
+	padding-top: 150px;
+}
+
+div.radio-box {
+	display: inline-block;
+	text-align: center;
+}
+
+.radio-box label {
+	display: block;
+	width: 100px;
+	text-align: center;
+}
+
+.radio-box input {
+	width: 20px;
+	display: block;
+	margin: 0px auto;
+	cursor: pointer;
+}
+
+#submit {
+	display: inline-block;
+	text-align: center;
+	background-color: blue;
+	color: #ffffff;
+	width: 100px;
+	padding: 5px;	
 	border-color: blue;
 	border-radius: 5px;
 	cursor: pointer;
