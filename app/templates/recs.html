@@ -2,11 +2,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>What Do NYC Login</title>
-	<link rel="stylesheet" type="text/css" href="/static/recs.css">
-	<link rel="stylesheet" type="text/css" href="/static/mobile.css" media="screen and (max-width : 568px)">
-	<script type="text/javascript" src="/static/recs.js"></script>
-	<script type="text/javascript" src="/static/mobile.js"></script>
+	<title>Recommendations</title>
+	<link rel="stylesheet" type="text/css" href="../static/recs.css">
+	<link rel="stylesheet" type="text/css" href="../static/mobile.css" media="screen and (max-width : 568px)">
+	<script type="text/javascript" src="../static/recs.js"></script>
+	<script type="text/javascript" src="../static/mobile.js"></script>
 </head>
 <body>
 	<div id="header">
@@ -20,21 +20,38 @@
 		</ul>
 	</div>
 
-	<div id="subhead">
-		<h1>How about one of these?</h1>
-	</div>
+	<!-- Display Recommendation -->
+
 	<div id="results">
-		<a onClick='single()'>Show Details</a>
+
+		<!-- Needs to be edited so we know what the recommendation -->
+
+		<form name="feedback" id="feedback" onSubmit="validate()" method="post">
+			<h3>So, are you going to go?</h3><br>
+
+			<div class="radio-box">
+				<input name="rating" type="radio" value="1"><label>No</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="2"><label>Unlikely</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="3"><label>Undecided</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="4"><label>Probably</label>
+			</div>
+			<div class="radio-box">
+				<input name="rating" type="radio" value="5"><label>Definitely</label>
+			</div>
+
+			<br><br>
+			<input type="submit" name="submit" id="submit" value="New Suggestion" onSubmit="validate()"></input>
+		</form>
 	</div>
-
-	<div id="bottom">
-		<p>None of these sound good?</p>
-		<button id="try">Try Again</button>
-	</div>
-
-
 </body>
 </html>
-	
-	
+
+
+
 	
