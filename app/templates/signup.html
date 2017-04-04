@@ -34,9 +34,13 @@
 		
 		<p>Select and answer one of the security questions below.</p>
 			<select name="secques">
-				<option value="1">What was the last name of your fourth grade teacher?</option>
+                          {% for i,j in form.securityQ.choices %}
+                          <option value = {{ i }} > {{ j }} </option>
+                          {% endfor %}
+
+			<!--	<option value="1">What was the last name of your fourth grade teacher?</option>
   	 			<option value="2">What were the last four digits of your childhood telephone number?</option>
-    				<option value="3">What was the name of the street you grew up on as a child?</option>
+    				<option value="3">What was the name of the street you grew up on as a child?</option> -->
   		</select><br><br>
 		<input type="text" name="secans" id="secans" placeholder="Answer"><br><br><br>
 			

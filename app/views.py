@@ -26,8 +26,8 @@ def signup():
     session = get_session()
     form = signupForm(request.form)
 
-    if form.validate():
-        print("valid")
+    #if form.validate():
+    #    print("valid")
 
     print(form.errors)
 
