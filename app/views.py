@@ -25,7 +25,6 @@ def index():
 def signup():
     session = get_session()
     form = signupForm(request.form)
-
     #if form.validate():
     #    print("valid")
 
@@ -40,7 +39,9 @@ def signup():
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, securityQanswer=form.securityQanswer.data)
+            #newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, securityQanswer=form.securityQanswer.data)
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
+
             session.add(newUser)
             session.commit()
 
