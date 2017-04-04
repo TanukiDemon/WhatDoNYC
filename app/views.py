@@ -1,5 +1,5 @@
 from neo4j.v1 import GraphDatabase
-from flask import render_template, redirect, request, Blueprint
+from flask import render_template, redirect, request, Blueprint, url_for
 from .wdnyc import app
 from .forms import *
 from .models import *
@@ -18,7 +18,7 @@ def home():
 
 @app.route('/index', methods=['GET'])
 def index():
-    return render_template('about.html', title='Welcome')
+    return render_template('index.html', title='Welcome')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -87,10 +87,5 @@ def wyr():
 
 
 @app.route('/questions')
-def questions():
-    return render_template('questions.html', title="Daily Questions")
-
-
-@app.route('/spotlight')
-def spotlight():
-    return render_template('spotlight.html', title="Spotlight")
+def about():
+    return render_template('about.html', title="Daily Questions")
