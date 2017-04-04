@@ -6,25 +6,20 @@ from .models import *
 
 my_view = Blueprint('my_view', __name__)
 
-# Start a new neo4j session to execute Cypher queries
-def startNeo4JSession(config):
-    neo_pw = config['global']['neo4j_password']
-    uri = "bolt://localhost:7687"
-    driver = GraphDatabase.driver(uri, auth=("neo4j", neo_pw))
-    return driver.session()
-
-# Used in the signup and login routes
+# Used in the signup, login, and forgot routes
 def checkIfUserExists(session, form):
-    return (session.query(User).filter(User.username == form.username.data).first())
+    return (session.query(User).filter(User.username == form.username.data))
 
 
 @app.route('/')
 def home():
     return redirect('/index')
 
+
 @app.route('/index', methods=['GET'])
 def index():
-    return render_template('index.html', title='Welcome')
+    return render_template('about.html', title='Welcome')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -34,13 +29,10 @@ def signup():
     if form.validate():
         print("valid")
 
-    print(checkIfUserExists(session, form))
-
     print(form.errors)
 
     if form.validate_on_submit():
         print("WORKED")
-        print(checkIfUserExists(session,form))
         #if (checkIfUserExists(session, form)):
         if (1 == 2):
             # If so, return register.html again
@@ -51,9 +43,10 @@ def signup():
             newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, securityQanswer=form.securityQanswer.data)
             session.add(newUser)
             session.commit()
-      
+
             return render_template('wyr.html', title='Would You Rather', form=form)
     return render_template('signup.html', title='Join us!', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -61,8 +54,17 @@ def login():
     if form.validate_on_submit() and checkIfUserExists(form):
         session['username'] = form.username.data
         return redirect('/wyr')
-    
+
     return render_template('login.html', title="Login", form=form)
+
+@app.route('/forgot', methods=['GET', 'POST'])
+def forgotPassword():
+    form = forgotPassword(request.form)
+    if checkIfUserExists(form):
+        session['username'] = form.username.data
+        return redirect('/secques')
+    else:
+        return render_template('forgot.html', title="Username does not exist", form=form)
 
 @app.route('/wyr', methods=['POST'])
 def wyr():
@@ -83,34 +85,12 @@ def wyr():
         return redirect('/wyr')
     return render_template('wyr.html')
 
-@app.route('/recommendations', methods=['GET', 'POST'])
-def recommendations(username):
-    # Start session and get user
-    session = startNeo4JSession()
-    activities = session.run("MATCH (user:User {username:{uname}})-[:RATED]->(activity:Activity)
-    RETURN user, activity",
-    {"uname": username})
 
-    # Get users who also rated events that the target user has
-    matchedUsers = session.run("MATCH (tom:Person {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(matchedUser:User)
-                               RETURN matchedUser.name", {"uname": username})
+@app.route('/questions')
+def questions():
+    return render_template('questions.html', title="Daily Questions")
 
-    # Get users who rated things that the users matched with the target user rated
-    oneRemovedUsers = session.run("MATCH (user:User)-[:RATED]->(activity1)<-[:RATED]-(matchedUser:User),
-         (matchedUser)-[:RATED]->(activity2)<-[:RATED]-(oneRemovedUser:User)
-         WHERE user.name = {uname}
-         AND   NOT    (user)-[:RATED]->()<-[:RATED]-(oneRemovedUser)
-         RETURN oneRemovedUser.username, count(distinct oneRemovedUser) as frequency
-     ORDER BY frequency DESC
-     LIMIT 5", {"uname": username})
 
-@app.route('/forgot', methods=['GET', 'POST'])
-def forgotPassword():
-    if checkIfUserExists(get_session(), form):
-        return redirect('/secques')
-    else:
-        return render_template('forgot.html', title="Username does not exist", form=form)
-
-@app.route('/about', methods=['GET'])
-def about():
-    return render_template('about.html')
+@app.route('/spotlight')
+def spotlight():
+    return render_template('spotlight.html', title="Spotlight")
