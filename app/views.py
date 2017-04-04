@@ -83,6 +83,27 @@ def wyr():
         return redirect('/wyr')
     return render_template('wyr.html')
 
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations(username):
+    # Start session and get user
+    session = startNeo4JSession()
+    activities = session.run("MATCH (user:User {username:{uname}})-[:RATED]->(activity:Activity)
+    RETURN user, activity",
+    {"uname": username})
+
+    # Get users who also rated events that the target user has
+    matchedUsers = session.run("MATCH (tom:Person {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(matchedUser:User)
+                               RETURN matchedUser.name", {"uname": username})
+
+    # Get users who rated things that the users matched with the target user rated
+    oneRemovedUsers = session.run("MATCH (user:User)-[:RATED]->(activity1)<-[:RATED]-(matchedUser:User),
+         (matchedUser)-[:RATED]->(activity2)<-[:RATED]-(oneRemovedUser:User)
+         WHERE user.name = {uname}
+         AND   NOT    (user)-[:RATED]->()<-[:RATED]-(oneRemovedUser)
+         RETURN oneRemovedUser.username, count(distinct oneRemovedUser) as frequency
+     ORDER BY frequency DESC
+     LIMIT 5", {"uname": username})
+
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPassword():
     if checkIfUserExists(get_session(), form):
