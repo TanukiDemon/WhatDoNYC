@@ -6,7 +6,7 @@ from .models import *
 
 my_view = Blueprint('my_view', __name__)
 
-# Used in the signup and login routes
+# Used in the signup, login, and forgot routes
 def checkIfUserExists(session, form):
     return (session.query(User).filter(User.username == form.username.data))
 
@@ -59,7 +59,9 @@ def login():
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPassword():
-    if checkIfUserExists:
+    form = forgotPassword(request.form)
+    if checkIfUserExists(form):
+        session['username'] = form.username.data
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
