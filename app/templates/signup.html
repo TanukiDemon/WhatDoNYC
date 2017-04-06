@@ -21,7 +21,7 @@
 	<br><br><br><br><br><br><br>
 	<div id="signup">
 		<h2>Create a What Do NYC Account</h2><br>
-		<form action="" method="post">
+		<form action="" method="POST">
                   {{ form.csrf_token }}
                   Enter name: <br>
                   {{ form.name(size=25) }}<br>
@@ -48,25 +48,33 @@
                   {% endfor %}<br>
 
 		<p>Select and answer one of the security questions below.</p>
-		<select name="SecurtiyQuestion">
-                  {% for ch in form.securityQ.choices %}
-                  <option value = "{{ ch }}"> {{ ch }} </option>
-                  {% endfor %}
+		<select name="SecurtiyQ">
+
+                  <ul>
+                    <!--
+                    {% for pair in form.securityQ.choices %}
+                    <option value = {{ pair[0] }}> {{ pair[1] }} </option>
+                    {% endfor %}
+                    -->
+                    <div id='cartB'>{{ wtf.quick_form(securityQ) }}</div>
                   {% for error in form.securityQ.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                   {% endfor %}
+                  </ul>
+
   		</select><br><br>
 
                 Enter answer<br>
                 {{ form.securityQanswer(size=25) }}<br><br>
-			
-			<input type="submit" name="submit" id="submit" value="Sign Up"><br><br><br>
-		</form>
-                
+		
+             <!-- <input type="submit" name="submit" id="submit" value="Sign Up"> -->
+              <center>{{ form.submit }}</center>
+		
                 {% if form.errors %}
                   {{ form.errors }}
                 {% endif %}
-                
+
+                </form>                
 		<div id="gotologin">
 			<br>
 			<p>Already have an account? <a href="login.html">Login</a></p>

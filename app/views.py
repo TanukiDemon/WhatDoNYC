@@ -23,14 +23,17 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    choices = {"1": "hey", "2": "yo", "3": "whoa"}
     session = get_session()
     form = signupForm(request.form)
-    #if form.validate():
-    #    print("valid")
-
+    form.securityQ.choices = choices.items()
+    print(choices.items())
+    if form.validate():
+        print("valid")
+    
     print(form.errors)
 
-    if form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         print("WORKED")
         #if (checkIfUserExists(session, form)):
         if (1 == 2):
@@ -39,13 +42,16 @@ def signup():
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
-            #newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, securityQanswer=form.securityQanswer.data)
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
+            print("question: ", form.securityQ.data)
+            select = request.form.get('securityQ')
+            return("selection: ", str(select))
+            # newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
-            session.add(newUser)
-            session.commit()
+            # session.add(newUser)
+            # session.commit()
 
-            return render_template('wyr.html', title='Would You Rather', form=form)
+            #return render_template('wyr.html', title='Would You Rather', form=form)
+            return "Good job!"
     return render_template('signup.html', title='Join us!', form=form)
 
 

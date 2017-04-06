@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectMultipleField, RadioField, SelectField
+from wtforms import StringField, PasswordField, SelectMultipleField, RadioField, SelectField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 
 class signupForm(FlaskForm):
+    def pre_validate(self, form):
+        for v, _ in self.choices:
+            if self.data == self.coerce(v):
+                break
+        else:
+            raise ValueError(self.gettext('Not a valid choice'))
+
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
 
     password = PasswordField('password', validators=[InputRequired(), Length(min=1, max=15)])
@@ -13,7 +20,10 @@ class signupForm(FlaskForm):
 
     securityQanswer = StringField('securityQanswer', validators=[InputRequired(), Length(min=1, max=35)])
 
-    securityQ = SelectField(u'Security Question', choices=[("1", "What was the last name of your fourth grade teacher?"), ("2", "What were the last four digits of your childhood telephone number?"), ("3", "What was the name of the street you grew up on as a child?")], default="1")
+    securityQ = SelectField(u'Security Question', choices = {}, coerce=str)
+    #securityQ = SelectField(u'Security Question', choices=[("1", "What was the last name of your fourth grade teacher?"), ("2", "What were the last four digits of your childhood telephone number?"), ("3", "What was the name of the street you grew up on as a child?")], coerce = str)
+
+    submit = SubmitField(u'Signed up')
 
 class loginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
