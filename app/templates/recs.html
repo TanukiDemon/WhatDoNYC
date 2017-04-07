@@ -10,36 +10,53 @@
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li class="selected"><a href={{ url_for('login') }}>recommendations</a></li>
+			<li class="selected"><a href="login.html">recommendations</a></li>
 			<li>|</li>
-			<li><a href={{ url_for('index') }}>spotlight</a></li>
+			<li><a href="index.html">spotlight</a></li>
 			<li>|</li>
-			<li><a href={{ url_for('about') }}>about</a></li>
+			<li><a href="about.html">about</a></li>
 		</ul>
 	</div>
+	<!-- Display Recommendation -->	
 
-	<!-- Display Recommendation -->
-	<p id="displayRecs"> </p>
+	<div id= "displayCard"> 
+		<p id="name"></p>
+		<p id="address"> </p>
+	</div>
 
 	<!-- Obtain Place ID and Make API Call -->
-	<script>
-		var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
+<script>
+	var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
 		
-		var APIkey= "&key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40";
-		var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + APIkey;
-		
-		function Get(yourURL) {
-			var Httpreq = new XMLHttpRequest(); // a new request
-			Httpreq.open("GET",yourURL,false);
-			Httpreq.send(null);
+	var APIkey= "&key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40";
+	var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + APIkey;
+	
 
-			// add something to parse the data (to only return results for the ones we want)
+	function Get(yourURL){
+    	var Httpreq = new XMLHttpRequest(); // a new request
+    	Httpreq.open("GET",yourURL,false);
+    	Httpreq.send(null);
 
-			document.getElementById("displayRecs").innerHTML = Httpreq.responseText;
-			return Httpreq.responseText;      
-		}
 
-		Get(yourURL);
+    	return Httpreq.responseText;          
+}
+
+	var responseText=Get(yourURL);
+    var responseObject = JSON.parse(responseText);
+	
+	if(responseObject==null){
+	    document.getElementById("name").innerHTML = "This object contains nothing";
+
+
+	}
+	else{
+		 document.getElementById("name").innerHTML = responseObject.result.name;
+		 document.getElementById("address").innerHTML = responseObject.result.formatted_address;
+
+		 //name, address, hours, 
+	}
+
+
 	</script>
 
 
@@ -73,7 +90,6 @@
 	</div>
 </body>
 </html>
-
 
 
 
