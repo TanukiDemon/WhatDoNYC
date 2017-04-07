@@ -26,16 +26,10 @@ def signup():
     session = get_session()
     form = signupForm(request.form)
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
-
-    #form.securityQ.process(request.form)
-    request.form.get('securityQ')
-
-    if request.method == 'POST' and form.validate():
-        print("valid")
     
     print(form.errors)
 
-    if form.submit.data and form.validate_on_submit():
+    if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
         #if (checkIfUserExists(session, form)):
         if (1 == 2):
@@ -45,14 +39,13 @@ def signup():
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
             print("question: ", form.securityQ.data)
-            select = request.form.get('securityQ')
-            return("selection: ", str(select))
-            # newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
-            # session.add(newUser)
-            # session.commit()
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
-            #return render_template('wyr.html', title='Would You Rather', form=form)
+            session.add(newUser)
+            session.commit()
+
+            return render_template('wyr.html', title='Would You Rather', form=form)
             return "Good job!"
     return render_template('signup.html', title='Join us!', form=form)
 
