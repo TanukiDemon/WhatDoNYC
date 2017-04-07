@@ -4,46 +4,48 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Recommendations</title>
 	<link rel="stylesheet" type="text/css" href="../static/recs.css">
-	<link rel="stylesheet" type="text/css" href="../static/mobile.css" media="screen and (max-width : 568px)">
 	<script type="text/javascript" src="../static/recs.js"></script>
-	<script type="text/javascript" src="../static/mobile.js"></script>
 </head>
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li class="selected"><a href={{ url_for('login.html') }}>recommendations</a></li>
+			<li class="selected"><a href="login.html">recommendations</a></li>
 			<li>|</li>
-			<li><a href={{ url_for('index.html') }}>spotlight</a></li>
+			<li><a href="index.html">spotlight</a></li>
 			<li>|</li>
-			<li><a href={{ url_for('about.html') }}>about</a></li>
+			<li><a href="about.html">about</a></li>
 		</ul>
 	</div>
 
-	<!-- Display Recommendation(s) -->
-	<p id="John"> </p>
+	<!-- Display Recommendation -->
+	<p id="displayRecs"> </p>
 
-<script>
-	var APIkey= "AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8";
-	var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=" + APIkey;
+	<!-- Obtain Place ID and Make API Call -->
+	<script>
+		var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
+		
+		var APIkey= "&key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40";
+		var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + APIkey;
+		
+		function Get(yourURL) {
+			var Httpreq = new XMLHttpRequest(); // a new request
+			Httpreq.open("GET",yourURL,false);
+			Httpreq.send(null);
 
-	function Get(yourURL){
-    	var Httpreq = new XMLHttpRequest(); // a new request
-    	Httpreq.open("GET",yourURL,false);
-    	Httpreq.send(null);
+			// add something to parse the data (to only return results for the ones we want)
 
-    	document.getElementById("John").innerHTML = Httpreq.responseText;
-    	return Httpreq.responseText;          
-}
+			document.getElementById("displayRecs").innerHTML = Httpreq.responseText;
+			return Httpreq.responseText;      
+		}
 
-	Get(yourURL);
-   
+		Get(yourURL);
+	</script>
 
-</script>
 
 	<div id="results">
 
-		<!-- Needs to be edited so we know what the recommendation(s) -->
+		<!-- Needs to be edited so we know what the recommendation -->
 
 		<form name="feedback" id="feedback" onSubmit="validate()" method="post">
 			<h3>So, are you going to go?</h3><br>
@@ -67,9 +69,14 @@
 			<br><br>
 			<input type="submit" name="submit" id="submit" value="New Suggestion" onSubmit="validate()"></input>
 		</form>
+		<br><br>
 	</div>
 </body>
 </html>
+
+
+
+
 
 
 
