@@ -21,6 +21,25 @@
 	</div>
 
 	<!-- Display Recommendation(s) -->
+	<p id="John"> </p>
+
+<script>
+	var APIkey= "AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8";
+	var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=" + APIkey;
+
+	function Get(yourURL){
+    	var Httpreq = new XMLHttpRequest(); // a new request
+    	Httpreq.open("GET",yourURL,false);
+    	Httpreq.send(null);
+
+    	document.getElementById("John").innerHTML = Httpreq.responseText;
+    	return Httpreq.responseText;          
+}
+
+	Get(yourURL);
+   
+
+</script>
 
 	<div id="results">
 
