@@ -20,7 +20,8 @@ class signupForm(FlaskForm):
 
     securityQanswer = StringField('securityQanswer', validators=[InputRequired(), Length(min=1, max=35)])
 
-    securityQ = SelectField(u'Security Question', choices = {}, coerce=str)
+    securityQ = SelectField(u'Security Question', coerce=str, choices = [])
+
     #securityQ = SelectField(u'Security Question', choices=[("1", "What was the last name of your fourth grade teacher?"), ("2", "What were the last four digits of your childhood telephone number?"), ("3", "What was the name of the street you grew up on as a child?")], coerce = str)
 
     submit = SubmitField(u'Signed up')

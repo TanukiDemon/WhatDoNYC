@@ -48,27 +48,18 @@
                   {% endfor %}<br>
 
 		<p>Select and answer one of the security questions below.</p>
-		<select name="SecurtiyQ">
-
-                  <ul>
-                    <!--
-                    {% for pair in form.securityQ.choices %}
-                    <option value = {{ pair[0] }}> {{ pair[1] }} </option>
-                    {% endfor %}
-                    -->
-                    <div id='cartB'>{{ wtf.quick_form(securityQ) }}</div>
-                  {% for error in form.securityQ.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
+                <select id="selectQuestion" name="SecurityQ">
+                  {% for question in form.securityQ.choices %}
+                  <option value="{{ question[0] }}">{{ question[1] }}</option>   
                   {% endfor %}
-                  </ul>
-
-  		</select><br><br>
+                </select><br><br>
 
                 Enter answer<br>
                 {{ form.securityQanswer(size=25) }}<br><br>
 		
              <!-- <input type="submit" name="submit" id="submit" value="Sign Up"> -->
-              <center>{{ form.submit }}</center>
+             {{ form.securityQ.process(request.form) }}
+             <center>{{ form.submit }}</center>
 		
                 {% if form.errors %}
                   {{ form.errors }}

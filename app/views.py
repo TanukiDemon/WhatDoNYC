@@ -23,11 +23,12 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    choices = {"1": "hey", "2": "yo", "3": "whoa"}
     session = get_session()
     form = signupForm(request.form)
-    form.securityQ.choices = choices.items()
-    print(choices.items())
+    form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
+
+    form.securityQ.process(request.form)
+
     if form.validate():
         print("valid")
     
