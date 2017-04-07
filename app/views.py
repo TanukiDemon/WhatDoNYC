@@ -27,9 +27,10 @@ def signup():
     form = signupForm(request.form)
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
 
-    form.securityQ.process(request.form)
+    #form.securityQ.process(request.form)
+    request.form.get('securityQ')
 
-    if form.validate():
+    if request.method == 'POST' and form.validate():
         print("valid")
     
     print(form.errors)

@@ -48,10 +48,16 @@
                   {% endfor %}<br>
 
 		<p>Select and answer one of the security questions below.</p>
+                <!--
                 <select id="selectQuestion" name="SecurityQ">
                   {% for question in form.securityQ.choices %}
                   <option value="{{ question[0] }}">{{ question[1] }}</option>   
                   {% endfor %}
+                -->
+                    <div class="form-group">
+                      {{ form.securityQ.label }} 
+                      {{ form.securityQ }}
+                    </div>
                 </select><br><br>
 
                 Enter answer<br>
