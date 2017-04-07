@@ -60,6 +60,7 @@ def login():
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPassword():
+    session = get_session()
     form = forgotPassword(request.form)
     if checkIfUserExists(form):
         session['username'] = form.username.data
