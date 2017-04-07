@@ -48,12 +48,6 @@
                   {% endfor %}<br>
 
 		<p>Select and answer one of the security questions below.</p>
-                <!--
-                <select id="selectQuestion" name="SecurityQ">
-                  {% for question in form.securityQ.choices %}
-                  <option value="{{ question[0] }}">{{ question[1] }}</option>   
-                  {% endfor %}
-                -->
                     <div class="form-group">
                       {{ form.securityQ.label }} 
                       {{ form.securityQ }}
@@ -63,7 +57,6 @@
                 Enter answer<br>
                 {{ form.securityQanswer(size=25) }}<br><br>
 		
-             <!-- <input type="submit" name="submit" id="submit" value="Sign Up"> -->
              {{ form.securityQ.process(request.form) }}
              <center>{{ form.submit }}</center>
 		
