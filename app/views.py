@@ -78,6 +78,17 @@ def secques(session):
     else:
         return render_template('/secques', title="Security Question response incorrect", form=form) 
 
+@app.route('reset', methods = ['GET','POST'])
+def reset(session):
+    #code to reset password and insert it into the db
+    form = resetPassword(request.form)
+    if form.reset1.data == form.reset2.data:
+        password = form.reset2.data
+        session.commit()
+        return redirect('/login')
+    else:
+        return render_template('reset.html', title = "Password do not match", form = form)
+    
 @app.route('/wyr', methods=['POST'])
 def wyr():
     # Serve "Would You Rather" survey
