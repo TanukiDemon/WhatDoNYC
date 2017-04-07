@@ -62,7 +62,6 @@ body {
 form {
 	width: 100%;
 	text-align: center;
-	padding-top: 150px;
 }
 
 div.radio-box {
@@ -95,8 +94,9 @@ div.radio-box {
 	cursor: pointer;
 }
 
-
-
+#displayRecs {
+	padding-top: 100px;
+}
 
 
 
