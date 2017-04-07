@@ -62,7 +62,7 @@ def login():
 def forgotPassword():
     session = get_session()
     form = forgotPassword(request.form)
-    if checkIfUserExists(form):
+    if checkIfUserExists(session,form):
         session['username'] = form.username.data
         return redirect('/secques')
     else:
