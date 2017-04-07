@@ -69,17 +69,17 @@ def forgotPassword():
         return render_template('forgot.html', title="Username does not exist", form=form)
     
 @app.route('/secques', methods = ['GET','POST'])
-def secques(session):
+def secques():
     #add code print question to screen
     form = securityQuestion(request.form)
     if session.query(User).filter(User.securityQanswer) == form.securityAnswer.data:
         #pass session to reset page
-        return redirect('/reset',session)
+        return redirect('/reset')
     else:
         return render_template('/secques', title="Security Question response incorrect", form=form) 
 
 @app.route('reset', methods = ['GET','POST'])
-def reset(session):
+def reset():
     #code to reset password and insert it into the db
     form = resetPassword(request.form)
     if form.reset1.data == form.reset2.data:
