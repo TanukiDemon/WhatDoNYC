@@ -78,7 +78,7 @@ def secques():
     else:
         return render_template('/secques', title="Security Question response incorrect", form=form) 
 
-@app.route('reset', methods = ['GET','POST'])
+@app.route('/reset', methods = ['GET','POST'])
 def reset():
     #code to reset password and insert it into the db
     form = resetPassword(request.form)
