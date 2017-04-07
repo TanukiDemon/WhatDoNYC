@@ -67,6 +67,16 @@ def forgotPassword():
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
+    
+@app.route('/secques', methods = ['GET','POST'])
+def secques(session):
+    #add code print question to screen
+    form = securityQuestion(request.form)
+    if session.query(User).filter(User.securityQanswer) == form.securityAnswer.data:
+        #pass session to reset page
+        return redirect('/reset',session)
+    else:
+        return render_template('/secques', title="Security Question response incorrect", form=form) 
 
 @app.route('/wyr', methods=['POST'])
 def wyr():
