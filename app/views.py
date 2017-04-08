@@ -98,6 +98,7 @@ def wyr():
     else:
         return render_template('login.html') # User not logged in
     if form.validate_on_submit():
+        
         # Add user and their preferences to Neo4j database
         session = startSession()
         session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
@@ -112,3 +113,20 @@ def wyr():
 @app.route('/questions')
 def about():
     return render_template('about.html', title="Daily Questions")
+
+@app.route('/recs')
+def recs(username):
+    # Query for the current user
+    user = session.run("MATCH (user:User {name:{uname}}"
+                       "RETURN user",
+                       {"uname": username})
+
+    # Query for all of the current user's activities
+    activities = session.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)"
+                             "RETURN user, actvy",
+                             {"uname": username})
+
+    # Get all users who rated the same activities as the current user
+    session.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
+                "RETURN coActor.name",
+                {"uname": username})
