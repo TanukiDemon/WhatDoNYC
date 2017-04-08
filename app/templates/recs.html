@@ -5,6 +5,29 @@
 	<title>Recommendations</title>
 	<link rel="stylesheet" type="text/css" href="../static/recs.css">
 	<script type="text/javascript" src="../static/recs.js"></script>
+	<style>
+		.card {
+    		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    		transition: 0.3s;
+    		border-radius: 5px; /* 5px rounded corners */
+    		width:20%;
+		}
+
+		/* On mouse-over, add a deeper shadow */
+		.card:hover {
+   			 box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+		}
+
+/* Add some padding inside the card container */
+		.container {
+    		padding: 2px 16px;
+		}
+	/* Add rounded corners to the top left and the top right corner of the image */
+		img {
+    		border-radius: 5px 5px 0 0;
+		}
+	</style>
+
 </head>
 <body>
 	<div id="header">
@@ -18,12 +41,15 @@
 		</ul>
 	</div>
 	<!-- Display Recommendation -->	
-
-	<div id= "displayCard"> 
-		<p id="name"></p>
-		<p id="address"> </p>
+	<div id="cardDeck">
+		<div class="card">
+  			<img src="http://www.ifatfoodchronicles.com.au/wp-content/uploads/2015/01/google-sydney-022.jpg" style="width:100%">
+  			<div class="container">
+   				<h4 id=reccName1><b></b></h4> 
+    			<p id="address1"></p> 
+  			</div>
+		</div>
 	</div>
-
 	<!-- Obtain Place ID and Make API Call -->
 <script>
 	var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
@@ -45,13 +71,13 @@
     var responseObject = JSON.parse(responseText);
 	
 	if(responseObject==null){
-	    document.getElementById("name").innerHTML = "This object contains nothing";
+	    document.getElementById("reccName1").innerHTML = "This object contains nothing";
 
 
 	}
 	else{
-		 document.getElementById("name").innerHTML = responseObject.result.name;
-		 document.getElementById("address").innerHTML = responseObject.result.formatted_address;
+		 document.getElementById("reccName1").innerHTML = responseObject.result.name;
+		 document.getElementById("address1").innerHTML = responseObject.result.formatted_address;
 
 		 //name, address, hours, 
 	}
@@ -90,6 +116,7 @@
 	</div>
 </body>
 </html>
+
 
 
 
