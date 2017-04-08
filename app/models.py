@@ -25,7 +25,7 @@ class User(Base): #inherits Base
         self.set_password(str(password))
         self.email = str(email)
         self.name = str(name)
-        self.securityQ = str(securityQ)
+        self.securityQ = int(securityQ)
         self.securityQanswer = str(answer)
 
 
