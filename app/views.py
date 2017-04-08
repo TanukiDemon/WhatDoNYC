@@ -40,12 +40,12 @@ def signup():
         else:
             print("question: ", form.securityQ.data)
 
-            #newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
-            #session.add(newUser)
-            #session.commit()
+            session.add(newUser)
+            session.commit()
 
-            return render_template('wyr.html', title='Would You Rather', form=form)
+            return render_template('wyr.html', title='Would You Rather', form=wouldYouRatherForm(request.form))
     return render_template('signup.html', title='Join us!', form=form)
 
 
