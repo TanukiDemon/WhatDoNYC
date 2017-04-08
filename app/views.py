@@ -127,6 +127,14 @@ def recs(username):
                              {"uname": username})
 
     # Get all users who rated the same activities as the current user
-    session.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
-                "RETURN coActor.name",
+    similarUsers = session.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
+                "RETURN otherUser.username",
+                {"uname": username})
+
+    # Get users who have been to the same activities as the users that the current user has been two (second degree of separation)
+    2ndDegUsers = session.run("MATCH (user:User)-[:RATED]->(actvy1)<-[:RATED]-(similarUser:User),
+         (similarUser)-[:RATED]->(actvy2)<-[:RATED]-(similarUser2:User)"
+                "WHERE user.name = {uname}"
+                "AND   NOT    (user)-[:RATED]->(actvy2)"
+                "RETURN similarUser2.username",
                 {"uname": username})
