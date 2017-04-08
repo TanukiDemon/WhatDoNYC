@@ -3,7 +3,9 @@
 
 ## Running the app
 The application can be run locally on one's machine by executing the run.py file in the root directory like so:
+
 `./run.py` 
 
 The browser should then be pointed to localhost:5000 with a chosen route. These include /login, /signup, /about, /index like so:
+
 `https://localhost:5000/about`
