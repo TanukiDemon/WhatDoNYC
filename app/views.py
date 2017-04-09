@@ -116,6 +116,7 @@ def about():
 
 @app.route('/recs')
 def recs(username):
+    '''
     # Query for the current user
     user = session.run("MATCH (user:User {name:{uname}}"
                        "RETURN user",
@@ -138,3 +139,5 @@ def recs(username):
                 "AND   NOT    (user)-[:RATED]->(actvy2)"
                 "RETURN similarUser2.username",
                 {"uname": username})
+    '''
+    print("Something coming soon")
