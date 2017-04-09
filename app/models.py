@@ -17,7 +17,7 @@ class User(Base): #inherits Base
     password = Column(String)
     email = Column(String)
     name = Column(String)
-    securityQ = Column(Int)
+    securityQ = Column(Integer)
     securityQAnswer = Column(String)
 
     def __init__(self, username, password, email, name, securityQ, answer):
