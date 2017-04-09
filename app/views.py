@@ -7,7 +7,8 @@ from .models import *
 my_view = Blueprint('my_view', __name__)
 
 # Used in the signup, login, and forgot routes
-def checkIfUserExists(session, form):
+def checkIfUserExists(form):
+    session = get_session()
     return (session.query(User).filter(User.username == form.username.data))
 
 
@@ -53,7 +54,7 @@ def signup():
 def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and checkIfUserExists(form):
-        session['username'] = form.username.data
+        #session['username'] = form.username.data
         return redirect('/wyr')
 
     return render_template('login.html', title="Login", form=form)
@@ -115,7 +116,7 @@ def about():
     return render_template('about.html', title="Daily Questions")
 
 @app.route('/recs')
-def recs(username):
+def recs():
     '''
     # Query for the current user
     user = session.run("MATCH (user:User {name:{uname}}"
@@ -140,4 +141,4 @@ def recs(username):
                 "RETURN similarUser2.username",
                 {"uname": username})
     '''
-    print("Something coming soon")
+    return render_template('recs.html')
