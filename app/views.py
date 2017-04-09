@@ -9,7 +9,7 @@ my_view = Blueprint('my_view', __name__)
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(form):
     session = get_session()
-    return (session.query(User).filter(User.username == form.username.data))
+    return (session.query(User).filter(User.username == form.username.data).first())
 
 
 @app.route('/')
@@ -32,9 +32,9 @@ def signup():
 
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
-        #if (checkIfUserExists(session, form)):
-        if (1 == 2):
-            # If so, return register.html again
+
+        if (checkIfUserExists(form)):
+        # If so, return register.html again
             return render_template('signup.html', title="User already exists", form=form)
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
