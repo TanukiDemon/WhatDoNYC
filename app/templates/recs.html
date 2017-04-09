@@ -18,11 +18,12 @@
    			 box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 		}
 
-/* Add some padding inside the card container */
+		/* Add some padding inside the card container */
 		.container {
     		padding: 2px 16px;
 		}
-	/* Add rounded corners to the top left and the top right corner of the image */
+		
+		/* Add rounded corners to the top left and the top right corner of the image */
 		img {
     		border-radius: 5px 5px 0 0;
 		}
@@ -33,11 +34,11 @@
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
-			<li class="selected"><a href="login.html">recommendations</a></li>
+			<li class="selected"><a {{ url_for('login') }}>recommendations</a></li>
 			<li>|</li>
-			<li><a href="index.html">spotlight</a></li>
+			<li><a h{{ url_for('index') }}>spotlight</a></li>
 			<li>|</li>
-			<li><a href="about.html">about</a></li>
+			<li><a {{ url_for('about') }}>about</a></li>
 		</ul>
 	</div>
 	<!-- Display Recommendation -->	
