@@ -55,7 +55,7 @@ def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and checkIfUserExists(form):
         #session['username'] = form.username.data
-        return redirect('/wyr')
+        return redirect('/recs')
 
     return render_template('login.html', title="Login", form=form)
 
