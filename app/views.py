@@ -31,7 +31,6 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    sqliteSession = get_session()
     form = signupForm(request.form)
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
     
@@ -44,10 +43,14 @@ def signup():
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
+            sqliteSession = get_session()
             newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
             sqliteSession.add(newUser)
             sqliteSession.commit()
+
+            # Store the user's new username to be used in the wyr route
+            session["username"] = form.username.data
 
             return render_template('wyr.html', title='Would You Rather', form=wouldYouRatherForm(request.form))
     return render_template('signup.html', title='Join us!', form=form)
@@ -99,7 +102,7 @@ def wyr():
     if 'username' in session:
         username = session['username'] # Get current user's username
     else:
-        return render_template('login.html') # User not logged in
+        return render_template('login.html', form=loginForm(request.form)) # User not logged in
     if form.validate_on_submit():
         
         # Add user and their preferences to Neo4j database
