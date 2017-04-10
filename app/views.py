@@ -1,5 +1,5 @@
 from neo4j.v1 import GraphDatabase
-from flask import render_template, redirect, request, Blueprint, url_for
+from flask import render_template, redirect, request, Blueprint, url_for, session
 import configparser
 from .wdnyc import app
 from .forms import *
@@ -8,9 +8,9 @@ from .models import *
 my_view = Blueprint('my_view', __name__)
 
 # Used in the signup, login, and forgot routes
-def checkIfUserExists(form):
-    session = get_session()
-    return (session.query(User).filter(User.username == form.username.data).first())
+def checkIfUserExists(username):
+    sqliteSession = get_session()
+    return (sqliteSession.query(User).filter(User.username == username).first())
 
 def getNeo4jSession():
     config = configparser.ConfigParser()
@@ -31,27 +31,23 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    session = get_session()
+    sqliteSession = get_session()
     form = signupForm(request.form)
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
     
-    print(form.errors)
-
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
 
-        if (checkIfUserExists(form)):
+        if (checkIfUserExists(form.username.data)):
         # If so, return register.html again
             return render_template('signup.html', title="User already exists", form=form)
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
-            print("question: ", form.securityQ.data)
-
             newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
 
-            session.add(newUser)
-            session.commit()
+            sqliteSession.add(newUser)
+            sqliteSession.commit()
 
             return render_template('wyr.html', title='Would You Rather', form=wouldYouRatherForm(request.form))
     return render_template('signup.html', title='Join us!', form=form)
@@ -61,16 +57,15 @@ def signup():
 def login():
     form = loginForm(request.form)
     if form.validate_on_submit() and checkIfUserExists(form):
-        #session['username'] = form.username.data
+        session['username'] = form.username.data
         return redirect('/recs')
 
     return render_template('login.html', title="Login", form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPassword():
-    session = get_session()
     form = forgotPassword(request.form)
-    if checkIfUserExists(session,form):
+    if checkIfUserExists(form.username.data):
         session['username'] = form.username.data
         return redirect('/secques')
     else:
@@ -115,6 +110,7 @@ def wyr():
                      "t2": form.artOrHistory.data, "t3": form.outdoorsOrSports.data,
                      "t4": form.entertainmentOrMusic.data})
         neo4jSession.close()
+
         return redirect('/wyr')
     return render_template('wyr.html')
 
