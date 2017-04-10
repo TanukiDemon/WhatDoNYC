@@ -111,9 +111,10 @@ def wyr():
         neo4jSession = getNeo4jSession()
         neo4jSession.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
                     "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
-                    {"uname": username, "t1": form.foodOrScience,
-                     "t2": form.artOrHistory, "t3": form.outdoorsOrSports,
-                     "t4": form.entertainmentOrMusic})
+                    {"uname": username, "t1": form.foodOrScience.data,
+                     "t2": form.artOrHistory.data, "t3": form.outdoorsOrSports.data,
+                     "t4": form.entertainmentOrMusic.data})
+        neo4jSession.close()
         return redirect('/wyr')
     return render_template('wyr.html')
 
