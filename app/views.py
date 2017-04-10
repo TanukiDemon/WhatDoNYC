@@ -1,5 +1,6 @@
 from neo4j.v1 import GraphDatabase
 from flask import render_template, redirect, request, Blueprint, url_for
+import configparser
 from .wdnyc import app
 from .forms import *
 from .models import *
@@ -11,6 +12,12 @@ def checkIfUserExists(form):
     session = get_session()
     return (session.query(User).filter(User.username == form.username.data).first())
 
+def getNeo4jSession():
+    config = configparser.ConfigParser()
+    fn = path.join(path.dirname(__file__), 'config.ini')
+    config.read(fn)
+    driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", config.get('global', 'neo4j_password')))
+    return driver.session()
 
 @app.route('/')
 def home():
@@ -90,7 +97,7 @@ def reset():
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
     
-@app.route('/wyr', methods=['POST'])
+@app.route('/wyr', methods=['GET', 'POST'])
 def wyr():
     # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
@@ -101,8 +108,8 @@ def wyr():
     if form.validate_on_submit():
         
         # Add user and their preferences to Neo4j database
-        session = startSession()
-        session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
+        neo4jSession = getNeo4jSession()
+        neo4jSession.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
                     "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
                     {"uname": username, "t1": form.foodOrScience,
                      "t2": form.artOrHistory, "t3": form.outdoorsOrSports,
