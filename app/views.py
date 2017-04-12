@@ -125,27 +125,43 @@ def about():
 @app.route('/recs')
 def recs():
     '''
+    neo4jSession = getneo4jsession()
+    username = neo4jSession.get('username', None)
+
     # Query for the current user
-    user = session.run("MATCH (user:User {name:{uname}}"
+    user = neo4jSession.run("MATCH (user:User {name:{uname}}"
                        "RETURN user",
                        {"uname": username})
 
     # Query for all of the current user's activities
-    activities = session.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)"
+    activities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)"
                              "RETURN user, actvy",
                              {"uname": username})
 
     # Get all users who rated the same activities as the current user
-    similarUsers = session.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
+    similarUsers = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
                 "RETURN otherUser.username",
                 {"uname": username})
 
-    # Get users who have been to the same activities as the users that the current user has been two (second degree of separation)
-    2ndDegUsers = session.run("MATCH (user:User)-[:RATED]->(actvy1)<-[:RATED]-(similarUser:User),
-         (similarUser)-[:RATED]->(actvy2)<-[:RATED]-(similarUser2:User)"
-                "WHERE user.name = {uname}"
-                "AND   NOT    (user)-[:RATED]->(actvy2)"
-                "RETURN similarUser2.username",
-                {"uname": username})
+    # Declare the similarity cutoff
+    cutoff = 0.5
+
+    # List of users who meet the cutoff
+    possibleUserRecs = []
+
+    # Compute similarity of all similar users
+    for simUser in similarUsers:
+      # Get number of activities both the current user and user in similarUsers list have rated
+      sharedActivities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)<-[:RATED]-(simiUser:User {name:{sUser}})"
+                "RETURN actvy",
+                {"uname": username, "sUser": simUser["username"]})
+
+      if (sharedActivities.length / activities.length >= cutoff):
+        possibleUserRecs.append(simUser)
+
+    # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
+    recs = neo4jSession.run(...)
+
+    neo4jSession.close()
     '''
     return render_template('recs.html')

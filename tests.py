@@ -32,12 +32,15 @@ class FlaskrTestCase(unittest.TestCase):
             username=username,
             passwor=password,
             email=email,
-            name=name
-            securityQ=securityQ
+            name=name,
+            securityQ=securityQ,
             securityQanswer=securityA
         ), follow_redirects=True)
 
     def test_signup(self):
-        rv = self.signup('new', 'user', 'fake@com', 'fakename', 'fakeQ', 'fakeA')
+        rv = self.signup('new', 'user', 'fake@com', 'fakename', 2, 'fakeA')
         assert b'You were registered' in rv.data
         # Remove user from database here        
+
+if __name__ == '__main__':
+    unittest.main()
