@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/static/mobile-index.css" media="screen and (max-width : 750px)">
 	<script type="text/javascript" src="/static/spotlight.js"></script>
 </head>
-<body>
+<body onload="hideShow()" onresize="hideShow()">
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
 		<ul id="navigation">
@@ -20,11 +20,11 @@
 		</ul>
 	</div>
 
-		<div id="grid">
+	<div id="grid">
 		<div id="row">
 			<li><a href={{ url_for('login') }}><img id="spotREC" src="/static/spotlightpics/persrec.png" alt="Get personalized recommendation"></a></li>
 			<li><a onClick='spotMHP()'><img id="spotMHP" src="/static/spotlightpics/ss_mhp.jpg" alt="Mister Hotpot"></a></li>
-			<li><a onClick='spotHG()'><img id="spotHG" src="/static/spotlightpics/ss_aham.jpg" alt="Hamilton Grange"></a></li>
+			<li><a onClick='spotHG()'><img id="spotHG" src="/static/spotlightpics/ss_aham.jpg" alt="Hamilton 	Grange"></a></li>
 		</div>
 		<div id="row">
 			<li><a onClick='spotCI()'><img id="spotCI" src="/static/spotlightpics/ss_coney.jpg" alt="Coney Island Cyclone"></a></li>
@@ -34,13 +34,20 @@
 	</div>
 
 	<div id="gridMobile">
-		<li><a href={{ url_for('login') }}><img id="spotREC" src="/static/spotlightpics/persrec.png" alt="Get personalized recommendation"></a></li>
+		<li><a href={{ url_for('login')}}><img id="spotREC" src="/static/spotlightpics/persrec.png" alt="Get personalized recommendation"></a></li>
 		<li><a onClick='spotMHP()'><img id="spotMHP" src="/static/spotlightpics/ss_mhp.jpg" alt="Mister Hotpot"></a></li>
-		<li><a onClick='spotHG()'><img id="spotHG" src="/static/spotlightpics/ss_aham.jpg" alt="Hamilton Grange"></a></li>
+		<li><a onClick='spotHG()'><img id="spotHG" src="/static/spotlightpics/ss_aham.jpg" alt="Hamilton 	Grange"></a></li>
 		<li><a onClick='spotCI()'><img id="spotCI" src="/static/spotlightpics/ss_coney.jpg" alt="Coney Island Cyclone"></a></li>
 		<li><a onClick='spotBH()'><img id="spotBH" src="/static/spotlightpics/ss_bohall.jpg" alt="Bohemian Hall and Beer Garden"></a></li>
 		<li><a onClick='spotLI()'><img id="spotLI" src="/static/spotlightpics/ss_lilit.jpg" alt="Little Italy"></a></li>
 	</div>
-	
+
 </body>
 </html>
+
+
+
+
+
+
+
