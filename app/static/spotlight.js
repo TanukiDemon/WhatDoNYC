@@ -1,3 +1,11 @@
+function hideShow() {
+	if(window.innerWidth < 750) {
+		document.getElementById("grid").style.visibility = "hidden";
+	} else {
+		document.getElementById("gridMobile").style.visibility = "hidden";
+	}
+}
+
 function spotMHP() {
 	myWindow=window.open("MHP.html", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
 }
