@@ -17,8 +17,7 @@ body {
 	font-size: 12px;
 }
 
-#grid {
-	padding-top: 150px;
+#gridMobile {
 	left: 0;
 	right: 0;
 	margin: 0;
@@ -27,23 +26,27 @@ body {
 	width: 100%;
 }
 
-#grid > * {
+#gridMobile > * {
 	width: 100%;
 }
 
-#grid ul li {
+#gridMobile ul li {
 	z-index: 0;
 	width: 100%;
 }
 
-#grid ul li a {
+#gridMobile ul li a {
 	z-index: 0;
 	width: 100%;
 }
 
-#grid img {
+#gridMobile img {
 	z-index: 0;
 	width: 100%;
-	border: 2px solid #ffffff;
+	cursor: pointer;
 }
+
+
+
+
 
