@@ -45,39 +45,31 @@ body {
 
 #grid {
 	padding-top: 85px;
-	left: 0;
-	right: 0;
-	margin: 0;
-	list-style-type: none;
-	line-height: 0;
 }
 
-#grid > * {
-	float: left;
+#row ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
 }
 
-#grid ul li {
-	margin: 0;
-	padding: 0;
+#row li {
+  display: table-cell;
 }
 
-#grid ul li a {
-	display: inline-block;
+#row img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
 }
 
-#grid img {
-	border: 3px solid #ffffff;
-	opacity: .9;
-}
-
-#grid img:hover {
+#row img:hover {
 	opacity: 1;
 }
-
-#spot {
-	cursor: pointer;
-}
-
 
 
 
