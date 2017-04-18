@@ -18,12 +18,12 @@
 			<li><a href={{ url_for('about') }}>about</a></li>
 		</ul>
 	</div>
-	<br><br><br><br><br><br><br>
+	<br><br><br><br><br>
 	<div id="signup">
 		<h2>Create a What Do NYC Account</h2><br>
 		<form action="" method="POST">
                   {{ form.csrf_token }}
-                  Enter name: <br>
+                  Enter first name: <br>
                   {{ form.name(size=25) }}<br>
                   {% for error in form.name.errors %}
                     <span style="color: red;">[{{ error }}]</span>
@@ -41,7 +41,7 @@
                     <span style="color: red;">[{{ error }}]</span>
                   {% endfor %}<br>
 
-                   Enter password:<br>
+                  Enter password:<br>
                   {{ form.password(size=25) }}<br>
 		  {% for error in form.password.errors %}
                     <span style="color: red;">[{{ error }}]</span>
@@ -52,9 +52,8 @@
                       {{ form.securityQ.label }} 
                       {{ form.securityQ }}
                     </div>
-                </select><br><br>
-
-                Enter answer<br>
+                </select><br>
+                Enter answer:
                 {{ form.securityQanswer(size=25) }}<br><br>
 		
              {{ form.securityQ.process(request.form) }}
@@ -73,3 +72,4 @@
 </body>
 {% endblock %}
 </html>
+
