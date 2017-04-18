@@ -1,0 +1,43 @@
+body {
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+}
+
+h1 {
+	text-align: center;
+}
+
+#place {
+	text-align: center;
+}
+
+a {
+	color: blue;
+	text-decoration: none;	
+}
+
+img {
+	height: 200px;
+	width: auto;
+}
+
+#des {
+	text-align: center;
+	padding-left: 35px;
+	padding-right: 35px;
+}
+
+#close {
+	text-align: center;
+}
+
+#CLbut {
+	display: inline-block;
+	background-color: blue;
+	color: #ffffff;
+	width: 75px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
