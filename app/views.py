@@ -146,7 +146,7 @@ def about():
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
     neo4jSession = getNeo4jSession()
-    username = neo4jSession.get('username', None)
+    username = session.get('username', None)
 
     # Query for the current user
     user = neo4jSession.run("MATCH (user:User {name:{uname}}"
