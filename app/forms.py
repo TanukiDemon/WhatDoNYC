@@ -42,3 +42,5 @@ class wouldYouRatherForm(FlaskForm):
     outdoorsOrSports = RadioField('outVSsports', choices=[('out', 'Outdoor'), ('sports', 'Sports')])
 
     entertainmentOrMusic = RadioField('entVSmusic', choices=[('ent', 'Entertainment'), ('music', 'Music')])
+
+    submit = SubmitField(u'Submit')
