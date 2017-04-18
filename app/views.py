@@ -29,6 +29,26 @@ def index():
     return render_template('index.html', title='Welcome')
 
 
+@app.route('/MHP', methods=['GET'])
+def mhp():
+    return render_template('MHP.html', title='Mister Hotpot')
+
+@app.route('/HG', methods=['GET'])
+def hg():
+    return render_template('HG.html', title='Hamilton Grange')
+
+@app.route('/CI', methods=['GET'])
+def ci():
+    return render_template('CI.html', title='Coney Island')
+
+@app.route('/BH', methods=['GET'])
+def bh():
+    return render_template('BH.html', title='Bohemian Hall and Beer Garden')
+
+@app.route('/LI', methods=['GET'])
+def li():
+    return render_template('LI.html', title='Little Italy')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = signupForm(request.form)
