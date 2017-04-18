@@ -22,12 +22,14 @@ class signupForm(FlaskForm):
 
     securityQ = SelectField(u'Security Question', choices = [], coerce = int)
 
-    submit = SubmitField(u'Signed up')
+    submit = SubmitField(u'Sign up')
 
 class loginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
 
     password = PasswordField('password', validators=[InputRequired(), Length(min=1, max=15)])
+    
+    submit = SubmitField(u'Log In')
 
 class forgotPassword(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
