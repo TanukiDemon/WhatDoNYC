@@ -54,7 +54,7 @@ def li():
 def signup():
     form = signupForm(request.form)
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
-    
+
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
 
@@ -94,7 +94,7 @@ def forgotPassword():
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
-    
+
 @app.route('/secques', methods = ['GET','POST'])
 def secques():
     #add code print question to screen
@@ -103,7 +103,7 @@ def secques():
         #pass session to reset page
         return redirect('/reset')
     else:
-        return render_template('/secques', title="Security Question response incorrect", form=form) 
+        return render_template('/secques', title="Security Question response incorrect", form=form)
 
 @app.route('/reset', methods = ['GET','POST'])
 def reset():
@@ -115,7 +115,7 @@ def reset():
         return redirect('/login')
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
-    
+
 @app.route('/wyr', methods=['GET', 'POST'])
 def wyr():
     # Serve "Would You Rather" survey
@@ -125,7 +125,7 @@ def wyr():
     else:
         return render_template('login.html', form=loginForm(request.form)) # User not logged in
     if form.validate_on_submit():
-        
+
         # Add user and their preferences to Neo4j database
         neo4jSession = getNeo4jSession()
         neo4jSession.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
@@ -154,12 +154,12 @@ def recs():
                        {"uname": username})
 
     # Query for all of the current user's activities
-    activities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)"
+    activities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
                              "RETURN user, actvy",
                              {"uname": username})
 
     # Get all users who rated the same activities as the current user
-    similarUsers = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(:Activity)<-[:RATED]-(otherUser:User)"
+    similarUsers = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
                 "RETURN otherUser.username",
                 {"uname": username})
 
@@ -172,7 +172,7 @@ def recs():
     # Compute similarity of all similar users
     for simUser in similarUsers:
       # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:RATED]->(actvy:Activity)<-[:RATED]-(simiUser:User {name:{sUser}})"
+      sharedActivities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
                 "RETURN actvy",
                 {"uname": username, "sUser": simUser["username"]})
 
