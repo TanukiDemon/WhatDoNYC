@@ -27,7 +27,8 @@
                 	  <br>{{ form.username(size=25) }}<br><br>
 			  Enter password:
                 	  <br>{{ form.password(size=25) }}<br><br>
-				<input type="submit" name="submit" id="submit" value="Sign In"><br><br>
+			
+			  <center>{{ form.submit }}</center>
 			</form>
                 {% if form.errors %}
                   {{ form.errors }}
@@ -46,3 +47,4 @@
 </body>
 {% endblock %}
 </html>
+
