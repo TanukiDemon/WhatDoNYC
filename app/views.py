@@ -1,9 +1,10 @@
-from neo4j.v1 import GraphDatabase
+from neo4j.v1 import GraphDatabase, basic_auth
 from flask import render_template, redirect, request, Blueprint, url_for, session
 import configparser
 from .wdnyc import app
 from .forms import *
 from .models import *
+from os import path
 
 my_view = Blueprint('my_view', __name__)
 
@@ -142,10 +143,9 @@ def wyr():
 def about():
     return render_template('about.html', title="Daily Questions")
 
-@app.route('/recs')
+@app.route('/recs', methods=['GET', 'POST'])
 def recs():
-    '''
-    neo4jSession = getneo4jsession()
+    neo4jSession = getNeo4jSession()
     username = neo4jSession.get('username', None)
 
     # Query for the current user
@@ -183,5 +183,4 @@ def recs():
     recs = neo4jSession.run(...)
 
     neo4jSession.close()
-    '''
     return render_template('recs.html')
