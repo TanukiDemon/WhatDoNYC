@@ -18,28 +18,29 @@
 			<li><a href={{ url_for('about') }}>about</a></li>
 		</ul>
 	</div>
-	<br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br>
 	<div id="login">
 		<h2>Log in to What Do NYC</h2><br>
-		<form action="" method="post">
-       	          {{ form.hidden_tag() }}
-		  Enter username:
-                  <br>{{ form.username(size=25) }}<br>
-		  Enter password:
-                  <br>{{ form.password(size=25) }}<br>
-			<input type="submit" name="submit" id="submit" value="Sign In"><br><br><br>
-		</form>
+			<form action="" method="post">
+       	        	  {{ form.hidden_tag() }}
+			  Enter username:
+                	  <br>{{ form.username(size=25) }}<br><br>
+			  Enter password:
+                	  <br>{{ form.password(size=25) }}<br><br>
+				<input type="submit" name="submit" id="submit" value="Sign In"><br><br>
+			</form>
                 {% if form.errors %}
                   {{ form.errors }}
                 {% endif %}
-		<div id="makeaccount">	
-			<br>
-			<p>Don't have an account yet? <a href={{ url_for('signup') }}>Register</a></p>
-		</div>
+	
+	<div id="makeaccount">	
+		<br>
+		<p>Don't have an account yet? <a href={{ url_for('signup') }}>Register</a></p>
+	</div>
 		
-		<div id="forgot">
-			<p>Forgot your password? <a href={{ url_for('forgotPassword') }}>Reset It</a></p><br>
-		</div>
+	<div id="forgot">
+		<p>Forgot your password? <a href={{ url_for('forgotPassword') }}>Reset It</a></p><br>
+	</div>
 		
 	</div>
 </body>
