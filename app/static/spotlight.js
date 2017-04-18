@@ -7,27 +7,27 @@ function hideShow() {
 }
 
 function spotMHP() {
-	myWindow=window.open("MHP", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+	myWindow=window.open("MHP", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650");
 }
 
 function spotCP() {
-	myWindow=window.open("CP", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+	myWindow=window.open("CP", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650");
 }
 
 function spotHG() {
-	myWindow=window.open("HG", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+	myWindow=window.open("HG", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650");
 }
 
 function spotCI() {
-	myWindow=window.open("CI", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+	myWindow=window.open("CI", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650");
 }
 
 function spotBH() {
-	myWindow=window.open("BH", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600")
+	myWindow=window.open("BH", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650")
 }
 
 function spotLI() {
-	myWindow=window.open("LI", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+	myWindow=window.open("LI", "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=650");
 }
 
 function winClose() {
