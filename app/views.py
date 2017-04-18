@@ -5,6 +5,7 @@ from .wdnyc import app
 from .forms import *
 from .models import *
 from os import path
+from py2neo import Graph, Node
 
 my_view = Blueprint('my_view', __name__)
 
@@ -17,8 +18,12 @@ def getNeo4jSession():
     config = configparser.ConfigParser()
     fn = path.join(path.dirname(__file__), 'config.ini')
     config.read(fn)
-    driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", config.get('global', 'neo4j_password')))
+    driver = GraphDatabase.driver("bolt://52.33.222.241:7687")
     return driver.session()
+
+def getPy2NeoSession():
+    remote_graph = Graph("http://52.33.222.241:7474/db/data/")
+    return remote_graph
 
 @app.route('/')
 def home():
@@ -145,11 +150,16 @@ def about():
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
-    neo4jSession = getNeo4jSession()
-    username = session.get('username', None)
+    graph = getPy2NeoSession()
 
+    # Insert test user
+    alice = Node("User", username="Alice")
+    graph.create(alice)
+    return render_template('recs.html')
+
+'''
     # Query for the current user
-    user = neo4jSession.run("MATCH (user:User {name:{uname}}"
+    user = neo4jSession.run("MATCH (user:User {username:{uname}}"
                        "RETURN user",
                        {"uname": username})
 
@@ -183,4 +193,6 @@ def recs():
     recs = neo4jSession.run(...)
 
     neo4jSession.close()
+
     return render_template('recs.html')
+'''
