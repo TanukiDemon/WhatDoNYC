@@ -46,3 +46,14 @@ body {
 	padding-top: 100px;
 	padding-left: 25px;
 }
+
+#submit {
+	background-color: blue;
+	color: #ffffff;
+	width: 75px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
