@@ -67,6 +67,12 @@ body {
 
 form {
 	text-align: center;
+	display: inline-block;
+}
+
+.wouldyourather {
+	text-align: center;
+	display: inline-block;
 }
 
 input {
