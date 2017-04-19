@@ -1,4 +1,3 @@
-from neo4j.v1 import GraphDatabase, basic_auth
 from flask import render_template, redirect, request, Blueprint, url_for, session
 import configparser
 from .wdnyc import app
@@ -125,12 +124,13 @@ def wyr():
     if form.validate_on_submit():
 
         # Add user and their preferences to Neo4j database
-        neo4jSession = getNeo4jSession()
-        neo4jSession.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
+        graph = getPy2NeoSession()
+        cypher = graph.cypher
+        cypher.execute("CREATE (a:User {username: {uname}, trait1: {t1}, "
                     "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
-                    {"uname": username, "t1": form.foodOrScience.data,
-                     "t2": form.artOrHistory.data, "t3": form.outdoorsOrSports.data,
-                     "t4": form.entertainmentOrMusic.data})
+                    uname = username, t1 = form.foodOrScience.data,
+                     t2 = form.artOrHistory.data, t3 = form.outdoorsOrSports.data,
+                     t4 = form.entertainmentOrMusic.data})
         neo4jSession.close()
 
         return redirect('/wyr')
@@ -146,9 +146,6 @@ def recs():
     # Get graph and cypher objects to perform Neo4j queries
     graph = getPy2NeoSession()
     cypher = graph.cypher
-
-cypher.execute("CREATE (a {name:{a}})-[:KNOWS]->(b:`Human Being`:Employee {name:{b}})",
-               a="Alice", b="Bob")
 
     # Query for the current user
     user = cypher.execute("MATCH (user:User {username:{uname}}"
@@ -183,43 +180,3 @@ cypher.execute("CREATE (a {name:{a}})-[:KNOWS]->(b:`Human Being`:Employee {name:
     recs = neo4jSession.run(...)
 
     return render_template('recs.html')
-
-'''
-    # Query for the current user
-    user = neo4jSession.run("MATCH (user:User {username:{uname}}"
-                       "RETURN user",
-                       {"uname": username})
-
-    # Query for all of the current user's activities
-    activities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
-                             "RETURN user, actvy",
-                             {"uname": username})
-
-    # Get all users who rated the same activities as the current user
-    similarUsers = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
-                "RETURN otherUser.username",
-                {"uname": username})
-
-    # Declare the similarity cutoff
-    cutoff = 0.5
-
-    # List of users who meet the cutoff
-    possibleUserRecs = []
-
-    # Compute similarity of all similar users
-    for simUser in similarUsers:
-      # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
-                "RETURN actvy",
-                {"uname": username, "sUser": simUser["username"]})
-
-      if (sharedActivities.length / activities.length >= cutoff):
-        possibleUserRecs.append(simUser)
-
-    # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
-    recs = neo4jSession.run(...)
-
-    neo4jSession.close()
-
-    return render_template('recs.html')
-'''
