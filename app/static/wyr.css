@@ -53,6 +53,7 @@ body {
 	border-color: blue;
 	border-radius: 5px;
 	cursor: pointer;
+	text-align: center;
 }
 
 #submit {
@@ -61,27 +62,24 @@ body {
 	border-color: blue;
 	border-radius: 5px;
 	cursor: pointer;
+	text-align: center;
 }
 
 /* WOULD YOU RATHER FORM */
 
-.wouldyourather {
-	text-align: left;
-  padding-left: 250px;
+form {
+	text-align: center;
+	padding-top: 100px;
 }
 
-.wouldyourather input{
+
+form input{
 	display: inline-block;
+	list-style: none;
 
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-}
-
-#submit {
-	padding-top: 10px;
-  padding-left: 375px;
-	text-align: center;
 }
 
 /* WOULD YOU RATHER: FOOD VS SCI */
