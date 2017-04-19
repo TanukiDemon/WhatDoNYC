@@ -66,20 +66,29 @@ body {
 }
 
 form {
+	padding-left: 100px;
 	text-align: center;
 	display: inline-block;
 }
 
 .wouldyourather {
+	padding-left: 100px;
 	text-align: center;
 	display: inline-block;
 }
 
 input {
 	display: inline-block;
+	list-style-type: none;
 }
 
 .input {
+	display: inline-block;
+	list-style-type: none;
+}
+
+form ul {
+	list-style-type: none;
 	display: inline-block;
 }
 
