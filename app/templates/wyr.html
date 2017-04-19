@@ -4,8 +4,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Would You Rather</title>
 	<link rel="stylesheet" type="text/css" href="/static/wyr.css">
-	<link rel="stylesheet" type="text/css" href="/static/mobile-wyr.css" media="screen and (max-width : 750px)">
-	<script type="text/javascript" src="/static/mobile.js"></script>
 </head>
 {% block content %}
 <body>
@@ -28,21 +26,21 @@
 		
 		{{ form.hidden_tag() }}
 		
-		<img src="/static/wyrpics/food.png" alt="Food" style="width:304px;height:228px;">
-		<img src="/static/wyrpics/science.png" alt="Art" style="width:304px;height:228px;"><br>
-		{{ form.foodOrScience(class_="input") }}<br><br>
+		<center><img src="/static/wyrpics/food.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/science.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.foodOrScience(class_="input") }}</center><br><br>
 		
-		<img src="/static/wyrpics/art.png" alt="Food" style="width:304px;height:228px;">
-		<img src="/static/wyrpics/history.png" alt="Art" style="width:304px;height:228px;"><br>
-		{{ form.artOrHistory(class_="input") }}<br><br>
+		<center><img src="/static/wyrpics/art.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/history.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.artOrHistory(class_="input") }}</center><br><br>
 		
-		<img src="/static/wyrpics/outdoors.png" alt="Food" style="width:304px;height:228px;">
-		<img src="/static/wyrpics/sports.png" alt="Art" style="width:304px;height:228px;"><br>
-		{{ form.outdoorsOrSports(class_="input") }}<br><br>
+		<center><img src="/static/wyrpics/outdoors.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/sports.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.outdoorsOrSports(class_="input") }}</center><br><br>
 		
-		<img src="/static/wyrpics/comedy.png" alt="Food" style="width:304px;height:228px;">
-		<img src="/static/wyrpics/music.png" alt="Art" style="width:304px;height:228px;"><br>
-		{{ form.entertainmentOrMusic(class_="input") }}<br><br>
+		<center><img src="/static/wyrpics/comedy.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/music.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.entertainmentOrMusic(class_="input") }}</center><br><br>
 		
 		<center>{{ form.submit(class_="submit" )}}</center><br><br>	
 	
