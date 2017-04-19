@@ -54,3 +54,11 @@ body {
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+#submit {
+	background-color: blue;
+	color: #ffffff;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
