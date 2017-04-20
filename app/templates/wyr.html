@@ -1,11 +1,9 @@
-html>
+<html>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Would You Rather</title>
 	<link rel="stylesheet" type="text/css" href="/static/wyr.css">
-	<link rel="stylesheet" type="text/css" href="/static/mobile-wyr.css" media="screen and (max-width : 750px)">
-	<script type="text/javascript" src="/static/mobile.js"></script>
 </head>
 {% block content %}
 <body>
@@ -19,6 +17,8 @@ html>
 			<li><a href={{ url_for('about') }}>about</a></li>
 		</ul>
 	</div>
+	
+	<br><br><br><br><br>
 
 	<h2 id="title">Would You Rather...</h2>
 
@@ -26,15 +26,23 @@ html>
 		
 		{{ form.hidden_tag() }}
 		
-		{{ form.foodOrScience }}<br>
+		<center><img src="/static/wyrpics/food.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/science.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.foodOrScience(class_="input") }}</center><br><br>
 		
-		{{ form.artOrHistory }}<br>
+		<center><img src="/static/wyrpics/art.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/history.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.artOrHistory(class_="input") }}</center><br><br>
 		
-		{{ form.outdoorsOrSports }}<br>
+		<center><img src="/static/wyrpics/outdoors.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/sports.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.outdoorsOrSports(class_="input") }}</center><br><br>
 		
-		{{ form.entertainmentOrMusic }}<br>
+		<center><img src="/static/wyrpics/comedy.png" alt="Food" style="width:304px;height:228px;">
+			<img src="/static/wyrpics/music.png" alt="Art" style="width:304px;height:228px;"></center><br>
+		<center>{{ form.entertainmentOrMusic(class_="input") }}</center><br><br>
 		
-		{{ form.submit }}<br><br>	
+		<center><style="color:white;background-color:blue">{{ form.submit(class_="submit" )}}</center><br><br>	
 	
 	</form>
 </body>

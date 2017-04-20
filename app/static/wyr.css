@@ -46,3 +46,49 @@ body {
 	padding-top: 100px;
 	padding-left: 25px;
 }
+
+.submit {
+	background-color: blue;
+	color: #ffffff;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+#submit {
+	background-color: blue;
+	color: #ffffff;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+form {
+	padding-left: 100px;
+	text-align: center;
+	display: inline-block;
+}
+
+.wouldyourather {
+	padding-left: 100px;
+	text-align: center;
+	display: inline-block;
+}
+
+input {
+	display: inline-block;
+	list-style-type: none;
+}
+
+.input {
+	display: inline-block;
+	list-style-type: none;
+}
+
+form ul {
+	list-style-type: none;
+	display: inline-block;
+}
+

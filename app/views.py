@@ -131,7 +131,7 @@ def wyr():
                     "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
                     uname = username, t1 = form.foodOrScience.data,
                      t2 = form.artOrHistory.data, t3 = form.outdoorsOrSports.data,
-                     t4 = form.entertainmentOrMusic.data})
+                     t4 = form.entertainmentOrMusic.data)
         neo4jSession.close()
 
         return redirect('/wyr')
