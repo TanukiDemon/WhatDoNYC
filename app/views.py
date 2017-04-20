@@ -5,6 +5,7 @@ from .forms import *
 from .models import *
 from os import path
 from py2neo import Graph, Node
+from operator import itemgetter
 
 my_view = Blueprint('my_view', __name__)
 
@@ -146,21 +147,22 @@ def recs():
     # Get graph and cypher objects to perform Neo4j queries
     graph = getPy2NeoSession()
     cypher = graph.cypher
+    currUsername = session.get("username", global)
 
     # Query for the current user
     user = cypher.execute("MATCH (user:User {username:{uname}}"
                        "RETURN user",
-                       uname = username)
+                       uname = currUsername)
 
     # Query for all of the current user's activities
     activities = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
                              "RETURN user, actvy",
-                             uname = username)
+                             uname = currUsername)
 
     # Get all users who rated the same activities as the current user
     similarUsers = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
                 "RETURN otherUser.username",
-                uname = username)
+                uname = currUsername)
 
     # List of users who meet the cutoff
     possibleUserRecs = []
@@ -168,15 +170,28 @@ def recs():
     # Compute similarity of all similar users
     for simUser in similarUsers:
       # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = neo4jSession.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
+      sharedActivities = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
                 "RETURN actvy",
-                uname = username, sUser = simUser["username"])
+                uname = currUsername, sUser = simUser["username"])
 
       # 0.2 is the similarity cutoff
       if (sharedActivities.length / activities.length >= 0.2):
         possibleUserRecs.append(simUser)
 
+    activities = {}
     # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
-    recs = neo4jSession.run(...)
+    for simUser in possibleUserRecs:
+        uniqueActivities = cypher.execute("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
+        "RETURN actvy",
+        uname = currUsername, sUser = simUser 
+        
+        for actvy in uniqueActivities:
+            if not actvy in activitiesBeenTo:
+                activities[actvy] = 1
+            else:
+                activities[actvy] += 1
+    
+    # Returns list of sorted (key, value) tuples from smallest to highest value
+    sortedActivities = sorted(activities.items(), key=lambda x: x[1])
 
     return render_template('recs.html')
