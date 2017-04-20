@@ -20,31 +20,31 @@
 	
 	<br><br><br><br><br>
 
-	<h2 id="title">Would You Rather...</h2>
+	<h2 id="title">Would You Rather...</h2><br>
 
-	<form class="wouldyourather" action="" method="post" style="text-align:center">
+	<center><form class="wouldyourather" action="" method="post" style="text-align:center">
 		
 		{{ form.hidden_tag() }}
 		
-		<center><img src="/static/wyrpics/food.jpg" alt="Food" style="width:304px;height:228px;">
-			<img src="/static/wyrpics/science.jpg" alt="Science" style="width:304px;height:228px;"></center><br>
+		<center><img src="/static/wyrpics/food.jpg" alt="Food" style="width:350px;height:233px;">
+			<img src="/static/wyrpics/science.jpg" alt="Science" style="width:350px;height:233px;"></center><br>
 		<center>{{ form.foodOrScience(class_="input") }}</center><br><br>
 		
-		<center><img src="/static/wyrpics/art.jpg" alt="Art" style="width:304px;height:228px;">
-			<img src="/static/wyrpics/history.jpg" alt="History" style="width:304px;height:228px;"></center><br>
+		<center><img src="/static/wyrpics/art.jpg" alt="Art" style="width:350px;height:233px;">
+			<img src="/static/wyrpics/history.jpg" alt="History" style="width:350px;height:233px;"></center><br>
 		<center>{{ form.artOrHistory(class_="input") }}</center><br><br>
 		
-		<center><img src="/static/wyrpics/outdoors.jpg" alt="Outdoors" style="width:304px;height:228px;">
-			<img src="/static/wyrpics/sports.jpg" alt="Sports" style="width:304px;height:228px;"></center><br>
+		<center><img src="/static/wyrpics/outdoors.jpg" alt="Outdoors" style="width:350px;height:233px;">
+			<img src="/static/wyrpics/sports.jpg" alt="Sports" style="width:350px;height:233px;"></center><br>
 		<center>{{ form.outdoorsOrSports(class_="input") }}</center><br><br>
 		
-		<center><img src="/static/wyrpics/comedy.jpg" alt="Comedy" style="width:304px;height:228px;">
-			<img src="/static/wyrpics/music.jpg" alt="Music" style="width:304px;height:228px;"></center><br>
+		<center><img src="/static/wyrpics/comedy.jpg" alt="Comedy" style="width:350px;height:233px;">
+			<img src="/static/wyrpics/music.jpg" alt="Music" style="width:350px;height:233px;"></center><br>
 		<center>{{ form.entertainmentOrMusic(class_="input") }}</center><br><br>
 		
 		<center><style="color:white;background-color:blue">{{ form.submit(class_="submit" )}}</center><br><br>	
 	
-	</form>
+	</form></center>
 	
 </body>
 {% endblock %}
