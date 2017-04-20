@@ -186,12 +186,13 @@ def recs():
         uname = currUsername, sUser = simUser 
         
         for actvy in uniqueActivities:
-            if not actvy in activitiesBeenTo:
+            if not actvy in activities:
                 activities[actvy] = 1
             else:
                 activities[actvy] += 1
     
-    # Returns list of sorted (key, value) tuples from smallest to highest value
-    sortedActivities = sorted(activities.items(), key=lambda x: x[1])
-
-    return render_template('recs.html')
+    # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
+    sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
+    
+    # Pick most popular activitity and pass it along to recs.html
+    return render_template('recs.html', sortedActivities[0])
