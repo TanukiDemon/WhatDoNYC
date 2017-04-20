@@ -4,8 +4,7 @@ from .wdnyc import app
 from .forms import *
 from .models import *
 from os import path
-from py2neo import Graph, Node
-from operator import itemgetter
+from py2neo import Graph
 
 my_view = Blueprint('my_view', __name__)
 
