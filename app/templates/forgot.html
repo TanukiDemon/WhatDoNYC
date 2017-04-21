@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="../static/forgot.css">
 	<link rel="stylesheet" type="text/css" href="../static/mobile-forgot.css" media="screen and (max-width : 750px)">
 </head>
+{% block content %}
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
@@ -22,10 +23,11 @@
 
 	<div id="form">
 		<h2>Request Password Reset</h2>
-		<input type="text" name="username" id="username" placeholder="Username"><br><br>
-		<input type="submit" name="submit" id="submit" value="Submit"><br><br><br>
-		</form>
+		<center>{{ form.forgotPassword() }}</center><br>
+		<center>{{ form.submit }}</center>
 	</div>
 
 </body>
+{% endblock %}
 </html>
+ 
