@@ -147,7 +147,7 @@ def recs():
     # Get graph and cypher objects to perform Neo4j queries
     graph = getPy2NeoSession()
     cypher = graph.cypher
-    currUsername = session.get("username", global)
+    currUsername = session['username']
 
     # Query for the current user
     user = cypher.execute("MATCH (user:User {username:{uname}}"
