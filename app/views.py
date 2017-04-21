@@ -85,7 +85,7 @@ def login():
     return render_template('login.html', title="Login", form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
-def forgotPassword():
+def forgotPass():
     form = forgotPassword(request.form)
     if checkIfUserExists(form.username.data):
         session['username'] = form.username.data
