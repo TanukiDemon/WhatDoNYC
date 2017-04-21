@@ -71,7 +71,7 @@ def signup():
             # Store the user's new username to be used in the wyr route
             session["username"] = form.username.data
 
-            return render_template('wyr.html', title='Would You Rather', form=wouldYouRatherForm(request.form))
+            return redirect('/wyr')
     return render_template('signup.html', title='Join us!', form=form)
 
 
@@ -120,23 +120,21 @@ def wyr():
     form = wouldYouRatherForm(request.form)
     if 'username' in session:
         username = session['username'] # Get current user's username
+        if form.validate_on_submit():
+            # Add user and their preferences to Neo4j database
+            graph_session = getPy2NeoSession()
+            cypher = graph_session.cypher
+            cypher.execute("CREATE (a:User {username: {uname}, trait1: {t1}, "
+                           "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
+                           uname=username, t1=form.foodOrScience.data,
+                           t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
+                           t4=form.entertainmentOrMusic.data)
+            graph_session.close()
+            return redirect('/recs')
     else:
-        return render_template('login.html', form=loginForm(request.form)) # User not logged in
-    if form.validate_on_submit():
+        return redirect('/login') # User not logged in
 
-        # Add user and their preferences to Neo4j database
-        graph = getPy2NeoSession()
-        cypher = graph.cypher
-        cypher.execute("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                    "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
-                    uname = username, t1 = form.foodOrScience.data,
-                     t2 = form.artOrHistory.data, t3 = form.outdoorsOrSports.data,
-                     t4 = form.entertainmentOrMusic.data)
-        neo4jSession.close()
-
-        return redirect('/wyr')
-    return render_template('wyr.html')
-
+    return render_template('wyr.html', title='wouldYouRatherForm', form=form)
 
 @app.route('/questions')
 def about():
