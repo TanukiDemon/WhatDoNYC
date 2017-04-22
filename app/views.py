@@ -11,7 +11,7 @@ my_view = Blueprint('my_view', __name__)
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(username):
     sqliteSession = get_session()
-    return (sqliteSession.query(User).filter(User.username == username).first())
+    return (sqliteSession.query(User).filter(User.username == username))
 
 def getPy2NeoSession():
     remote_graph = Graph("http://52.33.222.241:7474/db/data/")
@@ -84,7 +84,7 @@ def login():
     return render_template('login.html', title="Login", form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
-def forgotPassword():
+def forgotPass():
     form = forgotPassword(request.form)
     if checkIfUserExists(form.username.data):
         session['username'] = form.username.data
@@ -146,7 +146,7 @@ def recs():
     # Get graph and cypher objects to perform Neo4j queries
     graph = getPy2NeoSession()
     cypher = graph.cypher
-    currUsername = session.get("username", global)
+    currUsername = session['username']
 
     # Query for the current user
     user = cypher.execute("MATCH (user:User {username:{uname}}"
