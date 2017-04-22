@@ -12,7 +12,7 @@ my_view = Blueprint('my_view', __name__)
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(username):
     sqliteSession = get_session()
-    return (sqliteSession.query(User).filter(User.username == username))
+    return (sqliteSession.query(User).filter(User.username == username).first())
 
 def getPy2NeoSession():
     remote_graph = Graph("http://52.33.222.241:7474/db/data/")
@@ -78,7 +78,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = loginForm(request.form)
-    if form.validate_on_submit() and checkIfUserExists(form):
+    if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
         return redirect('/recs')
 
