@@ -1,0 +1,72 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Recommendations</title>
+	<link rel="stylesheet" type="text/css" href="../static/recs.css">
+	<script type="text/javascript" src="../static/recs.js"></script>
+
+</head>
+<body>
+	<div id="header">
+		<h1 id="name">What Do NYC</h1>
+		<ul id="navigation">
+			<li class="selected"><a href={{ url_for('login') }}>recommendations</a></li>
+			<li>|</li>
+			<li><a href={{ url_for('index') }}>spotlight</a></li>
+			<li>|</li>
+			<li><a href={{ url_for('about') }}>about</a></li>
+		</ul>
+	</div>
+
+	<br><br><br><br><br>
+
+	<!-- Display Recommendations -->	
+	<div id="cardDeck">
+		<div class="card">
+  			<img src="http://www.ifatfoodchronicles.com.au/wp-content/uploads/2015/01/google-sydney-022.jpg" style="width:100%">
+  			<div class="container">
+   				<h4 id=reccName1><b></b></h4> 
+    			<p id="address1"></p> 
+  			</div>
+		</div>
+	</div>
+
+	<!-- Obtain Place ID and Make API Call -->
+<script>
+	var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
+		
+	var APIkey= "&key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40";
+	var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + APIkey;
+	
+
+	function Get(yourURL){
+   	var Httpreq = new XMLHttpRequest(); // a new request
+  	Httpreq.open("GET",yourURL,false);
+		Httpreq.send(null);
+
+
+  	return Httpreq.responseText;          
+	}
+
+	var responseText=Get(yourURL);
+	var responseObject = JSON.parse(responseText);
+	
+	if(responseObject==null){
+	    document.getElementById("reccName1").innerHTML = "This object contains nothing";
+	} else{
+		 document.getElementById("reccName1").innerHTML = responseObject.result.name;
+		 document.getElementById("address1").innerHTML = responseObject.result.formatted_address;
+
+		 //name, address, hours, 
+	}
+
+	</script>
+</body>
+</html>
+
+
+
+
+
+
