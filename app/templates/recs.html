@@ -1,68 +1,155 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Recommendations</title>
-	<link rel="stylesheet" type="text/css" href="../static/recs.css">
-	<script type="text/javascript" src="../static/recs.js"></script>
+  <head>
+    <title>Place details</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 89%;
+        width: 65%;
+        display: inline-block;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <title>Recommendations</title>
+    <link rel="stylesheet" type="text/css" href="/static/recs.css">
+    <script type="text/javascript" src="/static/recs.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places"></script>
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 40.699771, lng:  -74.029229},
+          zoom: 11
+        });
 
-</head>
-<body>
-	<div id="header">
-		<h1 id="name">What Do NYC</h1>
-		<ul id="navigation">
-			<li class="selected"><a href={{ url_for('login') }}>recommendations</a></li>
-			<li>|</li>
-			<li><a href={{ url_for('index') }}>spotlight</a></li>
-			<li>|</li>
-			<li><a href={{ url_for('about') }}>about</a></li>
-		</ul>
-	</div>
+        placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
+        placeId2 = 'ChIJKxDbe_lYwokRVf__s8CPn-o';
+        placeId3 = 'ChIJjc2Kfu1LwokRlnmTgFg-Jjc';
+        placeId4 = 'ChIJyTmcRApbwokR-oXJRqpVI8Y';
 
-	<br><br><br><br><br>
+        var infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
 
-	<!-- Display Recommendations -->	
-	<div id="cardDeck">
-		<div class="card">
-  			<img src="http://www.ifatfoodchronicles.com.au/wp-content/uploads/2015/01/google-sydney-022.jpg" style="width:100%">
-  			<div class="container">
-   				<h4 id=reccName1><b></b></h4> 
-    			<p id="address1"></p> 
-  			</div>
-		</div>
-	</div>
+        service.getDetails({
+          placeId: placeId1
+        }, function(place, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                place.formatted_address + '<br>');
+              infowindow.open(map, this);
+            });
 
-	<!-- Obtain Place ID and Make API Call -->
-<script>
-	var placeID = "ChIJN1t_tDeuEmsRUsoyG83frY4";
-		
-	var APIkey= "&key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40";
-	var yourURL="https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + APIkey;
-	
+            document.getElementById("name1").innerHTML = place.name;
+            document.getElementById("address1").innerHTML = place.formatted_address;
+          }
+        });
+        
+        service.getDetails({
+          placeId: placeId2
+        }, function(place, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                place.formatted_address + '</div>');
+              infowindow.open(map, this);
+            });
 
-	function Get(yourURL){
-   	var Httpreq = new XMLHttpRequest(); // a new request
-  	Httpreq.open("GET",yourURL,false);
-		Httpreq.send(null);
+            document.getElementById("name2").innerHTML = place.name;
+            document.getElementById("address2").innerHTML = place.formatted_address;
+          }
+        });
 
+        service.getDetails({
+          placeId: placeId3
+        }, function(place, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                place.formatted_address + '</div>');
+              infowindow.open(map, this);
+            });
 
-  	return Httpreq.responseText;          
-	}
+            document.getElementById("name3").innerHTML = place.name;
+            document.getElementById("address3").innerHTML = place.formatted_address;
+          }
+        });
 
-	var responseText=Get(yourURL);
-	var responseObject = JSON.parse(responseText);
-	
-	if(responseObject==null){
-	    document.getElementById("reccName1").innerHTML = "This object contains nothing";
-	} else{
-		 document.getElementById("reccName1").innerHTML = responseObject.result.name;
-		 document.getElementById("address1").innerHTML = responseObject.result.formatted_address;
+        service.getDetails({
+          placeId: placeId4
+        }, function(place, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                place.formatted_address + '</div>');
+              infowindow.open(map, this);
+            });
 
-		 //name, address, hours, 
-	}
+            document.getElementById("name4").innerHTML = place.name;
+            document.getElementById("address4").innerHTML = place.formatted_address;
+          }
+        });
 
-	</script>
-</body>
+      }
+    </script>
+  </head>
+  <body>
+    <div id="header">
+    <h1 id="name">What Do NYC</h1>
+    <ul id="navigation">
+      <li class="selected"><a href={{ url_for('login') }}>recommendations</a></li>
+      <li>|</li>
+      <li><a href={{ url_for('index') }}>spotlight</a></li>
+      <li>|</li>
+      <li><a href={{ url_for('about') }}>about</a></li>
+    </ul>
+  </div>
+  <br><br><br><br>
+    <div id="map"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places&callback=initMap">
+    </script>
+
+    <div id="test">
+      <h4 id="name1"></h4>
+      <p id="address1"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name2"></h4>
+      <p id="address2"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name3"></h4>
+      <p id="address3"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name4"></h4>
+      <p id="address4"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+    </div>
+
+  </body>
 </html>
 
 

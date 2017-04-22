@@ -78,7 +78,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = loginForm(request.form)
-    if form.validate_on_submit() and checkIfUserExists(form):
+    if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
         return redirect('/recs')
 

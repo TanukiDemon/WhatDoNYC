@@ -1,0 +1,125 @@
+body {
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+}
+
+#header {
+	background-color: #000000;
+	color: #ffffff;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+#name {
+	display: inline-block;
+	padding-left: 20px;
+}
+
+#navigation {
+	list-style-type: none;
+	display: inline-block;
+	vertical-align: middle;
+	padding-right: 50px;
+	padding-top: 15px;
+	float: right;
+}
+
+#navigation li {
+	list-style-type: none;
+	display: inline-block;
+	font-size: 16px;
+	text-transform: uppercase;
+	padding-left: 7px;
+}
+
+#header ul li a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+#header ul li a:hover, #header ul li.selected a {
+	font-weight: bold;
+}
+
+#subhead {
+	padding-top: 85px;
+	padding-left: 25px;
+}
+
+#try {
+	display: inline-block;
+	background-color: blue;
+	color: #ffffff;
+	width: 75px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+form {
+	width: 100%;
+	text-align: center;
+}
+
+div.radio-box {
+	display: inline-block;
+	text-align: center;
+}
+
+.radio-box label {
+	display: block;
+	width: 100px;
+	text-align: center;
+}
+
+.radio-box input {
+	width: 20px;
+	display: block;
+	margin: 0px auto;
+	cursor: pointer;
+}
+
+#submit {
+	display: inline-block;
+	text-align: center;
+	background-color: blue;
+	color: #ffffff;
+	width: 100px;
+	padding: 5px;	
+	border-color: blue;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+#displayRecs {
+	padding-top: 100px;
+}
+
+.card {
+	padding-top: 50px;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	border-radius: 5px; /* 5px rounded corners */
+	width:20%;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+	padding: 2px 16px;
+}
+		
+/* Add rounded corners to the top left and the top right corner of the image */
+img {
+	border-radius: 5px 5px 0 0;
+}
+
+
+
