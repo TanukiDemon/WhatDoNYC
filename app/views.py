@@ -118,21 +118,16 @@ def reset():
 def wyr():
     # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
-    if 'username' in session:
-        username = session['username'] # Get current user's username
-        if form.validate_on_submit():
-            # Add user and their preferences to Neo4j database
-            graph_session = getPy2NeoSession()
-            cypher = graph_session.cypher
-            cypher.execute("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                           "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
-                           uname=username, t1=form.foodOrScience.data,
-                           t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
-                           t4=form.entertainmentOrMusic.data)
-            graph_session.close()
-            return redirect('/recs')
-    else:
-        return redirect('/login') # User not logged in
+    username = session['username'] # Get current user's username
+    if form.validate_on_submit():
+        # Add user and their preferences to Neo4j database
+        graph_session = getPy2NeoSession()
+        graph_session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
+                        "trait2: {t2}, trait3: {t3}, trait4: {t4}})",
+                        uname=username, t1=form.foodOrScience.data,
+                        t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
+                        t4=form.entertainmentOrMusic.data)
+        return redirect('/recs')
 
     return render_template('wyr.html', title='wouldYouRatherForm', form=form)
 
