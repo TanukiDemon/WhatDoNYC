@@ -38,6 +38,7 @@ class FlaskrTestCase(unittest.TestCase):
         ), follow_redirects=True)
 
     def test_signup(self):
+        # Fields are username, password, email, name, security question number, security question answer
         rv = self.signup('new', 'user', 'fake@com', 'fakename', 2, 'fakeA')
         assert b'You were registered' in rv.data
         # Remove user from database here        
