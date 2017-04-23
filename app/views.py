@@ -136,23 +136,22 @@ def about():
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
-    # Get graph and cypher objects to perform Neo4j queries
+    # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
-    cypher = graph.cypher
     currUsername = session['username']
 
     # Query for the current user
-    user = cypher.execute("MATCH (user:User {username:{uname}}"
+    user = graph.data("MATCH (user:User {username:{uname}}"
                        "RETURN user",
                        uname = currUsername)
 
     # Query for all of the current user's activities
-    activities = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
+    activities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
                              "RETURN user, actvy",
                              uname = currUsername)
 
     # Get all users who rated the same activities as the current user
-    similarUsers = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
+    similarUsers = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
                 "RETURN otherUser.username",
                 uname = currUsername)
 
@@ -162,7 +161,7 @@ def recs():
     # Compute similarity of all similar users
     for simUser in similarUsers:
       # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = cypher.execute("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
+      sharedActivities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
                 "RETURN actvy",
                 uname = currUsername, sUser = simUser["username"])
 
@@ -173,7 +172,7 @@ def recs():
     activities = {}
     # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
     for simUser in possibleUserRecs:
-        uniqueActivities = cypher.execute("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
+        uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
         "RETURN actvy",
         uname = currUsername, sUser = simUser 
         
