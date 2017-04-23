@@ -36,12 +36,12 @@ class forgotPassword(FlaskForm):
     submit = SubmitField(u'Submit')
 
 class wouldYouRatherForm(FlaskForm):
-    foodOrScience = RadioField('foodVSsci', choices = [('food', 'sample delicious foods?'), ('sci', 'perform cool science experiments?')])
+    foodOrScience = RadioField('foodVSsci', choices = [('food', 'sample delicious foods?'), ('science', 'perform cool science experiments?')])
 
     artOrHistory = RadioField('artVShistory', choices = [('art', 'talk to famous artists?'), ('history', 'go back in time?')])
 
-    outdoorsOrSports = RadioField('outVSsports', choices=[('out', 'spend time in a garden?'), ('sports', 'hike a breathtaking trail?')])
+    outdoorsOrSports = RadioField('outVSsports', choices=[('outside', 'spend time in a garden?'), ('sports', 'hike a breathtaking trail?')])
 
-    entertainmentOrMusic = RadioField('entVSmusic', choices=[('ent', 'go to a comedy club?'), ('music', 'listen to live music?')])
+    entertainmentOrMusic = RadioField('entVSmusic', choices=[('entertainment', 'go to a comedy club?'), ('music', 'listen to live music?')])
 
     submit = SubmitField(u'Submit')
