@@ -71,7 +71,7 @@ def signup():
             # Store the user's new username to be used in the wyr route
             session["username"] = form.username.data
 
-            return render_template('wyr.html', title='Would You Rather', form=wouldYouRatherForm(request.form))
+            return redirect('/wyr')
     return render_template('signup.html', title='Join us!', form=form)
 
 
@@ -118,25 +118,18 @@ def reset():
 def wyr():
     # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
-    if 'username' in session:
-        username = session['username'] # Get current user's username
-    else:
-        return render_template('login.html', form=loginForm(request.form)) # User not logged in
+    username = session['username'] # Get current user's username
     if form.validate_on_submit():
-
         # Add user and their preferences to Neo4j database
-        graph = getPy2NeoSession()
-        cypher = graph.cypher
-        cypher.execute("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                    "trait2: {t2}, trait3 {t3}, trait4 {t4}})",
-                    uname = username, t1 = form.foodOrScience.data,
-                     t2 = form.artOrHistory.data, t3 = form.outdoorsOrSports.data,
-                     t4 = form.entertainmentOrMusic.data)
-        neo4jSession.close()
+        graph_session = getPy2NeoSession()
+        graph_session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
+                        "trait2: {t2}, trait3: {t3}, trait4: {t4}})",
+                        uname=username, t1=form.foodOrScience.data,
+                        t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
+                        t4=form.entertainmentOrMusic.data)
+        return redirect('/recs')
 
-        return redirect('/wyr')
-    return render_template('wyr.html')
-
+    return render_template('wyr.html', title='wouldYouRatherForm', form=form)
 
 @app.route('/questions')
 def about():
