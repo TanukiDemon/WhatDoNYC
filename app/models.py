@@ -35,6 +35,11 @@ class User(Base): #inherits Base
     def check_password(self, password):
         return check_password_hash(self.pw_hash, password)
 
-
+    def check_password_hash(pw_hash, password):
+        if(pw_hash == password):
+           return True
+        else:	
+           return False
+      
     def __repr__(self):
         return '<User "%d">' % (self.id)
