@@ -59,7 +59,7 @@ def signup():
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
 
-        if (checkIfUserExists(form.username.data)):
+        if (checkIfUserExists(form.username.data) and checkIfEmailExists(form.email.data)):
         # If so, return register.html again
             return render_template('signup.html', title="User already exists", form=form)
 
