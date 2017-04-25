@@ -122,9 +122,9 @@ class FlaskrTestCase(unittest.TestCase):
             activities = {}
             # Get activities rated by at least two users in possibleRecs but not by the current user
             for simUser in possibleUserRecs:
-                uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
-                                              "RETURN actvy",
-                                              uname = currUsername, sUser = simUser
+                uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))"
+                                                "RETURN actvy",
+                                              uname = currUsername, sUser = simUser)
 
                 for actvy in uniqueActivities:
                     if not actvy in activities:
