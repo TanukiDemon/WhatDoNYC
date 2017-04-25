@@ -13,6 +13,14 @@ def checkIfUserExists(username):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.username == username).first())
 
+def checkPassword(password):
+    sqliteSession = get_session()
+    return (sqliteSession.query(User).filter(User.check_password_hash(User.password,password)))
+
+def checkIfEmailExists(email):
+    sqliteSession = get_session()
+    return (sqliteSession.query(User).filter(User.email == email).first())
+    
 def getPy2NeoSession():
     config = configparser.ConfigParser()
     fn = path.join(path.dirname(__file__), 'config.ini')
