@@ -4,18 +4,6 @@
     <title>Place details</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <style>
-      #map {
-        height: 89%;
-        width: 65%;
-        display: inline-block;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
     <title>Recommendations</title>
     <link rel="stylesheet" type="text/css" href="/static/recs.css">
     <script type="text/javascript" src="/static/recs.js"></script>
@@ -49,7 +37,7 @@
             });
 
             document.getElementById("name1").innerHTML = place.name;
-            document.getElementById("address1").innerHTML = place.formatted_address;
+            document.getElementById("vicinity1").innerHTML = place.vicinity;
           }
         });
         
@@ -68,7 +56,7 @@
             });
 
             document.getElementById("name2").innerHTML = place.name;
-            document.getElementById("address2").innerHTML = place.formatted_address;
+            document.getElementById("vicinity2").innerHTML = place.vicinity;
           }
         });
 
@@ -87,7 +75,7 @@
             });
 
             document.getElementById("name3").innerHTML = place.name;
-            document.getElementById("address3").innerHTML = place.formatted_address;
+            document.getElementById("vicinity3").innerHTML = place.vicinity;
           }
         });
 
@@ -106,7 +94,7 @@
             });
 
             document.getElementById("name4").innerHTML = place.name;
-            document.getElementById("address4").innerHTML = place.formatted_address;
+            document.getElementById("vicinity4").innerHTML = place.vicinity;
           }
         });
 
@@ -124,47 +112,36 @@
       <li><a href={{ url_for('about') }}>about</a></li>
     </ul>
   </div>
-  <br><br><br><br>
+  <br><br><br>
+    <div id="test">
+      <h4 id="name1"></h4>
+      <p id="vicinity1"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name2"></h4>
+      <p id="vicinity2"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name3"></h4>
+      <p id="vicinity3"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+
+      <h4 id="name4"></h4>
+      <p id="vicinity4"></p>
+      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+    </div>
+
     <div id="map"></div>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places&callback=initMap">
     </script>
-
-    <div id="test">
-      <h4 id="name1"></h4>
-      <p id="address1"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
-
-      <h4 id="name2"></h4>
-      <p id="address2"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
-
-      <h4 id="name3"></h4>
-      <p id="address3"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
-
-      <h4 id="name4"></h4>
-      <p id="address4"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
-    </div>
 
     <div id="footer">
        <p>Portions of this page are modifications based on work created and shared by Google 
          and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
     </div>
 
-    <div id="foot">
-       <center><p>Portions of this page are modifications based on work created and shared by Google 
-         and used according to terms described in the Creative Commons 3.0 Attribution License.</p></center>
-    </div>
-
     <br>
 
   </body>
 </html>
-
-
-
-
-
-

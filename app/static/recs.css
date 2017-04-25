@@ -1,3 +1,9 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 body {
 	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
 	background-color: black;
@@ -45,7 +51,7 @@ body {
 
 #test {
 	display: inline-block;
-	padding-left: 25px; 
+	padding-left: 50px; 
 	color: #ffffff;
 }
 
@@ -58,8 +64,20 @@ img {
 	padding-right: 5px;
 }
 
-#foot {
+#footer {
 	color: #ffffff;
 	font-size: 12px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
 }
+
+#map {
+	height: 85%;
+	width: 55%;
+	display: inline-block;
+	float: right;
+}
+
 
