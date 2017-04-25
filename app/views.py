@@ -98,7 +98,7 @@ def login():
         if checkPassword(form.password.data):
             return redirect('/recs')
         else:
-            return render_template('login.html', title="Incorrect Password", form=form          	
+            return render_template('login.html', title="Incorrect Password", form=form)          	
 
     return render_template('login.html', title="Login", form=form)
 
