@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <title>Recommendations</title>
     <link rel="stylesheet" type="text/css" href="/static/recs.css">
+    <link rel="stylesheet" type="text/css" href="mobile-recs.css" media="screen and (max-width : 750px)">
     <script type="text/javascript" src="/static/recs.js"></script>
     <script>
       function initMap() {
@@ -112,7 +113,12 @@
       <li><a href={{ url_for('about') }}>about</a></li>
     </ul>
   </div>
-  <br><br><br>
+  <br><br><br><br><br><br>
+    <div id="map"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places&callback=initMap">
+    </script>
+
     <div id="test">
       <h4 id="name1"></h4>
       <p id="vicinity1"></p>
@@ -130,11 +136,6 @@
       <p id="vicinity4"></p>
       <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
     </div>
-
-    <div id="map"></div>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places&callback=initMap">
-    </script>
 
     <div id="footer">
        <p>Portions of this page are modifications based on work created and shared by Google 

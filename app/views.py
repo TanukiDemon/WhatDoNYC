@@ -13,6 +13,14 @@ def checkIfUserExists(username):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.username == username).first())
 
+def checkPassword(password):
+    sqliteSession = get_session()
+    return (sqliteSession.query(User).filter(User.check_password_hash(User.password,password)))
+
+def checkIfEmailExists(email):
+    sqliteSession = get_session()
+    return (sqliteSession.query(User).filter(User.email == email).first())
+    
 def getPy2NeoSession():
     config = configparser.ConfigParser()
     fn = path.join(path.dirname(__file__), 'config.ini')
@@ -59,7 +67,7 @@ def signup():
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
         print("WORKED")
 
-        if (checkIfUserExists(form.username.data)):
+        if (checkIfUserExists(form.username.data) and checkIfEmailExists(form.email.data)):
         # If so, return register.html again
             return render_template('signup.html', title="User already exists", form=form)
 
@@ -80,10 +88,17 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    sqliteSession = get_session()
     form = loginForm(request.form)
+    
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
-        return redirect('/recs')
+
+
+        if checkPassword(form.password.data):
+            return redirect('/recs')
+        else:
+            return render_template('login.html', title="Incorrect Password", form=form)          	
 
     return render_template('login.html', title="Login", form=form)
 

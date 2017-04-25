@@ -67,17 +67,12 @@ img {
 #footer {
 	color: #ffffff;
 	font-size: 12px;
-	position: fixed;
-	bottom: 0;
-	width: 100%;
 	text-align: center;
 }
 
 #map {
 	height: 85%;
-	width: 55%;
+	width: 65%;
 	display: inline-block;
-	float: right;
 }
-
 
