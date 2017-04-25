@@ -80,10 +80,17 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    sqliteSession = get_session()
     form = loginForm(request.form)
+    
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
-        return redirect('/recs')
+
+
+        if checkPassword(form.password.data):
+            return redirect('/recs')
+        else:
+            return render_template('login.html', title="Incorrect Password", form=form          	
 
     return render_template('login.html', title="Login", form=form)
 
