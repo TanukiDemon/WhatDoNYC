@@ -17,7 +17,7 @@ def getPy2NeoSession():
     config = configparser.ConfigParser()
     fn = path.join(path.dirname(__file__), 'config.ini')
     config.read(fn)
-    
+
     remote_graph = Graph(config.get('global', 'py2neoAddress'))
     return remote_graph
 
@@ -178,16 +178,16 @@ def recs():
     for simUser in possibleUserRecs:
         uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
         "RETURN actvy",
-        uname = currUsername, sUser = simUser 
-        
+        uname = currUsername, sUser = simUser
+
         for actvy in uniqueActivities:
             if not actvy in activities:
                 activities[actvy] = 1
             else:
                 activities[actvy] += 1
-    
+
     # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
-    
+
     # Pick most popular activitity and pass it along to recs.html
     return render_template('recs.html', sortedActivities[0])

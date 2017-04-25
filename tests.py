@@ -94,10 +94,14 @@ class FlaskrTestCase(unittest.TestCase):
                                     "RETURN user, actvy",
                                     uname = currUsername)
 
+            assert len(activities) == 2
+
             # Get all users who rated the same activities as the current user
             similarUsers = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
                                       "RETURN otherUser.username",
                                       uname = currUsername)
+
+            assert len(similarUsers) == 3
 
             # List of users who meet the cutoff
             possibleUserRecs = []
@@ -113,8 +117,10 @@ class FlaskrTestCase(unittest.TestCase):
                 if (sharedActivities.length / activities.length >= 0.2):
                     possibleUserRecs.append(simUser)
 
+            assert len(possibleUserRecs) == 3
+
             activities = {}
-            # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
+            # Get activities rated by at least two users in possibleRecs but not by the current user
             for simUser in possibleUserRecs:
                 uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
                                               "RETURN actvy",
@@ -128,6 +134,11 @@ class FlaskrTestCase(unittest.TestCase):
 
             # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
             sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
+
+            assert len(sortedActivities) == 3
+            assert sortedActivities[0] == 'testActivity4'
+            assert sortedActivities[1] == 'testActivity3'
+            assert sortedActivities[2] == 'testActivity2'
 
             # Delete test nodes
             for i in range(0, 4):
