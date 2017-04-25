@@ -3,6 +3,7 @@ from app.wdnyc import *
 import unittest
 import tempfile
 from app.models import *
+from app.views import *
 from py2neo import Graph
 
 class FlaskrTestCase(unittest.TestCase):
@@ -40,6 +41,8 @@ class FlaskrTestCase(unittest.TestCase):
 
     def recs(self):
         # Insert test users and activities
+        graph = getPy2NeoSession()
+
         for i in range(0, 5):
             graph.data("INSERT (actvy: Activity) {name:{aName}}", aName = ("testActivity(%d)" % i))
         
@@ -76,10 +79,6 @@ class FlaskrTestCase(unittest.TestCase):
                    "CREATE (u)-[:HAS_BEEN_TO]->(a1)",
                    "CREATE (u)-[:HAS_BEEN_TO]->(a4)",
                    uname = 'user3', a1name = 'testActivity1', a4name = 'testActivity4')        
-
-MATCH (u:User {username:'admin'}), (r:Role {name:'ROLE_WEB_USER'})
-CREATE (u)-[:HAS_ROLE]->(r)
-
 
     def test_signup(self):
         # Fields are username, password, email, name, security question number, security question answer

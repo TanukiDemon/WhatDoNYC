@@ -14,7 +14,11 @@ def checkIfUserExists(username):
     return (sqliteSession.query(User).filter(User.username == username).first())
 
 def getPy2NeoSession():
-    remote_graph = Graph("http://52.33.222.241:7474/db/data/")
+    config = configparser.ConfigParser()
+    fn = path.join(path.dirname(__file__), 'config.ini')
+    config.read(fn)
+    
+    remote_graph = Graph(config.get('global', 'py2neoAddress'))
     return remote_graph
 
 @app.route('/')
