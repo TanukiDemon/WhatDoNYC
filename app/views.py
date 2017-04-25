@@ -134,9 +134,9 @@ def wyr():
 
     return render_template('wyr.html', title='wouldYouRatherForm', form=form)
 
-@app.route('/questions')
+@app.route('/about')
 def about():
-    return render_template('about.html', title="Daily Questions")
+    return render_template('about.html', title="About What Do NYC")
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
