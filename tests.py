@@ -3,6 +3,7 @@ from app.wdnyc import *
 import unittest
 import tempfile
 from app.models import *
+from py2neo import Graph
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -37,11 +38,27 @@ class FlaskrTestCase(unittest.TestCase):
             securityQanswer=securityA
         ), follow_redirects=True)
 
+    def recs(self):
+        # Insert test users and activities
+        for i in range(0, 5):
+            graph.data("INSERT (actvy: Activity) {name:{aName}}", aName = ("testActivity" + str(i)))
+        
+        for i in range(0, 4):
+            graph.data("INSERT (u: User) {username:{uname}}", uname = ("testUser" + str(i)))
+
+        # user 0 is connected to activites 0,1
+        # user 1 is connected to activities 0, 1, 2, 3, 4
+        # user 2 is connected to activities 1, 2, 3, 4
+        # user 3 is connected to activities 1, 4
+
     def test_signup(self):
         # Fields are username, password, email, name, security question number, security question answer
         rv = self.signup('new', 'user', 'fake@com', 'fakename', 2, 'fakeA')
         assert b'You were registered' in rv.data
         # Remove user from database here        
+
+    def test_recs(self):
+        
 
 if __name__ == '__main__':
     unittest.main()
