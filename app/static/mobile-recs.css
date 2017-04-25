@@ -1,0 +1,32 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	background-color: black;
+}
+
+#header {
+	background-color: #000000;
+	color: #ffffff;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+#navigation {
+	text-align: center;
+	font-size: 12px;
+}
+
+#map {
+	display: none;
+}
+
+#test {
+	color: #ffffff;
+}
