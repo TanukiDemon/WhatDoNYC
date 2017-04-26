@@ -3,7 +3,7 @@ import unittest
 import tempfile
 from py2neo import Graph
 from flask import session
-from app/views import getPy2NeoSession
+from app.views import getPy2NeoSession
 
 class FlaskrTestCase(unittest.TestCase):
     def test_recs(self):
