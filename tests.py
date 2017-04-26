@@ -17,39 +17,35 @@ class FlaskrTestCase(unittest.TestCase):
         for i in range(0, 4):
             graph.data("CREATE (u: User {username:{uname}})", {"uname": "testUser(%d)" % i})
 
-            '''
-            user 0 is connected to activites 0,1
-            user 1 is connected to activities 0, 1, 2, 3, 4
-            user 2 is connected to activities 1, 2, 3, 4
-            user 3 is connected to activities 1, 4
-            '''
 
-        tx.run("MATCH (u:User {username:{uname}}), (a0:Activity {name:{a0name}}), (a1:Activity {name:{a1name}})", uname = "user0", a0name = "testActivity0", a1name = "testActivity1")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a0)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a1)")
+        currUsername = 'testUser0'
 
-        tx.run("MATCH (u:User {username:{uname}}), (a0:Activity {name:{a0name}}), (a1:Activity {name:{a1name}}), (a2:Activity {name:{a2name}}), (a3:Activity {name:{a3name}}), (a4:Activity {name:{a4name}})", uname = 'user1', a0name = 'testActivity0', a1name = 'testActivity1', a2name = 'testActivity2', a3name = 'testActivity3', a4name = 'testActivity4')
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a0)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a1)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a2)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a3)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a4)")
+        '''
+        user 0 is connected to activites 0,1
+        user 1 is connected to activities 0, 1, 2, 3, 4
+        user 2 is connected to activities 1, 2, 3, 4
+        user 3 is connected to activities 1, 4
+        '''
+        # Initialize the above relationships between each user and activity. Commit these to the database afterwards
+        for i in range(0, 2):
+            tx.run("MATCH (u:User {username:{uname}}), (a:Activity {name:{aname}}) CREATE (u)-[:HAS_BEEN_TO]->(a)", uname = "testUser0", aname = "testActivity(%d)" % i)
 
-        tx.run("MATCH (u:User {username:{uname}}), (a1:Activity {name:{a1name}}), (a2:Activity {name:{a2name}}), (a3:Activity {name:{a3name}}), (a4:Activity {name:{a4name}})", uname = 'user2', a1name = 'testActivity1', a2name = 'testActivity2', a3name = 'testActivity3', a4name = 'testActivity4')
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a1)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a2)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a3)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a4)")
+        for i in range(0, 5):
+            tx.run("MATCH (u:User {username:{uname}}), (a:Activity {name:{aname}}) CREATE (u)-[:HAS_BEEN_TO]->(a)", uname = "testUser1", aname = "testActivity(%d)" % i)
 
-        tx.run("MATCH (u:User {username:{uname}}), (a1:Activity {name:{a1name}}), (a4:Activity {name:{a4name}})", uname = 'user3', a1name = 'testActivity1', a4name = 'testActivity4')
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a1)")
-        tx.run("CREATE (u)-[:HAS_BEEN_TO]->(a4)")
+        for i in range(1, 5):
+            tx.run("MATCH (u:User {username:{uname}}), (a:Activity {name:{aname}}) CREATE (u)-[:HAS_BEEN_TO]->(a)", uname = "testUser2", aname = "testActivity(%d)" % i)
 
-        currUsername = 'user0'
+        for i in [1,4]:
+            tx.run("MATCH (u:User {username:{uname}}), (a:Activity {name:{aname}}) CREATE (u)-[:HAS_BEEN_TO]->(a)", uname = "testUser3", aname = "testActivity(%d)" % i)
+
+        tx.commit()
 
         # Query for all of the current user's activities
-        activities = graph.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity) RETURN actvy", uname = currUsername).evaluate()
-
+        # activities = graph.run("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity) RETURN actvy", uname = currUsername).evaluate()
+        activities = graph.run("MATCH (u:User {username: {uname}})-[:HAS_BEEN_TO]-(b) RETURN b", uname = currUsername).data()
+        print(currUsername)
+        print(len(activities))
         assert len(activities) == 2
 
         # Get all users who rated the same activities as the current user
@@ -63,9 +59,7 @@ class FlaskrTestCase(unittest.TestCase):
         # Compute similarity of all similar users
         for simUser in similarUsers:
             # Get number of activities both the current user and user in similarUsers list have rated
-            sharedActivities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
-                                          "RETURN actvy",
-                                          uname = currUsername, sUser = simUser["username"])
+            sharedActivities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}}) RETURN actvy", uname = currUsername, sUser = simUser["username"])
 
             # 0.2 is the similarity cutoff
             if (sharedActivities.length / activities.length >= 0.2):
