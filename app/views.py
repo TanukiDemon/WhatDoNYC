@@ -28,7 +28,6 @@ def getPy2NeoSession():
     config.read(fn)
 
     remote_graph = Graph(config.get('global', 'py2neoAddress'))
-    #remote_graph = Graph("http://localhost:7474/db/data/")
     return remote_graph
 
 @app.route('/')
