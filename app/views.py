@@ -5,6 +5,7 @@ from .forms import *
 from .models import *
 from os import path
 from py2neo import Graph
+from collections import defaultdict
 
 my_view = Blueprint('my_view', __name__)
 

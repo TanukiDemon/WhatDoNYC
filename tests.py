@@ -4,6 +4,7 @@ import tempfile
 from py2neo import Graph, Node, Relationship
 from flask import session
 from app.views import getPy2NeoSession
+from collections import defaultdict
 
 class FlaskrTestCase(unittest.TestCase):
     def test_recs(self):
@@ -42,17 +43,17 @@ class FlaskrTestCase(unittest.TestCase):
             # Query for all of the current user's activities
             activities = graph.run("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a:Activity) RETURN a").data()
 
-            for a in activities:
-                print(a)
-
-            print(len(activities))
-            # assert len(activities) == 2
+            # print(len(activities))
+            assert len(activities) == 2
 
             # Get all users who rated the same activities as the current user
-            similarUsers = graph.run("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User) RETURN other.username").data()
+            similarUsers = graph.run("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User) WHERE NOT (other.username = 'testUser0') RETURN other.username").data()
 
+            similarUsers = set(similarUsers)
             print(len(similarUsers))
-            # assert len(similarUsers) == 3
+            for u in similarUsers:
+                print(u)
+            assert len(similarUsers) == 3
 
             # List of users who meet the cutoff
             possibleUserRecs = []
@@ -63,29 +64,37 @@ class FlaskrTestCase(unittest.TestCase):
                 sharedActivities = graph.data("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {name:{sUser}}) RETURN a", sUser = simUser["other.username"])
 
                 # 0.2 is the similarity cutoff
+                print(len(sharedActivities) / len(activities))
                 if (len(sharedActivities) / len(activities) >= 0.2):
                     possibleUserRecs.append(simUser)
 
-            # assert len(possibleUserRecs) == 3
+            print('Possible user recs: ', possibleUserRecs)
+            assert len(possibleUserRecs) == 3
 
-            activities = {}
+            # activities = {}
+            activities = defaultdict(lambda: 0)
+
             # Get activities rated by at least two users in possibleRecs but not by the current user
             for simUser in possibleUserRecs:
                 uniqueActivities = graph.run("MATCH (simUser:User {name:{sUser}} )-[:HAS_BEEN_TO])->(a:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name: 'testUser0'}) ) RETURN a", sUser = simUser).data()
 
                 for actvy in uniqueActivities:
+                    activities[actvy] += 1
+                '''
+                for actvy in uniqueActivities:
                     if not actvy in activities:
                         activities[actvy] = 1
                     else:
                         activities[actvy] += 1
+                '''
 
             # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
             sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
-            # assert len(sortedActivities) == 3
-            # assert sortedActivities[0] == 'testActivity4'
-            # assert sortedActivities[1] == 'testActivity3'
-            # assert sortedActivities[2] == 'testActivity2'
+            assert len(sortedActivities) == 3
+            assert sortedActivities[0] == 'testActivity4'
+            assert sortedActivities[1] == 'testActivity3'
+            assert sortedActivities[2] == 'testActivity2'
 
         finally:
             # Delete test nodes and their relationships
