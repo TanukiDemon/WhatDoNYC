@@ -49,8 +49,6 @@ class FlaskrTestCase(unittest.TestCase):
             # assert len(activities) == 2
 
             # Get all users who rated the same activities as the current user
-
-            # MATCH (tom:Person)-[:ACTED_IN]->(movie1)<-[:ACTED_IN]-(coActor:Person)
             similarUsers = graph.run("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User) RETURN other.username").data()
 
             print(len(similarUsers))
@@ -62,10 +60,10 @@ class FlaskrTestCase(unittest.TestCase):
             # Compute similarity of all similar users
             for simUser in similarUsers:
                 # Get number of activities both the current user and user in similarUsers list have rated
-                sharedActivities = graph.data("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {name:{sUser}}) RETURN a", sUser = simUser["username"])
+                sharedActivities = graph.data("MATCH (u:User {username: 'testUser0'} )-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {name:{sUser}}) RETURN a", sUser = simUser["other.username"])
 
                 # 0.2 is the similarity cutoff
-                if (sharedActivities.length / activities.length >= 0.2):
+                if (len(sharedActivities) / len(activities) >= 0.2):
                     possibleUserRecs.append(simUser)
 
             # assert len(possibleUserRecs) == 3
@@ -92,10 +90,10 @@ class FlaskrTestCase(unittest.TestCase):
         finally:
             # Delete test nodes and their relationships
             for i in range(0, 4):
-                graph.data("MATCH (u:User {username:{uname}})) DETACH DELETE u", uname = "testUser%d" % i)
+                graph.data("MATCH (u:User {username:{uname}}) DETACH DELETE u", uname = "testUser%d" % i)
 
             for i in range(0, 5):
-                graph.data("MATCH (a:Activity {name:{aname}})) DETACH DELETE a", aname = "testActivity%d" % i)
+                graph.data("MATCH (a:Activity {name:{aname}}) DETACH DELETE a", aname = "testActivity%d" % i)
 
 if __name__ == '__main__':
     unittest.main()
