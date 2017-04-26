@@ -58,21 +58,27 @@ class FlaskrTestCase(unittest.TestCase):
                 "-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User)"
                 "WHERE NOT (other.username = 'testUser0') RETURN other.username").data()
 
-            similarUsers = set(similarUsers)
-            print(len(similarUsers))
-            for u in similarUsers:
-                print(u)
-            assert len(similarUsers) == 3
+            uniqueSimUsers = []
+            for sim in similarUsers:
+                for key, value in sim.items():
+                    uniqueSimUsers.append(value)
+
+            uniqueSimUsers = set(uniqueSimUsers)
+            print(len(uniqueSimUsers))
+            print(uniqueSimUsers)
+            #for u in similarUsers:
+            #    print(u)
+            assert len(uniqueSimUsers) == 3
 
             # List of users who meet the cutoff
             possibleUserRecs = []
 
             # Compute similarity of all similar users
-            for simUser in similarUsers:
+            for simUser in uniqueSimUsers:
                 # Get number of activities both the current user and user in similarUsers list have rated
                 sharedActivities = graph.data("MATCH (u:User {username: 'testUser0'} )"
                     "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {name:{sUser}})"
-                    " RETURN a", sUser = simUser["other.username"])
+                    " RETURN a", sUser = simUser)
 
                 # 0.2 is the similarity cutoff
                 print(len(sharedActivities) / len(activities))
