@@ -20,13 +20,14 @@ def checkPassword(password):
 def checkIfEmailExists(email):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.email == email).first())
-    
+
 def getPy2NeoSession():
     config = configparser.ConfigParser()
     fn = path.join(path.dirname(__file__), 'config.ini')
     config.read(fn)
 
-    remote_graph = Graph(config.get('global', 'py2neoAddress'))
+    #remote_graph = Graph(config.get('global', 'py2neoAddress'))
+    remote_graph = Graph("http://localhost:7474/db/data/")
     return remote_graph
 
 @app.route('/')
@@ -90,7 +91,7 @@ def signup():
 def login():
     sqliteSession = get_session()
     form = loginForm(request.form)
-    
+
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
 
@@ -98,7 +99,7 @@ def login():
         if checkPassword(form.password.data):
             return redirect('/recs')
         else:
-            return render_template('login.html', title="Incorrect Password", form=form)          	
+            return render_template('login.html', title="Incorrect Password", form=form)
 
     return render_template('login.html', title="Login", form=form)
 
