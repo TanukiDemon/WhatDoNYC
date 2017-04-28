@@ -75,13 +75,15 @@ class FlaskrTestCase(unittest.TestCase):
 
             # Compute similarity of all similar users
             for simUser in uniqueSimUsers:
+                print("SIM: ", simUser)
                 # Get number of activities both the current user and user in similarUsers list have rated
-                sharedActivities = graph.data("MATCH (u:User {username: 'testUser0'} )"
-                    "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {name:{sUser}})"
-                    " RETURN a", sUser = simUser)
+                sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
+                    "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {username:{sUser}})"
+                    " RETURN a", sUser = simUser).data()
 
                 # 0.2 is the similarity cutoff
-                print(len(sharedActivities) / len(activities))
+                print('Share activities: ', len(sharedActivities))
+                print('Acts: ', len(activities))
                 if (len(sharedActivities) / len(activities) >= 0.2):
                     possibleUserRecs.append(simUser)
 
@@ -93,9 +95,12 @@ class FlaskrTestCase(unittest.TestCase):
 
             # Get activities rated by at least two users in possibleRecs but not by the current user
             for simUser in possibleUserRecs:
-                uniqueActivities = graph.run("MATCH (simUser:User {name:{sUser}} )"
-                    "-[:HAS_BEEN_TO])->(a:Activity)<- NOT ([:HAS_BEEN_TO]-"
-                    "(currUser:User {name: 'testUser0'}) ) RETURN a", sUser = simUser).data()
+                uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
+                    "-[:HAS_BEEN_TO]->(a) MATCH (u:User {username:'testUser0'})"
+                    "WHERE NOT (u)-[:HAS_BEEN_TO]->(a) RETURN a.name", sUser = simUser)
+
+                print("SIM USER: ", simUser)
+                print(uniqueActivities)
 
                 for actvy in uniqueActivities:
                     activities[actvy] += 1
