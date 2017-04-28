@@ -229,4 +229,4 @@ def recs():
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
     # Pick most popular activitity and pass it along to recs.html
-    return render_template('recs.html')
+    return render_template('recs.html', sortedActivities)
