@@ -187,7 +187,7 @@ def recs():
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
                             "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
                             "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
-                            "WHERE NOT (other.username = 'testUser0')"
+                            "WHERE NOT (other.username = {cUser})"
                             "RETURN other.username", cUser = currUser).data()
 
     # Create a list of the names of users who share at least one
@@ -215,7 +215,7 @@ def recs():
             possibleUserRecs.append(simUser)
 
     # activities will contain the popularity of activities
-    # that will be recommended to testUser0
+    # that will be recommended to currUser
     activities = defaultdict(lambda: 0)
 
     # Get activities rated by at the users in possibleUserRecs
