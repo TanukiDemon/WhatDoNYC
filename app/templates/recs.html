@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>Recommendations</title>
     <link rel="stylesheet" type="text/css" href="/static/recs.css">
-    <link rel="stylesheet" type="text/css" href="/static/mobile-recs.css" media="screen and (max-width : 750px)">
+    <link rel="stylesheet" type="text/css" href="mobile-recs.css" media="screen and (max-width : 750px)">
     <script type="text/javascript" src="/static/recs.js"></script>
     <script>
       function initMap() {
@@ -14,15 +14,12 @@
           center: {lat: 40.699771, lng:  -74.029229},
           zoom: 11
         });
-
         placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
         placeId2 = 'ChIJKxDbe_lYwokRVf__s8CPn-o';
         placeId3 = 'ChIJjc2Kfu1LwokRlnmTgFg-Jjc';
         placeId4 = 'ChIJyTmcRApbwokR-oXJRqpVI8Y';
-
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
-
         service.getDetails({
           placeId: placeId1
         }, function(place, status) {
@@ -36,7 +33,8 @@
                 place.formatted_address + '<br>');
               infowindow.open(map, this);
             });
-
+            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+            document.getElementById("photo1").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
             document.getElementById("name1").innerHTML = place.name;
             document.getElementById("vicinity1").innerHTML = place.vicinity;
           }
@@ -55,12 +53,12 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-
+           var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+            document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
             document.getElementById("name2").innerHTML = place.name;
             document.getElementById("vicinity2").innerHTML = place.vicinity;
           }
         });
-
         service.getDetails({
           placeId: placeId3
         }, function(place, status) {
@@ -74,12 +72,12 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-
+            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+            document.getElementById("photo3").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
             document.getElementById("name3").innerHTML = place.name;
             document.getElementById("vicinity3").innerHTML = place.vicinity;
           }
         });
-
         service.getDetails({
           placeId: placeId4
         }, function(place, status) {
@@ -93,12 +91,12 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-
+            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+            document.getElementById("photo4").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
             document.getElementById("name4").innerHTML = place.name;
             document.getElementById("vicinity4").innerHTML = place.vicinity;
           }
         });
-
       }
     </script>
   </head>
@@ -116,25 +114,28 @@
   <br><br><br><br><br><br>
     <div id="map"></div>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtWi4CvyxJha2eCfXpWPnjslA3FfRVR40&libraries=places&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
     </script>
 
     <div id="test">
+      <div id=photo1></div>
       <h4 id="name1"></h4>
       <p id="vicinity1"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+      <img class="review" src="/static/like.png"></img><img class="review" src="/static/dislike.png"></img><br><br>
 
+      <div id=photo2></div>
       <h4 id="name2"></h4>
       <p id="vicinity2"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
-
+      <img  class="review" src="/static/like.png"></img><img class ="review" src="/static/dislike.png"></img><br><br>
+      <div id=photo3></div>
       <h4 id="name3"></h4>
       <p id="vicinity3"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+      <img class="review" src="/static/like.png"></img><img class="review" src="/static/dislike.png"></img><br><br>
 
+      <div id=photo4></div>
       <h4 id="name4"></h4>
       <p id="vicinity4"></p>
-      <img src="/static/like.png"></img><img src="/static/dislike.png"></img><br><br>
+      <img class="review" src="/static/like.png"></img><img class="review" src="/static/dislike.png"></img><br><br>
     </div>
 
     <div id="footer">
