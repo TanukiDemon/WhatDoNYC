@@ -16,10 +16,10 @@
           zoom: 11
         });
 
-        placeId1 = '{{ form.recommendations[0][0] }}';
-        placeId2 = '{{ form.recommendations[1][0] }}';
-        placeId3 = '{{ form.recommendations[2][0] }}';
-        placeId4 = '{{ form.recommendations[3][0] }}';
+        placeId1 = '{{ form.recommendations.choices[0][0] }}';
+        placeId2 = '{{ form.recommendations.choices[1][0] }}';
+        placeId3 = '{{ form.recommendations.choices[2][0] }}';
+        placeId4 = '{{ form.recommendations.choices[3][0] }}';
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
         service.getDetails({
