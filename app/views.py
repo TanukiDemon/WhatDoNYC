@@ -156,6 +156,17 @@ def about():
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
+    '''
+    # If user has no connections, get most popular activities with a positive
+    # weight that correspond to their personality traits
+    Do activity tags match up with User traits?
+    
+    mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{weight:1}]->(a)"
+                            "RETURN a, COUNT(h)"
+                            "ORDER BY COUNT(h) DESC"
+                            "LIMIT 10")
+    '''
+
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
     currUser = session['username']
