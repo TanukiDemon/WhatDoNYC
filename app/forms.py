@@ -33,6 +33,12 @@ class loginForm(FlaskForm):
 
 class forgotPassword(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
+    
+    submit = SubmitField(u'Submit')
+
+class securityQuestion(FlaskForm):
+    secQuesAnswer = StringField('answer', validators=[InputRequired(), Length(min=1, max=35)])
+    
     submit = SubmitField(u'Submit')
 
 class wouldYouRatherForm(FlaskForm):
