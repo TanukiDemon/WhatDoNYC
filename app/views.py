@@ -162,7 +162,7 @@ def recs():
 
     # Get all users who rated the same activities as the current user
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
-                            "-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User)"
+                            "-[:HAS_BEEN_TO{weight:1}]->(a:Activity)<-[:HAS_BEEN_TO{weight:1}]-(other:User)"
                             "WHERE NOT (other.username = 'testUser0')"
                             "RETURN other.username", cUser = currUser).data()
 
@@ -183,7 +183,7 @@ def recs():
     for simUser in uniqueSimUsers:
         # Get number of activities both the current user and user in similarUsers list have rated
         sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
-                                    "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {username:{sUser}})"
+                                    "-[:HAS_BEEN_TO{weight:1}]->(a)<-[:HAS_BEEN_TO{weight:1}]-(sim:User {username:{sUser}})"
                                     " RETURN a", sUser = simUser).data()
 
         # 0.2 is the similarity cutoff
@@ -199,7 +199,7 @@ def recs():
     # Get activities rated by at least two users in possibleRecs but not by the current user
     for simUser in possibleUserRecs:
         uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
-                                        "-[:HAS_BEEN_TO]->(a) MATCH (u:User {username:'testUser0'})"
+                                        "-[:HAS_BEEN_TO{weight:1}]->(a) MATCH (u:User {username:'testUser0'})"
                                         "WHERE NOT (u)-[:HAS_BEEN_TO]->(a) RETURN a.name", sUser = simUser)
 
         for a in uniqueActivities:
@@ -210,4 +210,4 @@ def recs():
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
     # Pick most popular activitity and pass it along to recs.html
-    return render_template('recs.html', sortedActivities[0])
+    return render_template('recs.html')
