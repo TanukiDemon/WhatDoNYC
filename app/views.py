@@ -160,7 +160,7 @@ def recs():
     # If user has no connections, get most popular activities with a positive
     # weight that correspond to their personality traits
     Do activity tags match up with User traits?
-    
+
     mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{weight:1}]->(a)"
                             "RETURN a, COUNT(h)"
                             "ORDER BY COUNT(h) DESC"
@@ -173,7 +173,8 @@ def recs():
 
     # Get all users who rated the same activities as the current user
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
-                            "-[:HAS_BEEN_TO{weight:1}]->(a:Activity)<-[:HAS_BEEN_TO{weight:1}]-(other:User)"
+                            "-[:HAS_BEEN_TO{weight:1}]->(a:Activity)"
+                            "<-[:HAS_BEEN_TO{weight:1}]-(other:User)"
                             "WHERE NOT (other.username = 'testUser0')"
                             "RETURN other.username", cUser = currUser).data()
 
@@ -192,9 +193,11 @@ def recs():
 
     # Compute similarity of all similar users
     for simUser in uniqueSimUsers:
-        # Get number of activities both the current user and user in similarUsers list have rated
+        # Get number of activities both the current user and user in
+        # similarUsers list have rated
         sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
-                                    "-[:HAS_BEEN_TO{weight:1}]->(a)<-[:HAS_BEEN_TO{weight:1}]-(sim:User {username:{sUser}})"
+                                    "-[:HAS_BEEN_TO{weight:1}]->(a)<-"
+                                    "[:HAS_BEEN_TO{weight:1}]-(sim:User {username:{sUser}})"
                                     " RETURN a", sUser = simUser).data()
 
         # 0.2 is the similarity cutoff
@@ -207,17 +210,22 @@ def recs():
     # that will be recommended to testUser0
     activities = defaultdict(lambda: 0)
 
-    # Get activities rated by at least two users in possibleRecs but not by the current user
+    # Get activities rated by at the users in possibleUserRecs
+    # but not by the current user
     for simUser in possibleUserRecs:
         uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
-                                        "-[:HAS_BEEN_TO{weight:1}]->(a) MATCH (u:User {username:'testUser0'})"
-                                        "WHERE NOT (u)-[:HAS_BEEN_TO]->(a) RETURN a.name", sUser = simUser)
+                                        "-[:HAS_BEEN_TO{weight:1}]->(a)"
+                                        "MATCH (u:User {username:'testUser0'})"
+                                        "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
+                                        "RETURN a.name", sUser = simUser)
 
+        # Count the number of times each activity has been rated
         for a in uniqueActivities:
             for key, value in a.items():
                 activities[value] += 1
 
-    # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
+    # Returns list of sorted (key, value) tuples in descending order
+    # according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
     # Pick most popular activitity and pass it along to recs.html
