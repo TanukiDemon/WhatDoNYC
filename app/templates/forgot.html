@@ -21,12 +21,13 @@
 
 	<br><br><br><br><br><br><br><br>
 
-	<div id="form">
+	<form id="form" method="post">
 		<h2>Request Password Reset</h2>
+		{{ form.hidden_tag() }}
 		<p>Enter your username:</p>
-		<center>{{ form.username() }}</center><br>
+		<center>{{ form.username(size=25) }}</center><br>
 		<center>{{ form.submit }}</center><br>
-	</div>
+	</form>
 
 </body>
 {% endblock %}
