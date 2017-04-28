@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+{% block content %}
   <head>
     <title>Place details</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -14,10 +15,11 @@
           center: {lat: 40.699771, lng:  -74.029229},
           zoom: 11
         });
-        placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
-        placeId2 = 'ChIJKxDbe_lYwokRVf__s8CPn-o';
-        placeId3 = 'ChIJjc2Kfu1LwokRlnmTgFg-Jjc';
-        placeId4 = 'ChIJyTmcRApbwokR-oXJRqpVI8Y';
+
+        placeId1 = '{{ form.recommendations[0][0] }}';
+        placeId2 = '{{ form.recommendations[1][0] }}';
+        placeId3 = '{{ form.recommendations[2][0] }}';
+        placeId4 = '{{ form.recommendations[3][0] }}';
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
         service.getDetails({
@@ -39,7 +41,7 @@
             document.getElementById("vicinity1").innerHTML = place.vicinity;
           }
         });
-        
+
         service.getDetails({
           placeId: placeId2
         }, function(place, status) {
@@ -139,11 +141,12 @@
     </div>
 
     <div id="footer">
-       <p>Portions of this page are modifications based on work created and shared by Google 
+       <p>Portions of this page are modifications based on work created and shared by Google
          and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
     </div>
 
     <br>
 
   </body>
+  {% endblock %}
 </html>
