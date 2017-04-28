@@ -158,49 +158,53 @@ def about():
 def recs():
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
-    currUsername = session['username']
-
-    # Query for the current user
-    user = graph.data("MATCH (user:User {username:{uname}}"
-                       "RETURN user",
-                       uname = currUsername)
-
-    # Query for all of the current user's activities
-    activities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
-                             "RETURN user, actvy",
-                             uname = currUsername)
+    currUser = session['username']
 
     # Get all users who rated the same activities as the current user
-    similarUsers = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
-                "RETURN otherUser.username",
-                uname = currUsername)
+    similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
+                            "-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User)"
+                            "WHERE NOT (other.username = 'testUser0')"
+                            "RETURN other.username", cUser = currUser).data()
 
-    # List of users who meet the cutoff
+    # Create a list of the names of users who share at least one
+    # activity with currUser
+    uniqueSimUsers = []
+    for sim in similarUsers:
+        for key, value in sim.items():
+            uniqueSimUsers.append(value)
+
+        # Remove duplicates
+        uniqueSimUsers = set(uniqueSimUsers)
+
+    # List of users who meet the similarity cutoff
     possibleUserRecs = []
 
     # Compute similarity of all similar users
-    for simUser in similarUsers:
-      # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
-                "RETURN actvy",
-                uname = currUsername, sUser = simUser["username"])
+    for simUser in uniqueSimUsers:
+        # Get number of activities both the current user and user in similarUsers list have rated
+        sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
+                                    "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {username:{sUser}})"
+                                    " RETURN a", sUser = simUser).data()
 
-      # 0.2 is the similarity cutoff
-      if (sharedActivities.length / activities.length >= 0.2):
-        possibleUserRecs.append(simUser)
+        # 0.2 is the similarity cutoff
+        # If the following quotient is greater or equal than 0.2,
+        # then the similar user's name is added to possibleUserRecs
+        if (len(sharedActivities) / len(activities) >= 0.2):
+            possibleUserRecs.append(simUser)
 
-    activities = {}
-    # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
+    # activities will contain the popularity of activities
+    # that will be recommended to testUser0
+    activities = defaultdict(lambda: 0)
+
+    # Get activities rated by at least two users in possibleRecs but not by the current user
     for simUser in possibleUserRecs:
-        uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
-        "RETURN actvy",
-        uname = currUsername, sUser = simUser
+        uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
+                                        "-[:HAS_BEEN_TO]->(a) MATCH (u:User {username:'testUser0'})"
+                                        "WHERE NOT (u)-[:HAS_BEEN_TO]->(a) RETURN a.name", sUser = simUser)
 
-        for actvy in uniqueActivities:
-            if not actvy in activities:
-                activities[actvy] = 1
-            else:
-                activities[actvy] += 1
+        for a in uniqueActivities:
+            for key, value in a.items():
+                activities[value] += 1
 
     # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
