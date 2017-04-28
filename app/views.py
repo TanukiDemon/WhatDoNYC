@@ -212,7 +212,7 @@ def recs():
                                         "-[:HAS_BEEN_TO{weight:1}]->(a)"
                                         "MATCH (u:User {username:'testUser0'})"
                                         "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
-                                        "RETURN a.name", sUser = simUser)
+                                        "RETURN a.placeID", sUser = simUser)
 
         # Count the number of times each activity has been rated
         for a in uniqueActivities:
@@ -223,5 +223,8 @@ def recs():
     # according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
+    form = recsForm(request.form)
+    form.recommendations.choices = sortedActivities
+
     # Pick most popular activitity and pass it along to recs.html
-    return render_template('recs.html', sortedActivities)
+    return render_template('recs.html', title="Your recommendations", form=form)
