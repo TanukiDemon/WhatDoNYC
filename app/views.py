@@ -159,12 +159,13 @@ def recs():
     activities = graph.run("MATCH (u:User {username: {curr}} )"
                         "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
 
-    if not len(activities):
+    # print("ACTIVITIES: ", activities)
+    if not activities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         # Update this query to only return activities whose labels
         # match the user's traits
-        mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{weight:1}]->(a)"
+        mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{rating:1}]->(a)"
                                 "RETURN a.placeID, COUNT(h)"
                                 "ORDER BY COUNT(h) DESC"
                                 "LIMIT 4", currUser = currUser)
@@ -177,13 +178,15 @@ def recs():
         form = recsForm(request.form)
         form.recommendations.choices = recommendations
 
+        # print(form.recommendations.choices)
+
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
-                            "-[:HAS_BEEN_TO{weight:1}]->(a:Activity)"
-                            "<-[:HAS_BEEN_TO{weight:1}]-(other:User)"
+                            "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
+                            "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
                             "WHERE NOT (other.username = 'testUser0')"
                             "RETURN other.username", cUser = currUser).data()
 
@@ -194,20 +197,16 @@ def recs():
         for key, value in sim.items():
             uniqueSimUsers.append(value)
 
-        # Remove duplicates
-        uniqueSimUsers = set(uniqueSimUsers)
-
     # List of users who meet the similarity cutoff
     possibleUserRecs = []
-
     # Compute similarity of all similar users
-    for simUser in uniqueSimUsers:
+    for simUser in set(uniqueSimUsers):
         # Get number of activities both the current user and user in
         # similarUsers list have rated
-        sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
-                                    "-[:HAS_BEEN_TO{weight:1}]->(a)<-"
-                                    "[:HAS_BEEN_TO{weight:1}]-(sim:User {username:{sUser}})"
-                                    " RETURN a", sUser = simUser).data()
+        sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                    "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
+                                    "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
+                                    " RETURN a", sUser = simUser, curr = currUser).data()
 
         # 0.2 is the similarity cutoff
         # If the following quotient is greater or equal than 0.2,
@@ -219,14 +218,15 @@ def recs():
     # that will be recommended to testUser0
     activities = defaultdict(lambda: 0)
 
+    print("POSSIBLE USER RECS: ", possibleUserRecs)
     # Get activities rated by at the users in possibleUserRecs
     # but not by the current user
     for simUser in possibleUserRecs:
         uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
-                                        "-[:HAS_BEEN_TO{weight:1}]->(a)"
-                                        "MATCH (u:User {username:'testUser0'})"
+                                        "-[:HAS_BEEN_TO{rating:1}]->(a)"
+                                        "MATCH (u:User {username:{curr}})"
                                         "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
-                                        "RETURN a.placeID", sUser = simUser)
+                                        "RETURN a.placeID", sUser = simUser, curr = currUser)
 
         # Count the number of times each activity has been rated
         for a in uniqueActivities:
@@ -236,9 +236,12 @@ def recs():
     # Returns list of sorted (key, value) tuples in descending order
     # according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
+    print("Sorted activities: ", sortedActivities)
 
     form = recsForm(request.form)
     form.recommendations.choices = sortedActivities[0:4]
+
+    print("Choices: ", form.recommendations.choices)
 
     # Pick most popular activitity and pass it along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
