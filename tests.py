@@ -102,23 +102,23 @@ class FlaskrTestCase(unittest.TestCase):
                 print("SIM USER: ", simUser)
                 print(uniqueActivities)
 
-                for actvy in uniqueActivities:
-                    activities[actvy] += 1
-                '''
-                for actvy in uniqueActivities:
-                    if not actvy in activities:
-                        activities[actvy] = 1
-                    else:
-                        activities[actvy] += 1
-                '''
+                for a in uniqueActivities:
+                    for key, value in a.items():
+                        activities[value] += 1
+
+            assert(activities['testActivity4'] == 3)
+            assert(activities['testActivity3'] == 2)
+            assert(activities['testActivity2'] == 2)
+            assert(activities['testActivity1'] == 0)
+            assert(activities['testActivity0'] == 0)
 
             # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
             sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
             assert len(sortedActivities) == 3
-            assert sortedActivities[0] == 'testActivity4'
-            assert sortedActivities[1] == 'testActivity3'
-            assert sortedActivities[2] == 'testActivity2'
+            assert sortedActivities[0][0] == 'testActivity4'
+            assert sortedActivities[1][0] == 'testActivity3'
+            assert sortedActivities[2][0] == 'testActivity2'
 
         finally:
             # Delete test nodes and their relationships
