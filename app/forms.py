@@ -42,9 +42,9 @@ class securityQuestion(FlaskForm):
     submit = SubmitField(u'Submit')
     
 class resetPassword(FlaskForm):
-    reset1 = PasswordField('reset1', validators=[InputRequired(), Length(min=1, max=15)]
+    reset1 = PasswordField('reset1', validators=[InputRequired(), Length(min=1, max=15)])
                            
-    reset2 = PasswordField('reset2', validators=[InputRequired(), Length(min=1, max=15)]
+    reset2 = PasswordField('reset2', validators=[InputRequired(), Length(min=1, max=15)])
                            
     submit = SubmitField(u'Submit')
 
