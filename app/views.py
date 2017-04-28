@@ -155,7 +155,7 @@ def recs():
     graph = getPy2NeoSession()
     currUser = session['username']
 
-    # Query for all of testUser0's activities
+    # Query for all of currUser's activities
     activities = graph.run("MATCH (u:User {username: {curr}} )"
                         "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
 
@@ -164,9 +164,12 @@ def recs():
         # weight that correspond to their personality traits
         # Update this query to only return activities whose labels
         # match the user's traits
-        mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{rating:1}]->(a)"
-                                "RETURN a.placeID, COUNT(h)"
-                                "ORDER BY COUNT(h) DESC"
+
+        mostPopular = graph.run("MATCH (sample:User)-[h:HAS_BEEN_TO]->(a:Activity),"
+                                "(u:User {username {currUser}}) WHERE"
+                                "a.label == u.trait1 OR a.label == u.trait2"
+                                "OR a.label == u.trait3 OR a.label == u.trait4"
+                                "RETURN a.placeID, COUNT(h) ORDER BY COUNT(h) DESC"
                                 "LIMIT 4", currUser = currUser)
 
         recommendations = []
