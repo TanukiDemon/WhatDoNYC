@@ -59,5 +59,5 @@ class wouldYouRatherForm(FlaskForm):
 
     submit = SubmitField(u'Submit')
 
- class recsForm(FlaskForm):
-     recommendations = SelectField(u'Recommendations', choices = [], coerce = int)
+class recsForm(FlaskForm):
+    recommendations = SelectField(u'Recommendations', choices = [], coerce = int)
