@@ -28,11 +28,24 @@ class loginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
 
     password = PasswordField('password', validators=[InputRequired(), Length(min=1, max=15)])
-    
+
     submit = SubmitField(u'Log In')
 
 class forgotPassword(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=1, max=15)])
+
+    submit = SubmitField(u'Submit')
+
+class securityQuestion(FlaskForm):
+    securityAnswer = StringField('answer', validators=[InputRequired(), Length(min=1, max=35)])
+
+    submit = SubmitField(u'Submit')
+
+class resetPassword(FlaskForm):
+    reset1 = PasswordField('reset1', validators=[InputRequired(), Length(min=1, max=15)])
+
+    reset2 = PasswordField('reset2', validators=[InputRequired(), Length(min=1, max=15)])
+
     submit = SubmitField(u'Submit')
 
 class wouldYouRatherForm(FlaskForm):
@@ -45,3 +58,6 @@ class wouldYouRatherForm(FlaskForm):
     entertainmentOrMusic = RadioField('entVSmusic', choices=[('entertainment', 'go to a comedy club?'), ('music', 'listen to live music?')])
 
     submit = SubmitField(u'Submit')
+
+class recsForm(FlaskForm):
+    recommendations = SelectField(u'Recommendations', choices = [], coerce = int)

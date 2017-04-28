@@ -14,10 +14,6 @@ def checkIfUserExists(username):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.username == username).first())
 
-def checkPassword(password):
-    sqliteSession = get_session()
-    return (sqliteSession.query(User).filter(User.check_password_hash(User.password,password)))
-
 def checkIfEmailExists(email):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.email == email).first())
@@ -76,7 +72,7 @@ def signup():
         else:
             sqliteSession = get_session()
             newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
-
+            newUser.set_password(form.password.data)
             sqliteSession.add(newUser)
             sqliteSession.commit()
 
@@ -85,18 +81,17 @@ def signup():
 
             return redirect('/wyr')
     return render_template('signup.html', title='Join us!', form=form)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     sqliteSession = get_session()
     form = loginForm(request.form)
-
+    password = form.password.data
+    username = form.username.data
+    user = sqliteSession.query(User).filter(User.username == username).first()
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
 
-
-        if checkPassword(form.password.data):
+        if user.check_password(password):
             return redirect('/recs')
         else:
             return render_template('login.html', title="Incorrect Password", form=form)
@@ -158,52 +153,91 @@ def about():
 def recs():
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
-    currUsername = session['username']
+    currUser = session['username']
 
-    # Query for the current user
-    user = graph.data("MATCH (user:User {username:{uname}}"
-                       "RETURN user",
-                       uname = currUsername)
+    # Query for all of currUser's activities
+    activities = graph.run("MATCH (u:User {username: {curr}} )"
+                        "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
 
-    # Query for all of the current user's activities
-    activities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)"
-                             "RETURN user, actvy",
-                             uname = currUsername)
+    if not activities:
+        # If user has no connections, get most popular activities with a positive
+        # weight that correspond to their personality traits
+        # Update this query to only return activities whose labels
+        # match the user's traits
+
+        mostPopular = graph.run("MATCH (sample:User)-[h:HAS_BEEN_TO]->(a:Activity),"
+                                "(u:User {username {currUser}}) WHERE"
+                                "a.label == u.trait1 OR a.label == u.trait2"
+                                "OR a.label == u.trait3 OR a.label == u.trait4"
+                                "RETURN a.placeID, COUNT(h) ORDER BY COUNT(h) DESC"
+                                "LIMIT 4", currUser = currUser)
+
+        recommendations = []
+        for m in mostPopular:
+            for key, value in a.items():
+                recommendations.append((value, 0))
+
+        form = recsForm(request.form)
+        form.recommendations.choices = recommendations
+
+        # Pick most popular activitity and pass it along to recs.html
+        return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
-    similarUsers = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(:Activity)<-[:HAS_BEEN_TO]-(otherUser:User)"
-                "RETURN otherUser.username",
-                uname = currUsername)
+    similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
+                            "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
+                            "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
+                            "WHERE NOT (other.username = {cUser})"
+                            "RETURN other.username", cUser = currUser).data()
 
-    # List of users who meet the cutoff
+    # Create a list of the names of users who share at least one
+    # activity with currUser
+    uniqueSimUsers = []
+    for sim in similarUsers:
+        for key, value in sim.items():
+            uniqueSimUsers.append(value)
+
+    # List of users who meet the similarity cutoff
     possibleUserRecs = []
-
     # Compute similarity of all similar users
-    for simUser in similarUsers:
-      # Get number of activities both the current user and user in similarUsers list have rated
-      sharedActivities = graph.data("MATCH (user:User {name:{uname}})-[:HAS_BEEN_TO]->(actvy:Activity)<-[:HAS_BEEN_TO]-(simiUser:User {name:{sUser}})"
-                "RETURN actvy",
-                uname = currUsername, sUser = simUser["username"])
+    for simUser in set(uniqueSimUsers):
+        # Get number of activities both the current user and user in
+        # similarUsers list have rated
+        sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                    "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
+                                    "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
+                                    " RETURN a", sUser = simUser, curr = currUser).data()
 
-      # 0.2 is the similarity cutoff
-      if (sharedActivities.length / activities.length >= 0.2):
-        possibleUserRecs.append(simUser)
+        # 0.2 is the similarity cutoff
+        # If the following quotient is greater or equal than 0.2,
+        # then the similar user's name is added to possibleUserRecs
+        if (len(sharedActivities) / len(activities) >= 0.2):
+            possibleUserRecs.append(simUser)
 
-    activities = {}
-    # Get activities rated by at least two (or how many?) users in possibleRecs but not by the current user
+    # activities will contain the popularity of activities
+    # that will be recommended to currUser
+    activities = defaultdict(lambda: 0)
+
+    # Get activities rated by at the users in possibleUserRecs
+    # but not by the current user
     for simUser in possibleUserRecs:
-        uniqueActivities = graph.data("MATCH (simUser:User {name:{sUser}})-[:HAS_BEEN_TO])->(actvy:Activity)<- NOT ([:HAS_BEEN_TO]-(currUser:User {name:{uname}}))")
-        "RETURN actvy",
-        uname = currUsername, sUser = simUser
+        uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
+                                        "-[:HAS_BEEN_TO{rating:1}]->(a)"
+                                        "MATCH (u:User {username:{curr}})"
+                                        "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
+                                        "RETURN a.placeID", sUser = simUser, curr = currUser)
 
-        for actvy in uniqueActivities:
-            if not actvy in activities:
-                activities[actvy] = 1
-            else:
-                activities[actvy] += 1
+        # Count the number of times each activity has been rated
+        for a in uniqueActivities:
+            for key, value in a.items():
+                activities[value] += 1
 
-    # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
+    # Returns list of sorted (key, value) tuples in descending order
+    # according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
+    form = recsForm(request.form)
+    form.recommendations.choices = sortedActivities[0:4]
+
     # Pick most popular activitity and pass it along to recs.html
-    return render_template('recs.html', sortedActivities[0])
+    return render_template('recs.html', title="Your recommendations", form=form)

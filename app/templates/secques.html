@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="../static/forgot.css">
 	<link rel="stylesheet" type="text/css" href="../static/mobile-forgot.css" media="screen and (max-width : 750px)">
 </head>
+{% block content %}
 <body>
 	<div id="header">
 		<h1 id="name">What Do NYC</h1>
@@ -20,12 +21,18 @@
 
 	<br><br><br><br><br><br><br><br>
 
-	<div id="form">
+	<form id="form" style="text-align:center;">
 		<h2>Answer the security question below</h2>
-		<input type="text" name="secans" id="secans" placeholder="Answer"><br><br>
-		<input type="submit" name="submit" id="submit" value="Submit"><br><br><br>
-		</form>
-	</div>
+		
+		<!-- Print security question -->
+		
+		{{ form.hidden_tag() }}
+		
+		{{ form.securityAnswer(size=25) }}
+		
+		{{ form.submit }}
+	</form>
 
 </body>
+{% endblock %}
 </html>
