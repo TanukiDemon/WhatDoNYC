@@ -159,7 +159,6 @@ def recs():
     activities = graph.run("MATCH (u:User {username: {curr}} )"
                         "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
 
-    # print("ACTIVITIES: ", activities)
     if not activities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
@@ -177,8 +176,6 @@ def recs():
 
         form = recsForm(request.form)
         form.recommendations.choices = recommendations
-
-        # print(form.recommendations.choices)
 
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
@@ -218,7 +215,6 @@ def recs():
     # that will be recommended to testUser0
     activities = defaultdict(lambda: 0)
 
-    print("POSSIBLE USER RECS: ", possibleUserRecs)
     # Get activities rated by at the users in possibleUserRecs
     # but not by the current user
     for simUser in possibleUserRecs:
@@ -236,12 +232,9 @@ def recs():
     # Returns list of sorted (key, value) tuples in descending order
     # according to the the second tuple element
     sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
-    print("Sorted activities: ", sortedActivities)
 
     form = recsForm(request.form)
     form.recommendations.choices = sortedActivities[0:4]
-
-    print("Choices: ", form.recommendations.choices)
 
     # Pick most popular activitity and pass it along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
