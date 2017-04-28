@@ -151,20 +151,34 @@ def about():
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
-    '''
-    # If user has no connections, get most popular activities with a positive
-    # weight that correspond to their personality traits
-    Do activity tags match up with User traits?
-
-    mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{weight:1}]->(a)"
-                            "RETURN a, COUNT(h)"
-                            "ORDER BY COUNT(h) DESC"
-                            "LIMIT 10")
-    '''
-
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
     currUser = session['username']
+
+    # Query for all of testUser0's activities
+    activities = graph.run("MATCH (u:User {username: {curr}} )"
+                        "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
+
+    if not len(activities):
+        # If user has no connections, get most popular activities with a positive
+        # weight that correspond to their personality traits
+        # Update this query to only return activities whose labels
+        # match the user's traits
+        mostPopular = graph.run("MATCH (u)-[h:HAS_BEEN_TO{weight:1}]->(a)"
+                                "RETURN a.placeID, COUNT(h)"
+                                "ORDER BY COUNT(h) DESC"
+                                "LIMIT 4", currUser = currUser)
+
+        recommendations = []
+        for m in mostPopular:
+            for key, value in a.items():
+                recommendations.append((value, 0))
+
+        form = recsForm(request.form)
+        form.recommendations.choices = recommendations
+
+        # Pick most popular activitity and pass it along to recs.html
+        return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
