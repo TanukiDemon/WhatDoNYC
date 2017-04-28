@@ -13,6 +13,7 @@ class FlaskrTestCase(unittest.TestCase):
         tx = graph.begin()
 
         try:
+            # Create test users and activities with the following relationships
             for i in range(0, 5):
                 graph.data("CREATE (actvy: Activity {name:{aName}})",
                     {"aName": "testActivity%d" % i})
@@ -22,13 +23,14 @@ class FlaskrTestCase(unittest.TestCase):
                     {"uname": "testUser%d" % i})
 
             '''
-            user 0 is connected to activites 0,1
-            user 1 is connected to activities 0, 1, 2, 3, 4
-            user 2 is connected to activities 1, 2, 3, 4
-            user 3 is connected to activities 1, 4
+                Initialize the following relationships between each user and activity.
+                Commit these to the database afterwards
+                user 0 is connected to activites 0,1
+                user 1 is connected to activities 0, 1, 2, 3, 4
+                user 2 is connected to activities 1, 2, 3, 4
+                user 3 is connected to activities 1, 4
+
             '''
-            # Initialize the above relationships between each user and activity.
-            # Commit these to the database afterwards
             for i in range(0, 2):
                 tx.run("MATCH (u:User {username:'testUser0'}), (a:Activity {name:{aname}})"
                     "CREATE (u)-[:HAS_BEEN_TO]->(a)", aname = "testActivity%d" % i)
@@ -47,7 +49,7 @@ class FlaskrTestCase(unittest.TestCase):
 
             tx.commit()
 
-            # Query for all of the current user's activities
+            # Query for all of testUser0's activities
             activities = graph.run("MATCH (u:User {username: 'testUser0'} )"
                 "-[:HAS_BEEN_TO]->(a:Activity) RETURN a").data()
 
@@ -58,16 +60,15 @@ class FlaskrTestCase(unittest.TestCase):
                 "-[:HAS_BEEN_TO]->(a:Activity)<-[:HAS_BEEN_TO]-(other:User)"
                 "WHERE NOT (other.username = 'testUser0') RETURN other.username").data()
 
+            # Create a list of the names of users who share at least one
+            # activity with testUser0
             uniqueSimUsers = []
             for sim in similarUsers:
                 for key, value in sim.items():
                     uniqueSimUsers.append(value)
 
+            # Remove duplicates
             uniqueSimUsers = set(uniqueSimUsers)
-            print(len(uniqueSimUsers))
-            print(uniqueSimUsers)
-            #for u in similarUsers:
-            #    print(u)
             assert len(uniqueSimUsers) == 3
 
             # List of users who meet the cutoff
@@ -75,22 +76,21 @@ class FlaskrTestCase(unittest.TestCase):
 
             # Compute similarity of all similar users
             for simUser in uniqueSimUsers:
-                print("SIM: ", simUser)
                 # Get number of activities both the current user and user in similarUsers list have rated
                 sharedActivities = graph.run("MATCH (u:User {username: 'testUser0'} )"
                     "-[:HAS_BEEN_TO]->(a)<-[:HAS_BEEN_TO]-(sim:User {username:{sUser}})"
                     " RETURN a", sUser = simUser).data()
 
                 # 0.2 is the similarity cutoff
-                print('Share activities: ', len(sharedActivities))
-                print('Acts: ', len(activities))
+                # If the following quotient is greater or equal than 0.2,
+                # then the similar user's name is added to possibleUserRecs
                 if (len(sharedActivities) / len(activities) >= 0.2):
                     possibleUserRecs.append(simUser)
 
-            print('Possible user recs: ', possibleUserRecs)
             assert len(possibleUserRecs) == 3
 
-            # activities = {}
+            # activities will contain the popularity of activities
+            # that will be recommended to testUser0
             activities = defaultdict(lambda: 0)
 
             # Get activities rated by at least two users in possibleRecs but not by the current user
@@ -98,9 +98,6 @@ class FlaskrTestCase(unittest.TestCase):
                 uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
                     "-[:HAS_BEEN_TO]->(a) MATCH (u:User {username:'testUser0'})"
                     "WHERE NOT (u)-[:HAS_BEEN_TO]->(a) RETURN a.name", sUser = simUser)
-
-                print("SIM USER: ", simUser)
-                print(uniqueActivities)
 
                 for a in uniqueActivities:
                     for key, value in a.items():
@@ -115,10 +112,10 @@ class FlaskrTestCase(unittest.TestCase):
             # Returns list of sorted (key, value) tuples in descending order according to the the second tuple element
             sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
 
-            assert len(sortedActivities) == 3
+            assert len(sortedActivities) == 5
             assert sortedActivities[0][0] == 'testActivity4'
-            assert sortedActivities[1][0] == 'testActivity3'
-            assert sortedActivities[2][0] == 'testActivity2'
+            assert sortedActivities[1][0] == 'testActivity3' or 'testActivity2'
+            assert sortedActivities[2][0] == 'testActivity3' or 'testActivity2'
 
         finally:
             # Delete test nodes and their relationships
