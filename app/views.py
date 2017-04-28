@@ -72,7 +72,7 @@ def signup():
         else:
             sqliteSession = get_session()
             newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
-            newUser.set_password(form.passowrd.data)
+            newUser.set_password(form.password.data)
             sqliteSession.add(newUser)
             sqliteSession.commit()
 
