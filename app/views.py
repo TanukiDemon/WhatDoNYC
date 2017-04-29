@@ -197,10 +197,14 @@ def recs():
         for key, value in sim.items():
             # Get number of activities both the current user and user in
             # similarUsers list have rated
+
             numSharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                        "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
-                                        "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
-                                        " RETURN count(a)", sUser = value, curr = currUser).evaluate()
+                                            "-[:HAS_BEEN_TO{rating:1}]->(a)"
+                                            "<-[:HAS_BEEN_TO{rating:1}]-"
+                                            "(sim:User {username:{sUser}})"
+                                            "USING INDEX u:User(username)"
+                                            "USING INDEX sim:User(username)"
+                                            "RETURN count(a)", sUser = value, curr = currUser).evaluate()
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
