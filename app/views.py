@@ -176,7 +176,7 @@ def recs():
         recommendations = []
         for m in mostPopular:
             for key, value in a.items():
-                recommendations.append((value, 0))
+                recommendations.append(value)
 
         form = recsForm(request.form)
         form.recommendations.choices = recommendations
@@ -228,7 +228,7 @@ def recs():
 
     # Choices is a list of the four tuples from count with the highest values
     form = recsForm(request.form)
-    form.recommendations.choices = popularActivities.most_common(4)
+    form.recommendations.choices = [i for i, c in popularActivities.most_common(4)]
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
