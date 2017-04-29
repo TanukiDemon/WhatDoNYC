@@ -189,29 +189,23 @@ def recs():
                             "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
                             "RETURN DISTINCT other.username", cUser = currUser).data()
 
-    # Create a list of the names of users who share at least one
-    # activity with currUser
-    simUsers = []
-    for sim in similarUsers:
-        for key, value in sim.items():
-            simUsers.append(value)
-
     # List of users who meet the similarity cutoff
     possibleUserRecs = []
     # Compute similarity of all similar users
-    for simUser in simUsers:
-        # Get number of activities both the current user and user in
-        # similarUsers list have rated
-        sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                    "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
-                                    "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
-                                    " RETURN a", sUser = simUser, curr = currUser).data()
+    for sim in similarUsers:
+        for key, value in sim.items():
+            # Get number of activities both the current user and user in
+            # similarUsers list have rated
+            sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                        "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
+                                        "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
+                                        " RETURN a", sUser = value, curr = currUser).data()
 
-        # 0.2 is the similarity cutoff
-        # If the following quotient is greater or equal than 0.2,
-        # then the similar user's name is added to possibleUserRecs
-        if (len(sharedActivities) / len(activities) >= 0.2):
-            possibleUserRecs.append(simUser)
+            # 0.2 is the similarity cutoff
+            # If the following quotient is greater or equal than 0.2,
+            # then the similar user's name is added to possibleUserRecs
+            if (len(sharedActivities) / len(activities) >= 0.2):
+                possibleUserRecs.append(value)
 
     # activities will contain the popularity of activities
     # that will be recommended to currUser
