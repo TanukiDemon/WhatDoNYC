@@ -5,7 +5,7 @@ from .forms import *
 from .models import *
 from os import path
 from py2neo import Graph, Record
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 my_view = Blueprint('my_view', __name__)
 
@@ -207,12 +207,9 @@ def recs():
             if (len(sharedActivities) / len(activities) >= 0.2):
                 possibleUserRecs.append(value)
 
-    # activities will contain the popularity of activities
-    # that will be recommended to currUser
-    activities = defaultdict(lambda: 0)
-
     # Get activities rated by at the users in possibleUserRecs
     # but not by the current user
+    popularActivities = Counter()
     for simUser in possibleUserRecs:
         uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
                                         "-[:HAS_BEEN_TO{rating:1}]->(a)"
@@ -220,17 +217,13 @@ def recs():
                                         "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
                                         "RETURN a.placeID", sUser = simUser, curr = currUser)
 
-        # Count the number of times each activity has been rated
         for a in uniqueActivities:
             for key, value in a.items():
-                activities[value] += 1
+                popularActivities[value] += 1
 
-    # Returns list of sorted (key, value) tuples in descending order
-    # according to the the second tuple element
-    sortedActivities = sorted(activities.items(), key=lambda x: x[1], reverse=True)
-
+    # Choices is a list of the four tuples from count with the highest values
     form = recsForm(request.form)
-    form.recommendations.choices = sortedActivities[0:4]
+    form.recommendations.choices = popularActivities.most_common(4)
 
-    # Pick most popular activitity and pass it along to recs.html
+    # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
