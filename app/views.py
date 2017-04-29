@@ -4,7 +4,7 @@ from .wdnyc import app
 from .forms import *
 from .models import *
 from os import path
-from py2neo import Graph
+from py2neo import Graph, Record
 from collections import defaultdict
 
 my_view = Blueprint('my_view', __name__)
@@ -155,7 +155,7 @@ def recs():
     graph = getPy2NeoSession()
     currUser = session['username']
 
-    # Query for all of currUser's activities
+    # Count the number of currUser's activities
     activities = graph.run("MATCH (u:User {username: {curr}} )"
                         "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
 
@@ -187,20 +187,19 @@ def recs():
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
                             "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
                             "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
-                            "WHERE NOT (other.username = {cUser})"
-                            "RETURN other.username", cUser = currUser).data()
+                            "RETURN DISTINCT other.username", cUser = currUser).data()
 
     # Create a list of the names of users who share at least one
     # activity with currUser
-    uniqueSimUsers = []
+    simUsers = []
     for sim in similarUsers:
         for key, value in sim.items():
-            uniqueSimUsers.append(value)
+            simUsers.append(value)
 
     # List of users who meet the similarity cutoff
     possibleUserRecs = []
     # Compute similarity of all similar users
-    for simUser in set(uniqueSimUsers):
+    for simUser in simUsers:
         # Get number of activities both the current user and user in
         # similarUsers list have rated
         sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"

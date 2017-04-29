@@ -136,6 +136,12 @@ class FlaskrTestCase(unittest.TestCase):
 
             tx.commit()
 
+            # Count the number of currUser's activities
+            activities = graph.run("MATCH (u:User {username: 'testUser0'} )"
+                                    "-[:HAS_BEEN_TO]->(a:Activity) RETURN a").data()
+
+            assert(not activities)
+
             mostPopular = graph.run("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
                                     "(u:User {username:'testUser0'})"
                                     "WHERE a.label = u.trait1 OR a.label = u.trait2 "
@@ -143,9 +149,13 @@ class FlaskrTestCase(unittest.TestCase):
                                     "RETURN a.placeID, COUNT(h)"
                                     "ORDER BY COUNT(h) DESC LIMIT 4")
 
-            print(mostPopular)
+            print(mostPopular.data())
+            print(mostPopular.evaluate())
+
+            pop = graph.run("MATCH (a:Activity) RETURN a.name")
+            print(pop.evaluate())
         finally:
-            graph.data("MATCH (a:Activity {name:'testUser0'}) DETACH DELETE a")
+            graph.data("MATCH (u:User {name:'testUser0'}) DETACH DELETE u")
 
 if __name__ == '__main__':
     unittest.main()
