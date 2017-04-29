@@ -1,0 +1,3 @@
+4-29-17
+------
+Updated Neo4j database. Created indexes for User:username trait
