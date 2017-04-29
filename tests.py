@@ -125,5 +125,28 @@ class FlaskrTestCase(unittest.TestCase):
             for i in range(0, 5):
                 graph.data("MATCH (a:Activity {name:{aname}}) DETACH DELETE a", aname = "testActivity%d" % i)
 
+    def test_recs_no_relationships(self):
+        # Insert test users and activities
+        graph = getPy2NeoSession()
+        try:
+            tx = graph.begin()
+
+            graph.data("CREATE (u:User {name:'testUser0', trait4:'entertainment',"
+                        "trait2:'art', trait3:'outside', trait1:'food'})")
+
+            tx.commit()
+
+            # Use filter?
+            mostPopular = graph.run("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
+                                    "(u:User {username:'testUser0'})"
+                                    "WHERE a.label = u.trait1 OR a.label = u.trait2 "
+                                    "OR a.label = u.trait3 OR a.label = u.trait4 "
+                                    "RETURN a.placeID, COUNT(h)"
+                                    "ORDER BY COUNT(h) DESC LIMIT 4")
+
+            print(mostPopular)
+        finally:
+            graph.data("MATCH (a:Activity {name:'testUser0'}) DETACH DELETE a")
+
 if __name__ == '__main__':
     unittest.main()
