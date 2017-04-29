@@ -156,6 +156,9 @@ def recs():
     currUser = session['username']
 
     # Count the number of currUser's activities
+    # Replace with "MATCH (u:User {username: {curr}} ) return size(u->[:HAS_BEEN_TO]->(a))
+    # https://neo4j.com/blog/tuning-cypher-queries/
+    # https://stackoverflow.com/questions/13731911/how-to-use-sql-like-group-by-in-cypher-query-language-in-neo4j
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
                             "-[r:HAS_BEEN_TO]->(a) RETURN count(r)", curr = currUser).evaluate()
 

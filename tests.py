@@ -5,6 +5,7 @@ from py2neo import Graph, Node, Relationship
 from flask import session
 from app.views import getPy2NeoSession
 from collections import defaultdict
+import pandas
 
 class FlaskrTestCase(unittest.TestCase):
     def test_recs(self):
@@ -124,6 +125,19 @@ class FlaskrTestCase(unittest.TestCase):
 
             for i in range(0, 5):
                 graph.data("MATCH (a:Activity {name:{aname}}) DETACH DELETE a", aname = "testActivity%d" % i)
+
+        union = graph.data("MATCH (u:User)-[:HAS_BEEN_TO]->(a:Activity)"
+                            "WHERE u.username = 'stephen' OR u.username = 'ekimlin'"
+                            "return a.name, u.name")
+        for u in union:
+            if u['a.name'] == "High Line":
+                print(u)
+
+        d = pandas.DataFrame(union)
+        # print(d)
+        #print(d.groupby(d.index).sum())
+        print(d.groupby("a.name").sum())
+        #print(d.reset_index().groupby("a.name").sum())
 
     def test_recs_no_relationships(self):
         # Insert test users and activities
