@@ -156,10 +156,10 @@ def recs():
     currUser = session['username']
 
     # Count the number of currUser's activities
-    activities = graph.run("MATCH (u:User {username: {curr}} )"
-                        "-[:HAS_BEEN_TO]->(a:Activity) RETURN a", curr = currUser).data()
+    numActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                            "-[r:HAS_BEEN_TO]->(a) RETURN count(r)", curr = currUser).evaluate()
 
-    if not activities:
+    if not numActivities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         # Update this query to only return activities whose labels
@@ -196,15 +196,15 @@ def recs():
         for key, value in sim.items():
             # Get number of activities both the current user and user in
             # similarUsers list have rated
-            sharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
+            numSharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
                                         "-[:HAS_BEEN_TO{rating:1}]->(a)<-"
                                         "[:HAS_BEEN_TO{rating:1}]-(sim:User {username:{sUser}})"
-                                        " RETURN a", sUser = value, curr = currUser).data()
+                                        " RETURN count(a)", sUser = value, curr = currUser).evaluate()
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
             # then the similar user's name is added to possibleUserRecs
-            if (len(sharedActivities) / len(activities) >= 0.2):
+            if (numSharedActivities / numActivities >= 0.2):
                 possibleUserRecs.append(value)
 
     # Get activities rated by at the users in possibleUserRecs

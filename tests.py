@@ -134,6 +134,16 @@ class FlaskrTestCase(unittest.TestCase):
             graph.data("CREATE (u:User {name:'testUser0', trait4:'entertainment',"
                         "trait2:'art', trait3:'outside', trait1:'food'})")
 
+            num = graph.run("MATCH (u:User {username: 'testUser0'} )"
+                        "-[r:HAS_BEEN_TO]->(a) RETURN count(r)").evaluate()
+
+            print("NUM: ", num)
+
+            num2 = graph.run("MATCH (u:User {username: 'testUser0'} )"
+                            "-[r:HAS_BEEN_TO]->(a) RETURN count(r)").data()
+
+            print("NUM2: ", num2)
+
             tx.commit()
 
             # Count the number of currUser's activities
