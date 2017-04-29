@@ -156,8 +156,9 @@ class FlaskrTestCase(unittest.TestCase):
                                     "(u:User {username:'testUser0'})"
                                     "WHERE a.label = u.trait1 OR a.label = u.trait2 "
                                     "OR a.label = u.trait3 OR a.label = u.trait4 "
-                                    "RETURN a.placeID, COUNT(h)"
-                                    "ORDER BY COUNT(h) DESC LIMIT 4")
+                                    "WITH a, COUNT(h) as c "
+                                    "ORDER BY c DESC LIMIT 4 "
+                                    "RETURN a.placeID")
 
             print(mostPopular.data())
             print(mostPopular.evaluate())
