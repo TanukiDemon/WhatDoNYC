@@ -136,7 +136,6 @@ class FlaskrTestCase(unittest.TestCase):
 
             tx.commit()
 
-            # Use filter?
             mostPopular = graph.run("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
                                     "(u:User {username:'testUser0'})"
                                     "WHERE a.label = u.trait1 OR a.label = u.trait2 "
