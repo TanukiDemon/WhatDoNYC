@@ -137,12 +137,8 @@ class FlaskrTestCase(unittest.TestCase):
             num = graph.run("MATCH (u:User {username: 'testUser0'} )"
                         "-[r:HAS_BEEN_TO]->(a) RETURN count(r)").evaluate()
 
-            print("NUM: ", num)
-
             num2 = graph.run("MATCH (u:User {username: 'testUser0'} )"
                             "-[r:HAS_BEEN_TO]->(a) RETURN count(r)").data()
-
-            print("NUM2: ", num2)
 
             tx.commit()
 
@@ -160,11 +156,6 @@ class FlaskrTestCase(unittest.TestCase):
                                     "ORDER BY c DESC LIMIT 4 "
                                     "RETURN a.placeID")
 
-            print(mostPopular.data())
-            print(mostPopular.evaluate())
-
-            pop = graph.run("MATCH (a:Activity) RETURN a.name")
-            print(pop.evaluate())
         finally:
             graph.data("MATCH (u:User {name:'testUser0'}) DETACH DELETE u")
 
