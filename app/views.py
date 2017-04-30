@@ -6,7 +6,7 @@ from .models import *
 from os import path
 from py2neo import Graph, Record
 from collections import defaultdict, Counter
-from pandas import DataFrame
+from pandas import DataFrame, concat
 
 my_view = Blueprint('my_view', __name__)
 
@@ -201,44 +201,48 @@ def recs():
         for key, value in sim.items():
             # Get number of activities both the current user and user in
             # similarUsers list have rated
-            union = graph.data("MATCH (sim:User {username: 'ekimlin'})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+            union2 = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
                                 "WITH simAct as allActs "
                                 "MATCH (allActs) "
-                                "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
-                                "RETURN allActs.placeID as a.placeID")
+                                "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
+                                "RETURN allActs.placeID as aPlace", suser = value, curr = currUser)
 
             # Get similar user's activities that currUser hasn't been to.
             # Feed this into a dataframe
-            df = DataFrame(union)
+            df = DataFrame(union2)
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
             # then the similar user's name is added to possibleUserRecs
+            #print("SHAPE: ", df.shape[0])
             shareCount = numActivities - df.shape[0]
             if (shareCount / numActivities >= 0.2):
                 # Since the similar user makes the cut off,
                 # its dataframe is merged with allActivities
                 frames = [allActivities, df]
-                allActivities = pd.concat(frames)
+                allActivities = concat(frames)
 
     # All similarUsers have had their data processed and data has been
     # merged into allActivities as need
     # The duplicated rows are combined and a new column is created that
     # that contains the number of times the a.name value appeared originally
-    mergedDf = DataFrame(allActivities.groupby('a.placeID').size().rename('counts'))
+    mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
     # Get the four most popular activities' place IDs
     mostPopularDf = mergedDf.nlargest(4, 'counts')
     popularList = []
+
     for row in df.itertuples():
         pID, count = row
-        popularList.append(pID)
-
+        popularList.append(count)
+        print("PID: ", pID)
+        print("COUNT: ", count)
+    #print("SIZE of popularList: ", len(popularList))
     #print("popular: ", popularActivities.most_common(4))
     # Choices is a list of the four tuples from count with the highest values
     form = recsForm(request.form)
     #form.recommendations.choices = popularActivities.most_common(4)
-    form.recommendations.choices = popularList
+    form.recommendations.choices = popularList[:4]
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)

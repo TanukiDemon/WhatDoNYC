@@ -133,23 +133,25 @@ class FlaskrTestCase(unittest.TestCase):
         #                    "RETURN numActs AS FirstPart, allActs.name AS SecondPart")
 
             #"WITH COUNT(simAct) AS numActs, simAct as allActs "
-        union = graph.data("MATCH (sim:User {username: 'ekimlin'})-[:HAS_BEEN_TO]->(simAct:Activity)"
+        union = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO]->(simAct:Activity)"
                             "WITH simAct as allActs "
                             "MATCH (allActs) "
-                            "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
-                            "RETURN allActs.name as aName")
+                            "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
+                            "RETURN allActs.name as aName", suser = 'ekimlin', curr = 'stephen')
 
         df = DataFrame(union)
         #print(df)
 
         #"WITH COUNT(simAct) AS numActs, simAct as allActs "
-        union2 = graph.data("MATCH (sim:User {username: 'Rafawk'})-[:HAS_BEEN_TO]->(simAct:Activity)"
+        union2 = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO]->(simAct:Activity)"
                             "WITH simAct as allActs "
                             "MATCH (allActs) "
-                            "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
-                            "RETURN allActs.name as aName")
+                            "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
+                            "RETURN allActs.name as aName", suser = 'ekimlin', curr = 'stephen')
 
         df2 = DataFrame(union2)
+        print(df2)
+        print("SIZE OF union2: ", df2.shape[0])
 
         frames = [df, df2]
         mergedDf = concat(frames)
