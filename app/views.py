@@ -191,17 +191,16 @@ def recs():
     # Get all users who rated the same activities as the current user
     similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
                             "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
-                            "<-[:HAS_BEEN_TO{rating:1}]-(other:User)"
+                            "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
                             "RETURN DISTINCT other.username", cUser = currUser).data()
 
-    popularActivities = Counter()
     allActivities = DataFrame()
     # Compute similarity of all similar users
     for sim in similarUsers:
         for key, value in sim.items():
             # Get number of activities both the current user and user in
             # similarUsers list have rated
-            union2 = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+            uniqueActivities = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
                                 "WITH simAct as allActs "
                                 "MATCH (allActs) "
                                 "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
@@ -209,7 +208,7 @@ def recs():
 
             # Get similar user's activities that currUser hasn't been to.
             # Feed this into a dataframe
-            df = DataFrame(union2)
+            df = DataFrame(uniqueActivities)
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
@@ -233,10 +232,9 @@ def recs():
     popularList = []
 
     for row in df.itertuples():
-        pID, count = row
-        popularList.append(count)
-        print("PID: ", pID)
-        print("COUNT: ", count)
+        id, place = row
+        popularList.append(place)
+        
     #print("SIZE of popularList: ", len(popularList))
     #print("popular: ", popularActivities.most_common(4))
     # Choices is a list of the four tuples from count with the highest values
