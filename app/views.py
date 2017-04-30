@@ -195,110 +195,55 @@ def recs():
                             "RETURN DISTINCT other.username", cUser = currUser).data()
 
     popularActivities = Counter()
+    allActivities = DataFrame()
     # Compute similarity of all similar users
     for sim in similarUsers:
         for key, value in sim.items():
             # Get number of activities both the current user and user in
             # similarUsers list have rated
-            '''
-            union = graph.data("MATCH (u:User)-[:HAS_BEEN_TO]->(a:Activity)"
-                                "WHERE u.username = {sUser} OR u.username = {curr}"
-                                "return a.placeID, u.username", sUser = value, curr = currUser)
+            union = graph.data("MATCH (sim:User {username: 'ekimlin'})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+                                "WITH simAct as allActs "
+                                "MATCH (allActs) "
+                                "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
+                                "RETURN allActs.placeID as a.placeID")
 
-            union = graph.data("MATCH (u:User {username: {suser}})-[:HAS_BEEN_TO]->"
-                    "(a:Activity)<-[:HAS_BEEN_TO]-(u:User {username: {curr}}) "
-                    "RETURN a.placeID, u.username "
-                    "UNION "
-                    "MATCH (u:User {username: {suser}})-[:HAS_BEEN_TO]->"
-                    "(a:Activity) RETURN a.placeID, u.username", suser = value, curr = currUser)
+            # Get similar user's activities that currUser hasn't been to.
+            # Feed this into a dataframe
+            df = DataFrame(union)
 
-            MATCH (c1:Crew) WHERE c1.name='Morpheus'
-            WITH c1
-            MATCH (c1)--(c2:Crew)
-            WITH collect(c2) AS to_be_returned
-            MATCH (c2)--(u:USER)
-            WHERE u.name='Sherlock Holmes'
-            RETURN to_be_returned AS FirstPart, collect(c2) AS SecondPart
-            '''
-
-            # Get all sim users queries, save that total number as some output
-            # Feed all the returned nodes in new query that removes those also
-            # been to by the current user. Return these new nodes
-            union2 = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO]->(simAct:Activity)"
-                                "WITH collect(simAct) AS allActs "
-                                "MATCH (simAct) "
-                                "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(simAct) "
-                                "RETURN COUNT(allActs) AS FirstPart, collect(simAct.placeID) AS SecondPart", suser = value, curr = currUser)
-
-            # Make dataframe from results
-            df = DataFrame(union2)
-            print(df)
-
-            '''
-            shareCount = 0
-            tempCounter = Counter()
-
-            for row in DataFrame(df.groupby('a.placeID').size().rename('counts')).itertuples():
-                a,c = row
-                if c == 2:
-                    shareCount += 1
-                else:
-                    tempCounter[a] += 1
-
-
-            #print("SC: ", shareCount)
-            #print("tempCounter: ", tempCounter)
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
             # then the similar user's name is added to possibleUserRecs
+            shareCount = numActivities - df.shape[0]
             if (shareCount / numActivities >= 0.2):
-                # Get dataframe containing activities only similar user has been to
-                # Can we use numpy's arrays that support vectorized operations instead?
-                popularActivities = popularActivities + tempCounter
-            '''
-    '''
-    for sim in similarUsers:
-        for key, value in sim.items():
-            # Get number of activities both the current user and user in
-            # similarUsers list have rated
+                # Since the similar user makes the cut off,
+                # its dataframe is merged with allActivities
+                frames = [allActivities, df]
+                allActivities = pd.concat(frames)
 
-            numSharedActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                            "-[:HAS_BEEN_TO{rating:1}]->(a)"
-                                            "<-[:HAS_BEEN_TO{rating:1}]-"
-                                            "(sim:User {username:{sUser}})"
-                                            "USING INDEX u:User(username)"
-                                            "USING INDEX sim:User(username)"
-                                            "RETURN count(a)", sUser = value, curr = currUser).evaluate()
+    # All similarUsers have had their data processed and data has been
+    # merged into allActivities as need
+    # The duplicated rows are combined and a new column is created that
+    # that contains the number of times the a.name value appeared originally
+    mergedDf = DataFrame(allActivities.groupby('a.placeID').size().rename('counts'))
 
-            # 0.2 is the similarity cutoff
-            # If the following quotient is greater or equal than 0.2,
-            # then the similar user's name is added to possibleUserRecs
-            if (numSharedActivities / numActivities >= 0.2):
-                possibleUserRecs.append(value)
+    # Get the four most popular activities' place IDs
+    mostPopularDf = mergedDf.nlargest(4, 'counts')
+    popularList = []
+    for row in df.itertuples():
+        pID, count = row
+        popularList.append(pID)
 
-    # Get activities rated by at the users in possibleUserRecs
-    # but not by the current user
-    popularActivities = Counter()
-    for simUser in possibleUserRecs:
-        uniqueActivities = graph.data("MATCH (simUser:User {username:{sUser}})"
-                                        "-[:HAS_BEEN_TO{rating:1}]->(a)"
-                                        "MATCH (u:User {username:{curr}})"
-                                        "WHERE NOT (u)-[:HAS_BEEN_TO]->(a)"
-                                        "RETURN a.placeID", sUser = simUser, curr = currUser)
-
-        for a in uniqueActivities:
-            for key, value in a.items():
-                popularActivities[value] += 1
-    '''
     #print("popular: ", popularActivities.most_common(4))
     # Choices is a list of the four tuples from count with the highest values
     form = recsForm(request.form)
     #form.recommendations.choices = popularActivities.most_common(4)
-    form.recommendations.choices = [i for i, c in popularActivities.most_common(4)]
+    form.recommendations.choices = popularList
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
 
 @app.route('/recs/<rating>/<placeId>', methods=['GET'])
 def addRelation():
+    print("hello")
     # Add relationship in the database for user to placeId with weight rating
