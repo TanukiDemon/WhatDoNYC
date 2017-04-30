@@ -298,3 +298,7 @@ def recs():
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
+
+@app.route('/recs/<rating>/<placeId>', methods=['GET'])
+def addRelation():
+    # Add relationship in the database for user to placeId with weight rating
