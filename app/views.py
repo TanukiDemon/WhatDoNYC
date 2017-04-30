@@ -238,5 +238,4 @@ def recs():
 
 @app.route('/recs/<rating>/<placeId>', methods=['GET'])
 def addRelation():
-    print("In the addRelation function in recs/... route");
     # Add relationship in the database for user to placeId with weight rating
