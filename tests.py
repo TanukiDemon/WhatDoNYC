@@ -5,7 +5,7 @@ from py2neo import Graph, Node, Relationship
 from flask import session
 from app.views import getPy2NeoSession
 from collections import defaultdict
-import pandas
+from pandas import DataFrame
 
 class FlaskrTestCase(unittest.TestCase):
     def test_recs(self):
@@ -126,18 +126,51 @@ class FlaskrTestCase(unittest.TestCase):
             for i in range(0, 5):
                 graph.data("MATCH (a:Activity {name:{aname}}) DETACH DELETE a", aname = "testActivity%d" % i)
 
-        union = graph.data("MATCH (u:User)-[:HAS_BEEN_TO]->(a:Activity)"
-                            "WHERE u.username = 'stephen' OR u.username = 'ekimlin'"
-                            "return a.name, u.name")
-        for u in union:
-            if u['a.name'] == "High Line":
-                print(u)
+        #union = graph.data("MATCH (u:User)-[:HAS_BEEN_TO]->(a:Activity)"
+        #                    "WHERE u.username = 'stephen' OR u.username = 'ekimlin'"
+        #                    "return a.name, u.name")
 
-        d = pandas.DataFrame(union)
-        # print(d)
-        #print(d.groupby(d.index).sum())
-        print(d.groupby("a.name").sum())
-        #print(d.reset_index().groupby("a.name").sum())
+            #MATCH (david { name: 'David' })--(otherPerson)-->()
+            #WITH otherPerson, count(*) AS foaf
+            #WHERE foaf > 1
+            #RETURN otherPerson.name
+
+            # The name of the person connected to 'David' with the at least more than one outgoing relationship will be returned by the query.
+        #union = graph.data("MATCH (sim:User {username: 'ekimlin'})-[:HAS_BEEN_TO]->(simAct:Activity)"
+        #                    "WITH COUNT(simAct) AS numActs, simAct as allActs "
+        #                    "MATCH (allActs) "
+        #                    "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
+        #                    "RETURN numActs AS FirstPart, allActs.name AS SecondPart")
+
+            #"WITH COUNT(simAct) AS numActs, simAct as allActs "
+        union = graph.data("MATCH (sim:User {username: 'ekimlin'})-[:HAS_BEEN_TO]->(simAct:Activity)"
+                            "WITH simAct as allActs "
+                            "MATCH (allActs) "
+                            "WHERE NOT (:User {username:'stephen'})-[:HAS_BEEN_TO]->(allActs) "
+                            "RETURN allActs.name as firstPart")
+
+        eunion = graph.data("MATCH (s:User {username: 'ekimlin'})-[:HAS_BEEN_TO]->(a:Activity)"
+                                "RETURN count(a), a.name")
+
+        dfe = DataFrame(eunion)
+        print(dfe)
+
+        df = DataFrame(union)
+        print(df)
+        # returned as a pandas series: counts = df.groupby('col1').size(); counts
+        # counts_df returned as a dataframe
+        #counts_df = DataFrame(df.groupby('a.name').size().rename('counts'))
+        #print(counts_df)
+        # Use numpy array iteration for vectorized operations instead?
+        #print(df.groupby('a.name').size())
+        #for row in DataFrame(df.groupby('a.name').size().rename('counts')).itertuples():
+        for row in df.itertuples():
+            f = row
+            print("F: ", f)
+            #print("S: ", s)
+
+        #for row in counts_df.itertuples():
+        #    print(row[1])
 
     def test_recs_no_relationships(self):
         # Insert test users and activities
