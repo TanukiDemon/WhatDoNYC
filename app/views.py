@@ -158,8 +158,6 @@ def recs():
     form = recsForm(request.form)
 
     # Count the number of currUser's activities
-    #numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-    #                        "-[r:HAS_BEEN_TO]->(a) RETURN count(r)", curr = currUser).evaluate()
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
                                 "RETURN u.likedVisits", curr = currUser).evaluate()
     if not numActivities:
@@ -229,10 +227,10 @@ def recs():
     # that contains the number of times the a.name value appeared originally
     mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
-    # Get the four most popular activities' place IDs
+    # Sort the rows based on values in counts column
     mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
 
-    # Choices is a list of the four tuples from count with the highest values
+    # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
 
     # The most popular activities are passed along to recs.html
