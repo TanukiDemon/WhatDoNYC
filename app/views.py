@@ -186,39 +186,36 @@ def recs():
         return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
-    similarUsers = graph.run("MATCH (u:User {username: {cUser}} )"
+    similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
                             "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
                             "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
-                            "RETURN DISTINCT other.username", cUser = currUser).data()
+                            "RETURN DISTINCT other.username", cUser = currUser))
 
-    if not similarUsers:
+    if similarUsers.empty:
         return render_template('recs.html', title="Your recommendations", form=form)
 
     allActivities = DataFrame()
     # Compute similarity of all similar users
-    for sim in similarUsers:
-        for key, value in sim.items():
-            # Get number of activities both the current user and user in
-            # similarUsers list have rated
-            uniqueActivities = graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
-                                "WITH simAct as allActs "
-                                "MATCH (allActs) "
-                                "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
-                                "RETURN allActs.placeID as aPlace", suser = value, curr = currUser)
+    for row in similarUsers.itertuples():
+        i, uname = row
 
-            # Get similar user's activities that currUser hasn't been to.
-            # Feed this into a dataframe
-            df = DataFrame(uniqueActivities)
+        # Get number of activities both the current user and user in
+        # similarUsers list have rated
+        uniqueActivitiesDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+                                    "WITH simAct as allActs "
+                                    "MATCH (allActs) "
+                                    "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
+                                    "RETURN allActs.placeID as aPlace", suser = uname, curr = currUser))
 
-            # 0.2 is the similarity cutoff
-            # If the following quotient is greater or equal than 0.2,
-            # then the similar user's name is added to possibleUserRecs
-            shareCount = numActivities - df.shape[0]
-            if (shareCount / numActivities >= 0.2):
-                # Since the similar user makes the cut off,
-                # its dataframe is merged with allActivities
-                frames = [allActivities, df]
-                allActivities = concat(frames)
+        # 0.2 is the similarity cutoff
+        # If the following quotient is greater or equal than 0.2,
+        # then the similar user's name is added to possibleUserRecs
+        shareCount = numActivities - uniqueActivitiesDf.shape[0]
+        if (shareCount / numActivities >= 0.2):
+            # Since the similar user makes the cut off,
+            # its dataframe is merged with allActivities
+            frames = [allActivities, uniqueActivitiesDf]
+            allActivities = concat(frames)
 
     # All similarUsers have had their data processed and data has been
     # merged into allActivities as need
