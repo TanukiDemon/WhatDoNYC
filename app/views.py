@@ -150,6 +150,17 @@ def wyr():
 def about():
     return render_template('about.html', title="About What Do NYC")
 
+def generateRandomRecommendations(n, username):
+    recs = DataFrame(graph.data("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
+                                "(u:User {username:{curr}})"
+                                "WHERE a.label = u.trait1 OR a.label = u.trait2 "
+                                "OR a.label = u.trait3 OR a.label = u.trait4 "
+                                "WITH a, COUNT(h) as c "
+                                "ORDER BY c DESC LIMIT {lim} "
+                                "RETURN a.placeID", curr = currUser, lim=n))
+
+    return recs.values.tolist()
+
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
     # Get graph object to perform Neo4j queries
@@ -163,24 +174,8 @@ def recs():
     if not numActivities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
-        # Update this query to only return activities whose labels
-        # match the user's traits
-
-        mostPopular = graph.data("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
-                                "(u:User {username:{curr}})"
-                                "WHERE a.label = u.trait1 OR a.label = u.trait2 "
-                                "OR a.label = u.trait3 OR a.label = u.trait4 "
-                                "WITH a, COUNT(h) as c "
-                                "ORDER BY c DESC LIMIT 4 "
-                                "RETURN a.placeID", curr = currUser)
-
-        recommendations = []
-        for m in mostPopular:
-            for key, value in a.items():
-                recommendations.append(value)
-
         form = recsForm(request.form)
-        form.recommendations.choices = recommendations
+        form.recommendations.choices = generateRandomRecommendations(4, currUser)
 
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
@@ -230,6 +225,10 @@ def recs():
 
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
+
+    lngth = len(choices)
+    if l < 4:
+        form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
