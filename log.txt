@@ -1,3 +1,8 @@
 4-29-17
 ------
 Updated Neo4j database. Created indexes for User:username trait
+
+4-30-17
+-----
+Updated User nodes to contain property likedVisits, which counts the number of
+activities they rated a 1
