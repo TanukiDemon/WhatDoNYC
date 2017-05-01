@@ -216,7 +216,6 @@ def recs():
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
             # then the similar user's name is added to possibleUserRecs
-            #print("SHAPE: ", df.shape[0])
             shareCount = numActivities - df.shape[0]
             if (shareCount / numActivities >= 0.2):
                 # Since the similar user makes the cut off,
@@ -231,19 +230,10 @@ def recs():
     mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
     # Get the four most popular activities' place IDs
-    mostPopularDf = mergedDf.nlargest(4, 'counts')
-    popularList = []
+    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
 
-    for row in df.itertuples():
-        id, place = row
-        popularList.append(place)
-
-    #print("SIZE of popularList: ", len(popularList))
-    #print("popular: ", popularActivities.most_common(4))
     # Choices is a list of the four tuples from count with the highest values
-    #form = recsForm(request.form)
-    #form.recommendations.choices = popularActivities.most_common(4)
-    form.recommendations.choices = popularList[:4]
+    form.recommendations.choices =  mostPopularDf.index.values.tolist()
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)

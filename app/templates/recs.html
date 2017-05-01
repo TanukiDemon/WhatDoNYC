@@ -20,12 +20,12 @@
         placeId3 = '{{ form.recommendations.choices[2] }}';
         placeId4 = '{{ form.recommendations.choices[3] }}';
 
-        /* placeIds for testing...need to use if running locally (make four above a note) 
+        /* placeIds for testing...need to use if running locally (make four above a note)
         placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
         placeId2 = 'ChIJ8VOfr1RYwokRE441DHuxQNc';
         placeId3 = 'ChIJI-OMB0NfwokR6CIi6iO1znM';
         placeId4 = 'ChIJb8Jg9pZYwokR-qHGtvSkLzs';
-        */        
+        */
 
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
@@ -135,16 +135,16 @@
         }
         xmlHttp.open("GET", theUrl, true);
         xmlHttp.send(null);
-      } 
+      }
 
       function mycallback(data) {}
 
       function getFeedback(rating, placeId) {
         console.log(rating);
         console.log(placeId);
-        httpGetAsync("/recs?rating=value1,placeId=value2", mycallback);    
+        httpGetAsync("/recs?rating=value1,placeId=value2", mycallback);
       }
-    </script> 
+    </script>
 
     <div id="test">
       <div id=photo1></div>
@@ -156,7 +156,7 @@
       <h4 id="name2"></h4>
       <p id="vicinity2"></p>
       <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2)"></img><img class ="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2)"></img><br><br>
-     
+
       <div id=photo3></div>
       <h4 id="name3"></h4>
       <p id="vicinity3"></p>
@@ -178,4 +178,3 @@
   </body>
   {% endblock %}
 </html>
-
