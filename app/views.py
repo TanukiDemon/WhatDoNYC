@@ -209,7 +209,6 @@ def recs():
             # Get similar user's activities that currUser hasn't been to.
             # Feed this into a dataframe
             df = DataFrame(uniqueActivities)
-            print(df)
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
