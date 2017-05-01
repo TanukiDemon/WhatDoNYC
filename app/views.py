@@ -150,15 +150,19 @@ def wyr():
 def about():
     return render_template('about.html', title="About What Do NYC")
 
-def generateRandomRecommendations(n, username):
+# Generates recommendations of the most popular activities
+# based on the user's personality traits
+def generatePopularRecommendations(n, username):
+    # Get the required number of recommendations in DataFrame format
     recs = DataFrame(graph.data("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
                                 "(u:User {username:{curr}})"
                                 "WHERE a.label = u.trait1 OR a.label = u.trait2 "
                                 "OR a.label = u.trait3 OR a.label = u.trait4 "
                                 "WITH a, COUNT(h) as c "
                                 "ORDER BY c DESC LIMIT {lim} "
-                                "RETURN a.placeID", curr = currUser, lim=n))
+                                "RETURN a.placeID", curr = currUser, lim = n))
 
+    # Feed the place IDs into a list
     return recs.values.tolist()
 
 @app.route('/recs', methods=['GET', 'POST'])
@@ -226,6 +230,8 @@ def recs():
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
 
+    # If less than four recommendations were made, then generate ones based on
+    # the users' traits
     lngth = len(choices)
     if l < 4:
         form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
