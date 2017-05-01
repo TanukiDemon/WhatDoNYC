@@ -4,7 +4,7 @@ from .wdnyc import app
 from .forms import *
 from .models import *
 from os import path
-from py2neo import Graph, Record
+from py2neo import Graph, Node
 from collections import defaultdict, Counter
 from pandas import DataFrame, concat
 
@@ -155,14 +155,13 @@ def recs():
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
     currUser = session['username']
+    form = recsForm(request.form)
 
     # Count the number of currUser's activities
-    # Replace with "MATCH (u:User {username: {curr}} ) return size(u->[:HAS_BEEN_TO]->(a))
-    # https://neo4j.com/blog/tuning-cypher-queries/
-    # https://stackoverflow.com/questions/13731911/how-to-use-sql-like-group-by-in-cypher-query-language-in-neo4j
+    #numActivities = graph.run("MATCH (u:User {username: {curr}} )"
+    #                        "-[r:HAS_BEEN_TO]->(a) RETURN count(r)", curr = currUser).evaluate()
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                            "-[r:HAS_BEEN_TO]->(a) RETURN count(r)", curr = currUser).evaluate()
-
+                                "RETURN u.likedVisits", curr = currUser).evaluate()
     if not numActivities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
@@ -194,6 +193,9 @@ def recs():
                             "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
                             "RETURN DISTINCT other.username", cUser = currUser).data()
 
+    if not similarUsers:
+        return render_template('recs.html', title="Your recommendations", form=form)
+
     allActivities = DataFrame()
     # Compute similarity of all similar users
     for sim in similarUsers:
@@ -209,6 +211,7 @@ def recs():
             # Get similar user's activities that currUser hasn't been to.
             # Feed this into a dataframe
             df = DataFrame(uniqueActivities)
+            print(df)
 
             # 0.2 is the similarity cutoff
             # If the following quotient is greater or equal than 0.2,
@@ -234,11 +237,11 @@ def recs():
     for row in df.itertuples():
         id, place = row
         popularList.append(place)
-        
+
     #print("SIZE of popularList: ", len(popularList))
     #print("popular: ", popularActivities.most_common(4))
     # Choices is a list of the four tuples from count with the highest values
-    form = recsForm(request.form)
+    #form = recsForm(request.form)
     #form.recommendations.choices = popularActivities.most_common(4)
     form.recommendations.choices = popularList[:4]
 
