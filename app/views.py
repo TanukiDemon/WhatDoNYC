@@ -196,6 +196,8 @@ def recs():
 
     allActivities = DataFrame()
     # Compute similarity of all similar users
+
+    # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
     for row in similarUsers.itertuples():
         i, uname = row
 

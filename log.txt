@@ -6,3 +6,7 @@ Updated Neo4j database. Created indexes for User:username trait
 -----
 Updated User nodes to contain property likedVisits, which counts the number of
 activities they rated a 1
+
+More optimizing articles for pandas, numpy, python
+http://pandas.pydata.org/pandas-docs/stable/enhancingperf.html
+https://www.datascience.com/blog/straightening-loops-how-to-vectorize-data-aggregation-with-pandas-and-numpy/
