@@ -247,5 +247,5 @@ def addRelation():
     currUser = session["username"]
     recs = session["recommended"]
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
-                "u-[:HAS_BEEN_TO{rating:{r}}{recommended:{True}}]->(a)",
+                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{True}}]->(a)",
                 curr = currUser, pid=<placeId>, r = <rating>, rec = recs)
