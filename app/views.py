@@ -250,9 +250,13 @@ def recs():
 
 @app.route('/recs/<rating>/<placeId>', methods=['GET'])
 def addRelation():
-    # Add relationship in the database for user to placeId with weight rating
+    # Get a few values needed to run the query
     currUser = session["username"]
     recs = session["recommended"]
+    rule = request.url_rule
+    base, rating, placeId = rule.rule.split('/')
+
+    # Add relationship in the database for user to placeId with weight rating
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
                 "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{rec}}]->(a)",
                 curr = currUser, pid=placeId, r = rating, rec = recs)
