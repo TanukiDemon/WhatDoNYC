@@ -240,6 +240,8 @@ def recs():
     # If less than four recommendations were made, then generate ones based on
     # the users' traits
     lngth = len(choices)
+    if not lngth:
+        session['recommended'] = False
     if l < 4:
         form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
 
@@ -252,5 +254,5 @@ def addRelation():
     currUser = session["username"]
     recs = session["recommended"]
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
-                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{True}}]->(a)",
+                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{rec}}]->(a)",
                 curr = currUser, pid=placeId, r = rating, rec = recs)
