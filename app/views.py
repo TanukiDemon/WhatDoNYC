@@ -82,6 +82,7 @@ def signup():
 
             return redirect('/wyr')
     return render_template('signup.html', title='Join us!', form=form)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     sqliteSession = get_session()
@@ -176,6 +177,7 @@ def recs():
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
                                 "RETURN u.likedVisits", curr = currUser).evaluate()
     if not numActivities:
+        session['recommended'] = False
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
@@ -195,7 +197,7 @@ def recs():
 
     allActivities = DataFrame()
     # Compute similarity of all similar users
-
+    session['recommended'] = True
     # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
     for row in similarUsers.itertuples():
         i, uname = row
@@ -241,5 +243,9 @@ def recs():
 
 @app.route('/recs/<rating>/<placeId>', methods=['GET'])
 def addRelation():
-    print("hello")
     # Add relationship in the database for user to placeId with weight rating
+    currUser = session["username"]
+    recs = session["recommended"]
+    graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
+                "u-[:HAS_BEEN_TO{rating:{r}}{recommended:{True}}]->(a)",
+                curr = currUser, pid=<placeId>, r = <rating>, rec = recs)
