@@ -13,19 +13,17 @@
           center: {lat: 40.699771, lng:  -74.029229},
           zoom: 11
         });
-
+        
         placeId1 = '{{ form.recommendations.choices[0] }}';
         placeId2 = '{{ form.recommendations.choices[1] }}';
         placeId3 = '{{ form.recommendations.choices[2] }}';
         placeId4 = '{{ form.recommendations.choices[3] }}';
-
-        /* placeIds for testing...need to use if running locally (make four above a note)
+        /*
         placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
         placeId2 = 'ChIJ8VOfr1RYwokRE441DHuxQNc';
         placeId3 = 'ChIJI-OMB0NfwokR6CIi6iO1znM';
         placeId4 = 'ChIJb8Jg9pZYwokR-qHGtvSkLzs';
         */
-
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
         service.getDetails({
@@ -47,7 +45,6 @@
             document.getElementById("vicinity1").innerHTML = place.vicinity;
           }
         });
-
         service.getDetails({
           placeId: placeId2
         }, function(place, status) {
@@ -120,10 +117,7 @@
     </ul>
   </div>
   <br><br><br><br><br><br>
-    <div id="map"></div>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
-    </script>
+
 
     <script>
       function httpGetAsync(theUrl, callback) {
@@ -144,35 +138,50 @@
         httpGetAsync("/recs?rating=value1,placeId=value2", mycallback);
       }
     </script>
-
+    
     <div id="recommendations">
-      <div id=photo1></div>
-      <h4 id="name1"></h4>
-      <p id="vicinity1"></p>
-      <img review="class" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
 
-      <div id=photo2></div>
-      <h4 id="name2"></h4>
-      <p id="vicinity2"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
+      <div class="rec">
+        <div id=photo1></div>
+        <h4 id="name1"></h4>
+        <p id="vicinity1"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
+      </div>
 
-      <div id=photo3></div>
-      <h4 id="name3"></h4>
-      <p id="vicinity3"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
+      <div class="rec">
+        <div id=photo2></div>
+        <h4 id="name2"></h4>
+        <p id="vicinity2"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
+      </div>
 
-      <div id=photo4></div>
-      <h4 id="name4"></h4>
-      <p id="vicinity4"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId4); src='/static/dislike2.png'"></img><br><br>
+      <div class="rec">
+        <div id=photo3></div>
+        <h4 id="name3"></h4>
+        <p id="vicinity3"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
+      </div>
+
+      <div class="rec">
+        <div id=photo4></div>
+        <h4 id="name4"></h4>
+        <p id="vicinity4"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
+      </div>
+
     </div>
+
+    <div id="map"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
+    </script>
+
+    <br><br><br><br><br>
 
     <div id="footer">
        <p>Portions of this page are modifications based on work created and shared by Google
          and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
     </div>
-
-    <br>
 
   </body>
   {% endblock %}

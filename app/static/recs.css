@@ -1,78 +1,100 @@
 html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-	background-color: black;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  background-color: black;
+  text-align: center;
 }
 
 #header {
-	background-color: #000000;
-	color: #ffffff;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
+  background-color: #000000;
+  color: #ffffff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
 }
 
 #name {
-	display: inline-block;
-	padding-left: 20px;
+  display: inline-block;
 }
 
 #navigation {
-	list-style-type: none;
-	display: inline-block;
-	vertical-align: middle;
-	padding-right: 50px;
-	padding-top: 15px;
-	float: right;
+  list-style-type: none;
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 50px;
+  padding-top: 15px;
+  float: right;
 }
 
 #navigation li {
-	list-style-type: none;
-	display: inline-block;
-	font-size: 16px;
-	text-transform: uppercase;
-	padding-left: 7px;
+  list-style-type: none;
+  display: inline-block;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding-left: 7px;
 }
 
 #header ul li a {
-	color: #ffffff;
-	text-decoration: none;
+  color: #ffffff;
+  text-decoration: none;
 }
 
 #header ul li a:hover, #header ul li.selected a {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #recommendations {
-	display: inline-block;
-	padding-left: 50px; 
-	color: #ffffff;
+  padding-left: 100px; 
+  color: #ffffff;
+  text-align: center;
 }
 
-img {
-	display: inline-block;
-	cursor: pointer;
-	height: 50px;
-	width: auto;
-	padding-left: 5px;
-	padding-right: 5px;
+.review {
+  display: inline-block;
+  cursor: pointer;
+  height: 50px;
+  width: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/*Not currently in use */
+/*img {
+  display: inline-block;
+  cursor: pointer;
+  height: 50px;
+  width: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}*/
+
+.photo{
+  width: 100px;
+  height: 100px;
+
 }
 
 #footer {
-	color: #ffffff;
-	font-size: 12px;
-	text-align: center;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+}
+
+.rec{
+  float:left;
+  padding-left: 1%;
+
 }
 
 #map {
-	height: 85%;
-	width: 65%;
-	display: inline-block;
+  height: 65%;
+  width: 85%;
+  display: inline-block;
+  text-align: center;
 }
-
