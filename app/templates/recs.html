@@ -5,14 +5,15 @@
     <title>Recommendations</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="/static/recs.css">
-    <link rel="stylesheet" type="text/css" href="/static/mobile-recs.css" media="screen and (max-width : 750px)">
+    <link rel="stylesheet" type="text/css" href="../static/recs.css">
+    <link rel="stylesheet" type="text/css" href="../static/mobile-recs.css" media="screen and (max-width : 750px)">
     <script>
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 40.699771, lng:  -74.029229},
           zoom: 11
         });
+        
         placeId1 = '{{ form.recommendations.choices[0] }}';
         placeId2 = '{{ form.recommendations.choices[1] }}';
         placeId3 = '{{ form.recommendations.choices[2] }}';
@@ -128,42 +129,44 @@
         xmlHttp.open("GET", theUrl, true);
         xmlHttp.send(null);
       }
+
       function mycallback(data) {}
+
       function getFeedback(rating, placeId) {
         console.log(rating);
         console.log(placeId);
         httpGetAsync("/recs?rating=value1,placeId=value2", mycallback);
       }
     </script>
-
+    
     <div id="recommendations">
 
       <div class="rec">
         <div id=photo1></div>
         <h4 id="name1"></h4>
         <p id="vicinity1"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
+        <img class="review" src="../static/like.png" onclick="getFeedback('1', placeId1); src='../static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo2></div>
         <h4 id="name2"></h4>
         <p id="vicinity2"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
+        <img class="review" src="../static/like.png" onclick="getFeedback('1', placeId2); src='../static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo3></div>
         <h4 id="name3"></h4>
         <p id="vicinity3"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
+        <img class="review" src="../static/like.png" onclick="getFeedback('1', placeId3); src='..static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo4></div>
         <h4 id="name4"></h4>
         <p id="vicinity4"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId4); src='/static/dislike2.png'"></img><br><br>
+        <img class="review" src="../static/like.png" onclick="getFeedback('1', placeId4); src='../static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
       </div>
 
     </div>
@@ -172,16 +175,13 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
     </script>
-    <br><br>
 
-
+    <br><br><br><br><br>
 
     <div id="footer">
        <p>Portions of this page are modifications based on work created and shared by Google
          and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
     </div>
-
-    <br>
 
   </body>
   {% endblock %}
