@@ -1,11 +1,11 @@
 from flask import render_template, redirect, request, Blueprint, url_for, session
 import configparser
 from .wdnyc import app
+from .wdnyc import cache
 from .forms import *
 from .models import *
 from os import path
 from py2neo import Graph, Node
-from collections import defaultdict, Counter
 from pandas import DataFrame, concat
 
 my_view = Blueprint('my_view', __name__)
@@ -31,32 +31,37 @@ def getPy2NeoSession():
 def home():
     return redirect('/index')
 
-
+@cache.cached(timeout=50)
 @app.route('/index', methods=['GET'])
 def index():
     return render_template('index.html', title='Welcome')
 
-
+@cache.cached(timeout=50)
 @app.route('/MHP', methods=['GET'])
 def mhp():
     return render_template('MHP.html', title='Mister Hotpot')
 
+@cache.cached(timeout=50)
 @app.route('/HG', methods=['GET'])
 def hg():
     return render_template('HG.html', title='Hamilton Grange')
 
+@cache.cached(timeout=50)
 @app.route('/CI', methods=['GET'])
 def ci():
     return render_template('CI.html', title='Coney Island')
 
+@cache.cached(timeout=50)
 @app.route('/BH', methods=['GET'])
 def bh():
     return render_template('BH.html', title='Bohemian Hall and Beer Garden')
 
+@cache.cached(timeout=50)
 @app.route('/LI', methods=['GET'])
 def li():
     return render_template('LI.html', title='Little Italy')
 
+@cache.cached(timeout=50)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = signupForm(request.form)
@@ -248,4 +253,4 @@ def addRelation():
     recs = session["recommended"]
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
                 "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{True}}]->(a)",
-                curr = currUser, pid=<placeId>, r = <rating>, rec = recs)
+                curr = currUser, pid=placeId, r = rating, rec = recs)
