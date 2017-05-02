@@ -21,6 +21,8 @@ body {
 
 #name {
   display: inline-block;
+  padding-left: 20px;
+  float: left;
 }
 
 #navigation {
