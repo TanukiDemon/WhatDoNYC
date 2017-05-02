@@ -12,3 +12,6 @@ http://pandas.pydata.org/pandas-docs/stable/enhancingperf.html
 https://www.datascience.com/blog/straightening-loops-how-to-vectorize-data-aggregation-with-pandas-and-numpy/
 
 https://neo4j.com/blog/neo4j-2-2-query-tuning/
+
+Mllib ALS algorithm: https://spark.apache.org/mllib/
+https://spark.apache.org/docs/2.1.0/mllib-collaborative-filtering.html

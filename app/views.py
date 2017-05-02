@@ -180,9 +180,9 @@ def recs():
 
     # Count the number of currUser's activities
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                "SET u.counter = u.counter + 1"
                                 "RETURN u.likedVisits", curr = currUser).evaluate()
     if not numActivities:
-        session['recommended'] = False
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
@@ -202,7 +202,6 @@ def recs():
 
     allActivities = DataFrame()
     # Compute similarity of all similar users
-    session['recommended'] = True
     # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
     for row in similarUsers.itertuples():
         i, uname = row
@@ -240,8 +239,6 @@ def recs():
     # If less than four recommendations were made, then generate ones based on
     # the users' traits
     lngth = len(choices)
-    if not lngth:
-        session['recommended'] = False
     if l < 4:
         form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
 
@@ -252,11 +249,11 @@ def recs():
 def addRelation():
     # Get a few values needed to run the query
     currUser = session["username"]
-    recs = session["recommended"]
     rule = request.url_rule
     base, rating, placeId = rule.rule.split('/')
 
     # Add relationship in the database for user to placeId with weight rating
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
-                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recommended:{rec}}]->(a)",
-                curr = currUser, pid=placeId, r = rating, rec = recs)
+                "WHERE count = u.counter"
+                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recSetCounter:count}]->(a)",
+                curr = currUser, pid=placeId, r = rating)
