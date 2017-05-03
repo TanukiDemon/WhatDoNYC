@@ -73,7 +73,8 @@
       function getFeedback(rating, placeId) {
         console.log(rating);
         console.log(placeId);
-        httpGetAsync("/feedback?rating=value1,placeId=value2", mycallback);
+        url = "/feedback?rating=" + rating + "&placeId=" + placeId;
+        httpGetAsync(url, mycallback);
       }
     </script>
 
