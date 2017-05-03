@@ -187,7 +187,7 @@ def recs():
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
-        form.recommendations.choices = generateRandomRecommendations(1, currUser)
+        form.recommendations.choices = generateRandomRecommendations(4, currUser)
 
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
@@ -240,9 +240,9 @@ def recs():
 
     # If less than four recommendations were made, then generate ones based on
     # the users' traits
-    #lngth = len(form.recommendations.choices)
-    #if lngth < 4:
-    #    form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
+    lngth = len(form.recommendations.choices)
+    if lngth < 4:
+        form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
