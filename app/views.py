@@ -158,7 +158,7 @@ def about():
 
 # Generates recommendations of the most popular activities
 # based on the user's personality traits
-def generatePopularRecommendations(n, username):
+def generatePopularRecommendations(graph, n):
     # Get the required number of recommendations in DataFrame format
     recs = DataFrame(graph.data("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
                                 "(u:User {username:{curr}})"
@@ -166,7 +166,7 @@ def generatePopularRecommendations(n, username):
                                 "OR a.label = u.trait3 OR a.label = u.trait4 "
                                 "WITH a, COUNT(h) as c "
                                 "ORDER BY c DESC LIMIT {lim} "
-                                "RETURN a.placeID", curr = currUser, lim = n))
+                                "RETURN a.placeID", curr = session['username'], lim = n))
 
     # Feed the place IDs into a list
     return recs.values.tolist()
@@ -187,8 +187,9 @@ def recs():
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
-        form.recommendations.choices = generateRandomRecommendations(4, currUser)
+        form.recommendations.choices = generatePopularRecommendations(graph, 4)
 
+        print("CHOICES: ", form.recommendations.choices)
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
 
@@ -242,7 +243,7 @@ def recs():
     # the users' traits
     lngth = len(form.recommendations.choices)
     if lngth < 4:
-        form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
+        form.recommendations.choices += generatePopularRecommendations(graph, 4-lngth)
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
