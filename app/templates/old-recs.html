@@ -135,7 +135,8 @@
       function getFeedback(rating, placeId) {
         console.log(rating);
         console.log(placeId);
-        httpGetAsync("/feedback?rating=rating, placeId=placeId", mycallback);
+        url = "/feedback?rating=" + rating + "&placeId=" + placeId;
+        httpGetAsync(url, mycallback);
       }
     </script>
 
@@ -168,6 +169,8 @@
         <p id="vicinity4"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
       </div>
+    
+    <button onclick="window.location.reload(true)">New Recommendation</button>
 
     </div>
 
