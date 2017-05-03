@@ -180,13 +180,14 @@ def recs():
 
     # Count the number of currUser's activities
     numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                "SET u.counter = u.counter + 1"
+                                "SET u.counter = u.counter + 1 "
                                 "RETURN u.likedVisits", curr = currUser).evaluate()
+
     if not numActivities:
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
-        form.recommendations.choices = generateRandomRecommendations(4, currUser)
+        form.recommendations.choices = generateRandomRecommendations(1, currUser)
 
         # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
@@ -231,29 +232,32 @@ def recs():
     mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
     # Sort the rows based on values in counts column
-    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
+    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(1)
 
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
+    print("CHOICES: ", form.recommendations.choices)
 
     # If less than four recommendations were made, then generate ones based on
     # the users' traits
-    lngth = len(choices)
-    if l < 4:
-        form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
+    #lngth = len(form.recommendations.choices)
+    #if lngth < 4:
+    #    form.recommendations.choices += generateRandomRecommendations(4-lngth, currUser)
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
 
-@app.route('/recs/<rating>/<placeId>', methods=['GET'])
-def addRelation():
+@app.route('/feedback')
+def feedback():
+    graph = getPy2NeoSession()
+    rating = request.args.get('rating')
+    placeId = request.args.get('placeId')
     # Get a few values needed to run the query
     currUser = session["username"]
-    rule = request.url_rule
-    base, rating, placeId = rule.rule.split('/')
 
     # Add relationship in the database for user to placeId with weight rating
-    graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}})"
-                "WHERE count = u.counter"
-                "CREATE u-[:HAS_BEEN_TO{rating:{r}}{recSetCounter:count}]->(a)",
+    graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
+                "SET u.likedVisits = u.likedVisits + 1 "
+                "CREATE (u)-[:HAS_BEEN_TO{rating:{r}, recSetCounter:u.counter}]->(a)",
                 curr = currUser, pid=placeId, r = rating)
+    return redirect(url_for('recs'))
