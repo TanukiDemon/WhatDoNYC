@@ -260,4 +260,4 @@ def feedback():
                 "SET u.likedVisits = u.likedVisits + 1 "
                 "CREATE (u)-[:HAS_BEEN_TO{rating:{r}, recSetCounter:u.counter}]->(a)",
                 curr = currUser, pid=placeId, r = rating)
-    return redirect(url_for('recs'))
+    return render_template('recs.html', title="Your recommendations")
