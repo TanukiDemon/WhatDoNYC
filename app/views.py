@@ -259,14 +259,14 @@ def recs():
 @app.route('/feedback')
 def feedback():
     graph = getPy2NeoSession()
-    rating = request.args.get('rating')
+    rating = int(request.args.get('rating'))
     placeId = request.args.get('placeId')
     # Get a few values needed to run the query
     currUser = session["username"]
 
     # Add relationship in the database for user to placeId with weight rating
     graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
-                "SET u.likedVisits = u.likedVisits + 1 "
+                "SET u.likedVisits = u.likedVisits + {r} "
                 "CREATE (u)-[:HAS_BEEN_TO{rating:{r}, recSetCounter:u.counter}]->(a)",
                 curr = currUser, pid=placeId, r = rating)
     return render_template('recs.html', title="Your recommendations")
