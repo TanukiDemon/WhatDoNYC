@@ -27,6 +27,7 @@ def getPy2NeoSession():
     remote_graph = Graph(config.get('global', 'py2neoAddress'))
     return remote_graph
 
+@cache.cached(timeout=50)
 @app.route('/')
 def home():
     return redirect('/index')
@@ -88,6 +89,7 @@ def signup():
             return redirect('/wyr')
     return render_template('signup.html', title='Join us!', form=form)
 
+@cache.cached(timeout=50)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     sqliteSession = get_session()
@@ -105,6 +107,7 @@ def login():
 
     return render_template('login.html', title="Login", form=form)
 
+@cache.cached(timeout=50)
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPass():
     form = forgotPassword(request.form)
@@ -114,6 +117,7 @@ def forgotPass():
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
 
+@cache.cached(timeout=50)
 @app.route('/secques', methods = ['GET','POST'])
 def secques():
     #add code print question to screen
@@ -124,6 +128,7 @@ def secques():
     else:
         return render_template('/secques', title="Security Question response incorrect", form=form)
 
+@cache.cached(timeout=50)
 @app.route('/reset', methods = ['GET','POST'])
 def reset():
     #code to reset password and insert it into the db
@@ -135,6 +140,7 @@ def reset():
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
 
+@cache.cached(timeout=50)
 @app.route('/wyr', methods=['GET', 'POST'])
 def wyr():
     # Serve "Would You Rather" survey
@@ -152,6 +158,7 @@ def wyr():
 
     return render_template('wyr.html', title='wouldYouRatherForm', form=form)
 
+@cache.cached(timeout=50)
 @app.route('/about')
 def about():
     return render_template('about.html', title="About What Do NYC")
@@ -171,6 +178,7 @@ def generatePopularRecommendations(graph, n):
     # Feed the place IDs into a list
     return recs.values.tolist()
 
+@cache.cached(timeout=50)
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
     # Get graph object to perform Neo4j queries
