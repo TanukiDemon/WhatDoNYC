@@ -265,8 +265,16 @@ def feedback():
     currUser = session["username"]
 
     # Add relationship in the database for user to placeId with weight rating
-    graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
-                "SET u.likedVisits = u.likedVisits + {r} "
-                "CREATE (u)-[:HAS_BEEN_TO{rating:{r}, recSetCounter:u.counter}]->(a)",
-                curr = currUser, pid=placeId, r = rating)
+    # If the rating is one, then the user's likedVisits property must be incremented
+    if rating == 1:
+        graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
+                    "SET u.likedVisits = u.likedVisits + 1 "
+                    "CREATE (u)-[:HAS_BEEN_TO{rating:1, recSetCounter:u.counter}]->(a)",
+                    curr = currUser, pid=placeId)
+
+    # Otherwise, there is no reason to update the property
+    else:
+        graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
+                    "CREATE (u)-[:HAS_BEEN_TO{rating:0, recSetCounter:u.counter}]->(a)",
+                    curr = currUser, pid=placeId)
     return render_template('recs.html', title="Your recommendations")
