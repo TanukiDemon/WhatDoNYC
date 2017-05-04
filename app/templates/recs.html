@@ -9,23 +9,24 @@
     <link rel="stylesheet" type="text/css" href="/static/mobile-recs.css" media="screen and (max-width : 750px)">
     <script>
       function initMap() {
+        // Create and load the map that is displayed on the page
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 40.699771, lng:  -74.029229},
           zoom: 11
         });
 
+        // Initialize PlaceIds with recommendations returned from query of Neo4j database in recs route 
         placeId1 = '{{ form.recommendations.choices[0] }}';
         placeId2 = '{{ form.recommendations.choices[1] }}';
         placeId3 = '{{ form.recommendations.choices[2] }}';
         placeId4 = '{{ form.recommendations.choices[3] }}';
-        /*
-        placeId1 = 'ChIJmZ5emqJYwokRuDz79o0coAQ';
-        placeId2 = 'ChIJ8VOfr1RYwokRE441DHuxQNc';
-        placeId3 = 'ChIJI-OMB0NfwokR6CIi6iO1znM';
-        placeId4 = 'ChIJb8Jg9pZYwokR-qHGtvSkLzs';
-        */
+
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
+       
+        // Google Places API call for each of the four recommendations
+        // Returns a photo as well as the place name and vicinity (less detailed address)
+        // Also populates infowindow displayed by clicking on red marker for each place on the map
         service.getDetails({
           placeId: placeId1
         }, function(place, status) {
@@ -118,8 +119,8 @@
   </div>
   <br><br><br><br><br><br>
 
-
     <script>
+      // Asynchronous HTTP GET request for "theUrl" parameter provided to the function
       function httpGetAsync(theUrl, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
@@ -130,8 +131,17 @@
         xmlHttp.send(null);
       }
 
+      // Empty callback function utilized by httpGetAsync function
+      // This is empty because we do not want to execute any JavaScript code after the GET request
       function mycallback(data) {}
 
+      // getFeedback is called when a user clicks on the thumbs up or thumbs down icon below a recommendation
+      //   to rate it
+      // The function creates a url by concatenating elements of the url with the rating and placeId values with 
+      //   which the function was called
+      // It then calls the httpGetAsync function to issue an HTTP GET request for the url
+      // The url is for the /feedback route in views.py which adds a relationship for the rating provided by the user
+      //   between the user's node and the node of the activity/venue that was recommended in Neo4j
       function getFeedback(rating, placeId) {
         console.log(rating);
         console.log(placeId);
@@ -170,6 +180,8 @@
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
       </div>
     
+    <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
+          user has rated the recommendations he/she was already provided -->
     <button onclick="window.location.reload(true)">New Recommendation</button>
 
     </div>
