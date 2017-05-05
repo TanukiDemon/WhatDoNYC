@@ -148,6 +148,11 @@
         url = "/feedback?rating=" + rating + "&placeId=" + placeId;
         httpGetAsync(url, mycallback);
       }
+      
+      function logout() {
+        url = "/logout";
+        httpGetAsync(url, mycallback);
+      }
     </script>
 
     <div id="recommendations">
@@ -183,6 +188,9 @@
     <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
           user has rated the recommendations he/she was already provided -->
     <button onclick="window.location.reload(true)">New Recommendation</button>
+
+    <!-- Logout button -->
+    <button onclick="logout()">Logout</button>
 
     </div>
 
