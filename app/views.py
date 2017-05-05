@@ -175,7 +175,7 @@ def generatePopularRecommendations(graph, n):
                                 "ORDER BY c DESC LIMIT {lim} "
                                 "RETURN a.placeID", curr = session['username'], lim = n))
 
-    # Feed the place IDs into a list
+    # Feed the place IDs into a list before returning
     return recs.values.tolist()
 
 @app.route('/recs', methods=['GET', 'POST'])
