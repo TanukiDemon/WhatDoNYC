@@ -126,7 +126,7 @@ def secques():
     #add code print question to screen
     sqliteSession = get_session()
     form = securityQuestion(request.form)
-    quest = form.securityQAnswer.data
+    quest = form.securityAnswer.data
     usern = sqliteSession.query(User).filter(User.username == session['username']).first()
     if form.validate_on_submit() and checkIfUserExists(usern.username):
         for user, secQ in sqliteSession.query(User.username, User.securityQAnswer):
