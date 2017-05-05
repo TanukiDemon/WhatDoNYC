@@ -150,7 +150,7 @@ def wyr():
         # Add user and their preferences to Neo4j database
         graph_session = getPy2NeoSession()
         graph_session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                        "trait2: {t2}, trait3: {t3}, trait4: {t4}}, counter: 0)",
+                        "trait2: {t2}, trait3: {t3}, trait4: {t4}, counter: 0})",
                         uname=username, t1=form.foodOrScience.data,
                         t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
                         t4=form.entertainmentOrMusic.data)
