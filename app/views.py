@@ -151,29 +151,6 @@ def reset():
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
 
-@app.route('/secques', methods = ['GET','POST'])
-@cache.cached(timeout=50)
-def secques():
-    #add code print question to screen
-    form = securityQuestion(request.form)
-    if session.query(User).filter(User.securityQanswer) == form.securityAnswer.data:
-        #pass session to reset page
-        return redirect('/reset')
-    else:
-        return render_template('/secques', title="Security Question response incorrect", form=form)
-
-@app.route('/reset', methods = ['GET','POST'])
-@cache.cached(timeout=50)
-def reset():
-    #code to reset password and insert it into the db
-    form = resetPassword(request.form)
-    if form.reset1.data == form.reset2.data:
-        password = form.reset2.data
-        session.commit()
-        return redirect('/login')
-    else:
-        return render_template('reset.html', title = "Password do not match", form = form)
-
 @app.route('/wyr', methods=['GET', 'POST'])
 @cache.cached(timeout=50)
 def wyr():
