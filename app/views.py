@@ -170,10 +170,13 @@ def generatePopularRecommendations(graph, n):
                                 "OR a.label = u.trait3 OR a.label = u.trait4 "
                                 "WITH a, COUNT(h) as c "
                                 "ORDER BY c DESC LIMIT {lim} "
-                                "RETURN a.placeID", curr = session['username'], lim = n))
+                                "RETURN a.placeID, a.name", curr = session['username'], lim = n))
 
     # Feed the place IDs into a list before returning
-    return recs.values.tolist()
+    r = recs.values.tolist()
+
+    r = [[i[1], i[0]] for i in r]
+    return r
 
 @app.route('/recs', methods=['GET', 'POST'])
 def recs():
