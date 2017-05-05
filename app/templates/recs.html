@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="/static/recs.css">
     <link rel="stylesheet" type="text/css" href="/static/mobile-recs.css" media="screen and (max-width : 750px)">
+    <script type="text/javascript" src="/static/recs.js"></script>
     <script>
       function initMap() {
         // Create and load the map that is displayed on the page
@@ -42,7 +43,6 @@
             });
             var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo1").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("name1").innerHTML = place.name;
             document.getElementById("vicinity1").innerHTML = place.vicinity;
           }
         });
@@ -61,7 +61,6 @@
             });
            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("name2").innerHTML = place.name;
             document.getElementById("vicinity2").innerHTML = place.vicinity;
           }
         });
@@ -80,7 +79,6 @@
             });
             var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo3").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("name3").innerHTML = place.name;
             document.getElementById("vicinity3").innerHTML = place.vicinity;
           }
         });
@@ -99,7 +97,6 @@
             });
             var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo4").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("name4").innerHTML = place.name;
             document.getElementById("vicinity4").innerHTML = place.vicinity;
           }
         });
@@ -118,72 +115,36 @@
     </ul>
   </div>
   <br><br><br><br><br><br>
+    
+  <div id="recommendations">
 
-    <script>
-      // Asynchronous HTTP GET request for "theUrl" parameter provided to the function
-      function httpGetAsync(theUrl, callback) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-         callback(xmlHttp.responseText);
-        }
-        xmlHttp.open("GET", theUrl, true);
-        xmlHttp.send(null);
-      }
+    <div class="rec">
+      <div id=photo1></div>
+      <h4>{{ form.recommendations.choices[0][1] }}</h4>
+      <p id="vicinity1"></p>
+      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
+    </div>
 
-      // Empty callback function utilized by httpGetAsync function
-      // This is empty because we do not want to execute any JavaScript code after the GET request
-      function mycallback(data) {}
+    <div class="rec">
+      <div id=photo2></div>
+      <h4>{{ form.recommendations.choices[1][1] }}</h4>
+      <p id="vicinity2"></p>
+      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
+    </div>
 
-      // getFeedback is called when a user clicks on the thumbs up or thumbs down icon below a recommendation
-      //   to rate it
-      // The function creates a url by concatenating elements of the url with the rating and placeId values with
-      //   which the function was called
-      // It then calls the httpGetAsync function to issue an HTTP GET request for the url
-      // The url is for the /feedback route in views.py which adds a relationship for the rating provided by the user
-      //   between the user's node and the node of the activity/venue that was recommended in Neo4j
-      function getFeedback(rating, placeId) {
-        console.log(rating);
-        console.log(placeId);
-        url = "/feedback?rating=" + rating + "&placeId=" + placeId;
-        httpGetAsync(url, mycallback);
-      }
-      
-      function logout() {
-        url = "/logout";
-        httpGetAsync(url, mycallback);
-      }
-    </script>
+    <div class="rec">
+      <div id=photo3></div>
+      <h4>{{ form.recommendations.choices[2][1] }}</h4>
+      <p id="vicinity3"></p>
+      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
+    </div>
 
-    <div id="recommendations">
-
-      <div class="rec">
-        <div id=photo1></div>
-        <h4>{{ form.recommendations.choices[0][1] }}</h4>
-        <p id="vicinity1"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
-      </div>
-
-      <div class="rec">
-        <div id=photo2></div>
-        <h4>{{ form.recommendations.choices[1][1] }}</h4>
-        <p id="vicinity2"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
-      </div>
-
-      <div class="rec">
-        <div id=photo3></div>
-        <h4>{{ form.recommendations.choices[2][1] }}</h4>
-        <p id="vicinity3"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
-      </div>
-
-      <div class="rec">
-        <div id=photo4></div>
-        <h4>{{ form.recommendations.choices[3][1]}}</h4>
-        <p id="vicinity4"></p>
-        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
-      </div>
+    <div class="rec">
+      <div id=photo4></div>
+      <h4>{{ form.recommendations.choices[3][1]}}</h4>
+      <p id="vicinity4"></p>
+      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
+    </div>
 
     <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
           user has rated the recommendations he/she was already provided -->
@@ -192,19 +153,19 @@
     <!-- Logout button -->
     <button onclick="logout()">Logout</button>
 
-    </div>
+  </div>
 
-    <div id="map"></div>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
-    </script>
+  <div id="map"></div>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
+  </script>
 
-    <br><br><br><br><br>
+  <br><br><br><br><br>
 
-    <div id="footer">
-       <p>Portions of this page are modifications based on work created and shared by Google
-         and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
-    </div>
+  <div id="footer">
+    <p>Portions of this page are modifications based on work created and shared by Google
+       and used according to terms described in the Creative Commons 3.0 Attribution License.</p>
+  </div>
 
   </body>
   {% endblock %}
