@@ -110,12 +110,46 @@ def login():
 @app.route('/forgot', methods=['GET', 'POST'])
 @cache.cached(timeout=50)
 def forgotPass():
+    sqliteSession = get_session()
     form = forgotPassword(request.form)
-    if checkIfUserExists(form.username.data):
+    username = form.username.data
+    user = sqliteSession.query(User).filter(User.username == username).first()
+    if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
+
+@app.route('/secques', methods = ['GET','POST'])
+@cache.cached(timeout=50)
+def secques():
+    #add code print question to screen
+    sqliteSession = get_session()
+    form = securityQuestion(request.form)
+    quest = form.securityQAnswer.data
+    usern = sqliteSession.query(User).filter(User.username == session['username']).first()
+    if form.validate_on_submit() and checkIfUserExists(usern.username):
+        for user, secQ in sqliteSession.query(User.username, User.securityQAnswer):
+            if user == session['username']:
+                if secQ == quest:
+                    return redirect('/reset')
+
+    return render_template('secques.html', title="Security Question response incorrect", form=form)
+
+@app.route('/reset', methods = ['GET','POST'])
+@cache.cached(timeout=50)
+def reset():
+    #code to reset password and insert it into the db
+    sqliteSession = get_session()
+    form = resetPassword(request.form)
+    
+    if form.reset1.data and form.reset1.data == form.reset2.data:
+        user = sqliteSession.query(User).filter(User.username == session['username']).first()
+        user.set_password(form.reset2.data)
+        sqliteSession.commit()
+        return redirect('/login')
+    else:
+        return render_template('reset.html', title = "Password do not match", form = form)
 
 @app.route('/secques', methods = ['GET','POST'])
 @cache.cached(timeout=50)
