@@ -49,13 +49,13 @@ class resetPassword(FlaskForm):
     submit = SubmitField(u'Submit')
 
 class wouldYouRatherForm(FlaskForm):
-    foodOrScience = RadioField('foodVSsci', choices = [('food', 'sample delicious foods?'), ('science', 'perform cool science experiments?')])
+    foodOrScience = RadioField('foodVSsci', choices = [('Food/Drink', 'sample delicious foods?'), ('Science', 'perform cool science experiments?')])
 
-    artOrHistory = RadioField('artVShistory', choices = [('art', 'talk to famous artists?'), ('history', 'go back in time?')])
+    artOrHistory = RadioField('artVShistory', choices = [('Arts', 'talk to famous artists?'), ('History', 'go back in time?')])
 
-    outdoorsOrSports = RadioField('outVSsports', choices=[('outside', 'spend time in a garden?'), ('sports', 'hike a breathtaking trail?')])
+    outdoorsOrSports = RadioField('outVSsports', choices=[('Outdoor', 'spend time in a garden?'), ('Sports', 'hike a breathtaking trail?')])
 
-    entertainmentOrMusic = RadioField('entVSmusic', choices=[('entertainment', 'go to a comedy club?'), ('music', 'listen to live music?')])
+    entertainmentOrMusic = RadioField('entVSmusic', choices=[('Entertainment', 'go to a comedy club?'), ('Music', 'listen to live music?')])
 
     submit = SubmitField(u'Submit')
 
