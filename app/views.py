@@ -221,7 +221,7 @@ def recs():
                                         "MATCH (allActs) "
                                         "WHERE NOT (:User {username:{curr}})-"
                                         "[:HAS_BEEN_TO]->(allActs) "
-                                        "RETURN allActs.placeID as aPlace",
+                                        "RETURN allActs.placeID as aPlace, allActs.name as aName",
                                         suser = uname, curr = currUser))
 
         # 0.2 is the similarity cutoff
@@ -236,7 +236,7 @@ def recs():
     # merged into allActivities as needed. The duplicated rows are combined
     # and a new column is created that that contains the number of times
     # the a.name value appeared originally
-    mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
+    mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
 
     # Sort the rows based on values in counts column
     mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)

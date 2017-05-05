@@ -15,15 +15,15 @@
           zoom: 11
         });
 
-        // Initialize PlaceIds with recommendations returned from query of Neo4j database in recs route 
-        placeId1 = '{{ form.recommendations.choices[0] }}';
-        placeId2 = '{{ form.recommendations.choices[1] }}';
-        placeId3 = '{{ form.recommendations.choices[2] }}';
-        placeId4 = '{{ form.recommendations.choices[3] }}';
+        // Initialize PlaceIds with recommendations returned from query of Neo4j database in recs route
+        placeId1 = '{{ form.recommendations.choices[0][0] }}';
+        placeId2 = '{{ form.recommendations.choices[1][0] }}';
+        placeId3 = '{{ form.recommendations.choices[2][0] }}';
+        placeId4 = '{{ form.recommendations.choices[3][0] }}';
 
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
-       
+
         // Google Places API call for each of the four recommendations
         // Returns a photo as well as the place name and vicinity (less detailed address)
         // Also populates infowindow displayed by clicking on red marker for each place on the map
@@ -137,7 +137,7 @@
 
       // getFeedback is called when a user clicks on the thumbs up or thumbs down icon below a recommendation
       //   to rate it
-      // The function creates a url by concatenating elements of the url with the rating and placeId values with 
+      // The function creates a url by concatenating elements of the url with the rating and placeId values with
       //   which the function was called
       // It then calls the httpGetAsync function to issue an HTTP GET request for the url
       // The url is for the /feedback route in views.py which adds a relationship for the rating provided by the user
@@ -154,32 +154,32 @@
 
       <div class="rec">
         <div id=photo1></div>
-        <h4 id="name1"></h4>
+        <h4>{{ form.recommendations.choices[0][1] }}</h4>
         <p id="vicinity1"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo2></div>
-        <h4 id="name2"></h4>
+        <h4>{{ form.recommendations.choices[1][1] }}</h4>
         <p id="vicinity2"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo3></div>
-        <h4 id="name3"></h4>
+        <h4>{{ form.recommendations.choices[2][1] }}</h4>
         <p id="vicinity3"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
       </div>
 
       <div class="rec">
         <div id=photo4></div>
-        <h4 id="name4"></h4>
+        <h4>{{ form.recommendations.choices[3][1]}}</h4>
         <p id="vicinity4"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
       </div>
-    
+
     <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
           user has rated the recommendations he/she was already provided -->
     <button onclick="window.location.reload(true)">New Recommendation</button>
