@@ -184,6 +184,7 @@ def recs():
     # Get graph object to perform Neo4j queries
     graph = getPy2NeoSession()
     currUser = session['username']
+    # Make a form that will be modified later on
     form = recsForm(request.form)
 
     # Count the number of currUser's activities
@@ -196,9 +197,6 @@ def recs():
         # weight that correspond to their personality traits
         form = recsForm(request.form)
         form.recommendations.choices = generatePopularRecommendations(graph, 4)
-
-        print("CHOICES: ", form.recommendations.choices)
-        # Pick most popular activitity and pass it along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
@@ -208,36 +206,40 @@ def recs():
                             "RETURN DISTINCT other.username", cUser = currUser))
 
     if similarUsers.empty:
+        # Get the most popular activities that correspond to user traits
+        form.recommendations.choices = generatePopularRecommendations(graph, 4)
         return render_template('recs.html', title="Your recommendations", form=form)
 
+    # Create the dataframe that will contain possible activities to recommend
     allActivities = DataFrame()
     # Compute similarity of all similar users
     # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
     for row in similarUsers.itertuples():
         i, uname = row
 
-        # Get number of activities both the current user and user in
-        # similarUsers list have rated
-        uniqueActivitiesDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
-                                    "WITH simAct as allActs "
-                                    "MATCH (allActs) "
-                                    "WHERE NOT (:User {username:{curr}})-[:HAS_BEEN_TO]->(allActs) "
-                                    "RETURN allActs.placeID as aPlace", suser = uname, curr = currUser))
+        # Query for the activities that similar user liked but the current user
+        # has never visited
+        actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
+                                        "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+                                        "WITH simAct as allActs "
+                                        "MATCH (allActs) "
+                                        "WHERE NOT (:User {username:{curr}})-"
+                                        "[:HAS_BEEN_TO]->(allActs) "
+                                        "RETURN allActs.placeID as aPlace",
+                                        suser = uname, curr = currUser))
 
         # 0.2 is the similarity cutoff
-        # If the following quotient is greater or equal than 0.2,
-        # then the similar user's name is added to possibleUserRecs
-        shareCount = numActivities - uniqueActivitiesDf.shape[0]
+        shareCount = numActivities - actsDf.shape[0]
         if (shareCount / numActivities >= 0.2):
             # Since the similar user makes the cut off,
             # its dataframe is merged with allActivities
-            frames = [allActivities, uniqueActivitiesDf]
+            frames = [allActivities, actsDf]
             allActivities = concat(frames)
 
     # All similarUsers have had their data processed and data has been
-    # merged into allActivities as need
-    # The duplicated rows are combined and a new column is created that
-    # that contains the number of times the a.name value appeared originally
+    # merged into allActivities as needed. The duplicated rows are combined
+    # and a new column is created that that contains the number of times
+    # the a.name value appeared originally
     mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
     # Sort the rows based on values in counts column
@@ -245,10 +247,9 @@ def recs():
 
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
-    print("CHOICES: ", form.recommendations.choices)
 
     # If less than four recommendations were made, then generate ones based on
-    # the users' traits
+    # the user's traits
     lngth = len(form.recommendations.choices)
     if lngth < 4:
         form.recommendations.choices += generatePopularRecommendations(graph, 4-lngth)
