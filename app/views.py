@@ -130,7 +130,7 @@ def reset():
     #code to reset password and insert it into the db
     sqliteSession = get_session()
     form = resetPassword(request.form)
-    
+
     if form.reset1.data and form.reset1.data == form.reset2.data:
         user = sqliteSession.query(User).filter(User.username == session['username']).first()
         user.set_password(form.reset2.data)
@@ -239,7 +239,7 @@ def recs():
     mergedDf = DataFrame(allActivities.groupby('aPlace').size().rename('counts'))
 
     # Sort the rows based on values in counts column
-    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(1)
+    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
 
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
