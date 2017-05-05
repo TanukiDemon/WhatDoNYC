@@ -70,7 +70,7 @@ def signup():
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
             sqliteSession = get_session()
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data)
+            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data, status = 1)
             newUser.set_password(form.password.data)
             sqliteSession.add(newUser)
             sqliteSession.commit()
@@ -90,6 +90,7 @@ def login():
     user = sqliteSession.query(User).filter(User.username == username).first()
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
+        session['status'] = 1
 
         if user.check_password(password):
             return redirect('/recs')
@@ -178,83 +179,95 @@ def generatePopularRecommendations(graph, n):
     r = [[i[1], i[0]] for i in r]
     return r
 
+@app.route('/logout')
+def logout():
+    session['usernanme'] = None
+    session['status'] = 0
+    print("here")
+    return render_template('about.html', title="About What Do NYC")
+
 @app.route('/recs', methods=['GET', 'POST'])
+
 def recs():
-    # Get graph object to perform Neo4j queries
-    graph = getPy2NeoSession()
-    currUser = session['username']
-    # Make a form that will be modified later on
-    form = recsForm(request.form)
-
-    # Count the number of currUser's activities
-    numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                "SET u.counter = u.counter + 1 "
-                                "RETURN u.likedVisits", curr = currUser).evaluate()
-
-    if not numActivities:
-        # If user has no connections, get most popular activities with a positive
-        # weight that correspond to their personality traits
+    if session['status'] == 1:
+        # Get graph object to perform Neo4j queries
+        graph = getPy2NeoSession()
+        currUser = session['username']
+        # Make a form that will be modified later on
         form = recsForm(request.form)
-        form.recommendations.choices = generatePopularRecommendations(graph, 4)
+
+        # Count the number of currUser's activities
+        numActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                    "SET u.counter = u.counter + 1 "
+                                    "RETURN u.likedVisits", curr = currUser).evaluate()
+
+        if not numActivities:
+            # If user has no connections, get most popular activities with a positive
+            # weight that correspond to their personality traits
+            form = recsForm(request.form)
+            form.recommendations.choices = generatePopularRecommendations(graph, 4)
+            return render_template('recs.html', title="Your recommendations", form=form)
+
+        # Get all users who rated the same activities as the current user
+        similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
+                                "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
+                                "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
+                                "RETURN DISTINCT other.username", cUser = currUser))
+
+        if similarUsers.empty:
+            # Get the most popular activities that correspond to user traits
+            form.recommendations.choices = generatePopularRecommendations(graph, 4)
+            return render_template('recs.html', title="Your recommendations", form=form)
+
+        # Create the dataframe that will contain possible activities to recommend
+        allActivities = DataFrame()
+        # Compute similarity of all similar users
+        # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
+        for row in similarUsers.itertuples():
+            i, uname = row
+
+            # Query for the activities that similar user liked but the current user
+            # has never visited
+            actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
+                                            "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+                                            "WITH simAct as allActs "
+                                            "MATCH (allActs) "
+                                            "WHERE NOT (:User {username:{curr}})-"
+                                            "[:HAS_BEEN_TO]->(allActs) "
+                                            "RETURN allActs.placeID as aPlace, allActs.name as aName",
+                                            suser = uname, curr = currUser))
+
+            # 0.2 is the similarity cutoff
+            shareCount = numActivities - actsDf.shape[0]
+            if (shareCount / numActivities >= 0.2):
+                # Since the similar user makes the cut off,
+                # its dataframe is merged with allActivities
+                frames = [allActivities, actsDf]
+                allActivities = concat(frames)
+
+        # All similarUsers have had their data processed and data has been
+        # merged into allActivities as needed. The duplicated rows are combined
+        # and a new column is created that that contains the number of times
+        # the a.name value appeared originally
+        mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
+
+        # Sort the rows based on values in counts column
+        mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
+
+        # Choices is a list of the four location ids with the highest count values
+        form.recommendations.choices =  mostPopularDf.index.values.tolist()
+
+        # If less than four recommendations were made, then generate ones based on
+        # the user's traits
+        lngth = len(form.recommendations.choices)
+        if lngth < 4:
+            form.recommendations.choices += generatePopularRecommendations(graph, 4-lngth)
+
+        # The most popular activities are passed along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
-
-    # Get all users who rated the same activities as the current user
-    similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
-                            "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
-                            "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
-                            "RETURN DISTINCT other.username", cUser = currUser))
-
-    if similarUsers.empty:
-        # Get the most popular activities that correspond to user traits
-        form.recommendations.choices = generatePopularRecommendations(graph, 4)
-        return render_template('recs.html', title="Your recommendations", form=form)
-
-    # Create the dataframe that will contain possible activities to recommend
-    allActivities = DataFrame()
-    # Compute similarity of all similar users
-    # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
-    for row in similarUsers.itertuples():
-        i, uname = row
-
-        # Query for the activities that similar user liked but the current user
-        # has never visited
-        actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
-                                        "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
-                                        "WITH simAct as allActs "
-                                        "MATCH (allActs) "
-                                        "WHERE NOT (:User {username:{curr}})-"
-                                        "[:HAS_BEEN_TO]->(allActs) "
-                                        "RETURN allActs.placeID as aPlace, allActs.name as aName",
-                                        suser = uname, curr = currUser))
-
-        # 0.2 is the similarity cutoff
-        shareCount = numActivities - actsDf.shape[0]
-        if (shareCount / numActivities >= 0.2):
-            # Since the similar user makes the cut off,
-            # its dataframe is merged with allActivities
-            frames = [allActivities, actsDf]
-            allActivities = concat(frames)
-
-    # All similarUsers have had their data processed and data has been
-    # merged into allActivities as needed. The duplicated rows are combined
-    # and a new column is created that that contains the number of times
-    # the a.name value appeared originally
-    mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
-
-    # Sort the rows based on values in counts column
-    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
-
-    # Choices is a list of the four location ids with the highest count values
-    form.recommendations.choices =  mostPopularDf.index.values.tolist()
-
-    # If less than four recommendations were made, then generate ones based on
-    # the user's traits
-    lngth = len(form.recommendations.choices)
-    if lngth < 4:
-        form.recommendations.choices += generatePopularRecommendations(graph, 4-lngth)
-
-    # The most popular activities are passed along to recs.html
-    return render_template('recs.html', title="Your recommendations", form=form)
+    else:
+        return redirect ('/login')
+        
 
 @app.route('/feedback')
 def feedback():
