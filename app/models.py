@@ -19,14 +19,16 @@ class User(Base): #inherits Base
     name = Column(String)
     securityQ = Column(Integer)
     securityQAnswer = Column(String)
+    status = Column(Integer)
 
-    def __init__(self, username, password, email, name, securityQ, answer):
+    def __init__(self, username, password, email, name, securityQ, answer,status):
         self.username = str(username)
         self.password=str(password)
         self.email = str(email)
         self.name = str(name)
         self.securityQ = int(securityQ)
         self.securityQAnswer = str(answer)
+        self.status = int(status)
 
 
     def set_password(self, password):
