@@ -168,10 +168,10 @@ def generatePopularRecommendations(graph, n):
                                 "WHERE a.label = u.trait1 OR a.label = u.trait2 "
                                 "OR a.label = u.trait3 OR a.label = u.trait4 "
                                 "WITH a as selectActs, u as currU "
-                                "MATCH (selectActs) "
+                                "MATCH (selectActs), (currU) "
                                 "WHERE NOT (currU)-[:HAS_BEEN_TO]->(selectActs) "
-                                "LIMIT {lim} "
-                                "RETURN selectActs.placeID, selectActs.name", curr = session['username'], lim = n))
+                                "RETURN selectActs.placeID, selectActs.name "
+                                "LIMIT {lim}", curr = session['username'], lim = n))
 
     # Feed the place IDs into a list before returning
     r = recs.values.tolist()
