@@ -148,7 +148,7 @@ def wyr():
         # Add user and their preferences to Neo4j database
         graph_session = getPy2NeoSession()
         graph_session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                        "trait2: {t2}, trait3: {t3}, trait4: {t4}, counter: 0})",
+                        "trait2: {t2}, trait3: {t3}, trait4: {t4}, counter: 0, likedVisits: 0})",
                         uname=username, t1=form.foodOrScience.data,
                         t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
                         t4=form.entertainmentOrMusic.data)
@@ -164,13 +164,14 @@ def about():
 # based on the user's personality traits
 def generatePopularRecommendations(graph, n):
     # Get the required number of recommendations in DataFrame format
-    recs = DataFrame(graph.data("MATCH (s)-[h:HAS_BEEN_TO]->(a:Activity),"
-                                "(u:User {username:{curr}})"
+    recs = DataFrame(graph.data("MATCH (u:User {username: {curr}}), (a:Activity) "
                                 "WHERE a.label = u.trait1 OR a.label = u.trait2 "
                                 "OR a.label = u.trait3 OR a.label = u.trait4 "
-                                "WITH a, COUNT(h) as c "
-                                "ORDER BY c DESC LIMIT {lim} "
-                                "RETURN a.placeID, a.name", curr = session['username'], lim = n))
+                                "WITH a as selectActs, u as currU "
+                                "MATCH (selectActs) "
+                                "WHERE NOT (currU)-[:HAS_BEEN_TO]->(selectActs) "
+                                "LIMIT {lim} "
+                                "RETURN selectActs.placeID, selectActs.name", curr = session['username'], lim = n))
 
     # Feed the place IDs into a list before returning
     r = recs.values.tolist()
@@ -263,6 +264,8 @@ def feedback():
     placeId = request.args.get('placeId')
     # Get a few values needed to run the query
     currUser = session["username"]
+
+    print(rating)
 
     # Add relationship in the database for user to placeId with weight rating
     # If the rating is one, then the user's likedVisits property must be incremented
