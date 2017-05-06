@@ -118,33 +118,33 @@
     
   <div id="recommendations">
 
-    <div class="rec">
-      <div id=photo1></div>
-      <h4>{{ form.recommendations.choices[0][1] }}</h4>
-      <p id="vicinity1"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId1); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId1); src='../static/dislike2.png'"></img><br><br>
-    </div>
+        <div id="firstRec" class="rec card">
+        <span><h4>{{ form.recommendations.choices[0][1] }}</h4></span>
+        <div id=photo1></div>
+        <p id="vicinity1"></p>
+        <img class="review" src="static/like2.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
+      </div>
+  
+      <div id="secondRec" class="rec card">
+        <span><h4>{{ form.recommendations.choices[1][1] }}</h4><span>
+        <div id=photo2></div>
+        <p id="vicinity2"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
+      </div>
+  
+        <div id="thirdRec" class="rec card">
+          <span><h4>{{ form.recommendations.choices[2][1] }}</h4></span>
+        <div id=photo3></div>
+        <p id="vicinity3"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
+      </div>
 
-    <div class="rec">
-      <div id=photo2></div>
-      <h4>{{ form.recommendations.choices[1][1] }}</h4>
-      <p id="vicinity2"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId2); src='../static/dislike2.png'"></img><br><br>
-    </div>
-
-    <div class="rec">
-      <div id=photo3></div>
-      <h4>{{ form.recommendations.choices[2][1] }}</h4>
-      <p id="vicinity3"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId3); src='../static/dislike2.png'"></img><br><br>
-    </div>
-
-    <div class="rec">
-      <div id=photo4></div>
-      <h4>{{ form.recommendations.choices[3][1]}}</h4>
-      <p id="vicinity4"></p>
-      <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="../static/dislike.png" onclick="getFeedback('0', placeId4); src='../static/dislike2.png'"></img><br><br>
-    </div>
+      <div id="fourthRec" class="rec card">
+        <h4>{{ form.recommendations.choices[3][1]}}</h4>
+        <div id=photo4></div>
+        <p id="vicinity4"></p>
+        <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId4); src='/static/dislike2.png'"></img><br><br>
+      </div>
 
     <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
           user has rated the recommendations he/she was already provided -->
