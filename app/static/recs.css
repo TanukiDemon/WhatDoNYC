@@ -114,19 +114,19 @@ body {
 }
 #firstRec{
 
-      background-image: url('/Users/stephenmartinez/Documents/Undergraduate_Courses/Capstone/API_Requests/nyc1.jpg');
+      background-image: url('static/nyc1.jpg');
 }
 #secondRec{
 
-      background-image: url('/Users/stephenmartinez/Documents/Undergraduate_Courses/Capstone/API_Requests/nyc2.jpg');
+      background-image: url('/static/nyc2.jpg');
 }
 #thirdRec{
 
-      background-image: url('/Users/stephenmartinez/Documents/Undergraduate_Courses/Capstone/API_Requests/nyc3.jpg');
+      background-image: url('/static/nyc3.jpg');
 }
 #fourthRec{
 
-      background-image: url('/Users/stephenmartinez/Documents/Undergraduate_Courses/Capstone/API_Requests/nyc4.jpg');
+      background-image: url('/static/nyc4.jpg');
 }
 
 #map {
