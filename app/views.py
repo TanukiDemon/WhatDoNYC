@@ -1,7 +1,6 @@
 from flask import render_template, redirect, request, Blueprint, url_for, session
 import configparser
 from .wdnyc import app
-from .wdnyc import cache
 from .forms import *
 from .models import *
 from os import path
@@ -163,7 +162,7 @@ def about():
 
 # Generates recommendations of the most popular activities
 # based on the user's personality traits
-def generatePopularRecommendations(graph, n):
+def getRecommendationsForTraits(graph, n):
     # Get the required number of recommendations in DataFrame format
     recs = DataFrame(graph.data("MATCH (u:User {username: {curr}}), (a:Activity) "
                                 "WHERE a.label = u.trait1 OR a.label = u.trait2 "
@@ -206,7 +205,7 @@ def recs():
             # If user has no connections, get most popular activities with a positive
             # weight that correspond to their personality traits
             form = recsForm(request.form)
-            form.recommendations.choices = generatePopularRecommendations(graph, 4)
+            form.recommendations.choices = getRecommendationsForTraits(graph, 4)
             return render_template('recs.html', title="Your recommendations", form=form)
 
         # Get all users who rated the same activities as the current user
@@ -217,7 +216,7 @@ def recs():
 
         if similarUsers.empty:
             # Get the most popular activities that correspond to user traits
-            form.recommendations.choices = generatePopularRecommendations(graph, 4)
+            form.recommendations.choices = getRecommendationsForTraits(graph, 4)
             return render_template('recs.html', title="Your recommendations", form=form)
 
         # Create the dataframe that will contain possible activities to recommend
@@ -235,7 +234,8 @@ def recs():
                                             "MATCH (allActs) "
                                             "WHERE NOT (:User {username:{curr}})-"
                                             "[:HAS_BEEN_TO]->(allActs) "
-                                            "RETURN allActs.placeID as aPlace, allActs.name as aName",
+                                            "RETURN allActs.placeID as aPlace, "
+                                            "allActs.name as aName",
                                             suser = uname, curr = currUser))
 
             # 0.2 is the similarity cutoff
@@ -262,13 +262,13 @@ def recs():
         # the user's traits
         lngth = len(form.recommendations.choices)
         if lngth < 4:
-            form.recommendations.choices += generatePopularRecommendations(graph, 4-lngth)
+            form.recommendations.choices += getRecommendationsForTraits(graph, 4-lngth)
 
         # The most popular activities are passed along to recs.html
         return render_template('recs.html', title="Your recommendations", form=form)
     else:
         return redirect ('/login')
-        
+
 
 @app.route('/feedback')
 def feedback():
