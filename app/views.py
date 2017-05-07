@@ -60,7 +60,6 @@ def signup():
     form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
 
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
-        print("WORKED")
 
         if (checkIfUserExists(form.username.data) and checkIfEmailExists(form.email.data)):
         # If so, return register.html again
@@ -278,8 +277,6 @@ def feedback():
     placeId = request.args.get('placeId')
     # Get a few values needed to run the query
     currUser = session["username"]
-
-    print(rating)
 
     # Add relationship in the database for user to placeId with weight rating
     # If the rating is one, then the user's likedVisits property must be incremented
