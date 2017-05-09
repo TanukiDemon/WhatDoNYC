@@ -123,7 +123,7 @@ def secques():
     form.question.choices = [user.securityQ]
     answer = form.securityAnswer.data    
     
-    if form.validate_on_submit() and checkIfUserExists(user.username):
+    if checkIfUserExists(user.username):
         if answer == user.securityQAnswer:
             return redirect('/reset')
 
