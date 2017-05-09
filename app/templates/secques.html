@@ -23,8 +23,18 @@
 
 	<form id="form" method="post" action="" style="text-align:center;">
 		<h2>Answer the security question below</h2>
-		{{ form.question.choices[0] }}
-		<!-- Print security question -->
+		
+		<!-- Print security question user chose at sign  up-->
+
+		{% if form.question.choices[0] == 1 %}
+		<p>What was the last name of your fourth grade teacher?</p>
+		{% elif form.quesiton.choices[0] == 2 %}
+		<p>What were the last four digits of your childhood telephone number?</p>
+		{% else %}
+		<p>What was the name of the street you grew up on?</p>
+		{% endif %}
+
+		<br>
 		
 		{{ form.hidden_tag() }}
 		
