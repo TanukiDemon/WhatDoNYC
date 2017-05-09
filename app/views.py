@@ -14,6 +14,7 @@ def checkIfUserExists(username):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.username == username).first())
 
+#Used in signup route
 def checkIfEmailExists(email):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.email == email).first())
@@ -83,11 +84,13 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     sqliteSession = get_session()
+    
     form = loginForm(request.form)
     password = form.password.data
     username = form.username.data
     user = sqliteSession.query(User).filter(User.username == username).first()
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
+	#store the user in a global session
         session['username'] = form.username.data
         session['status'] = 1
 
@@ -106,22 +109,23 @@ def forgotPass():
     user = sqliteSession.query(User).filter(User.username == username).first()
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
+         
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
 
 @app.route('/secques', methods = ['GET','POST'])
 def secques():
-    #add code print question to screen
     sqliteSession = get_session()
+    #gets all information for current user
+    user = sqliteSession.query(User).filter(User.username == session['username']).first()
     form = securityQuestion(request.form)
-    quest = form.securityAnswer.data
-    usern = sqliteSession.query(User).filter(User.username == session['username']).first()
-    if form.validate_on_submit() and checkIfUserExists(usern.username):
-        for user, secQ in sqliteSession.query(User.username, User.securityQAnswer):
-            if user == session['username']:
-                if secQ == quest:
-                    return redirect('/reset')
+    form.question.choices = [user.securityQ]
+    answer = form.securityAnswer.data    
+    
+    if form.validate_on_submit() and checkIfUserExists(user.username):
+        if answer == user.securityQAnswer:
+            return redirect('/reset')
 
     return render_template('secques.html', title="Security Question response incorrect", form=form)
 
@@ -130,7 +134,7 @@ def reset():
     #code to reset password and insert it into the db
     sqliteSession = get_session()
     form = resetPassword(request.form)
-
+    #checks if both passwords match
     if form.reset1.data and form.reset1.data == form.reset2.data:
         user = sqliteSession.query(User).filter(User.username == session['username']).first()
         user.set_password(form.reset2.data)
@@ -138,7 +142,7 @@ def reset():
         return redirect('/login')
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
-
+    
 @app.route('/wyr', methods=['GET', 'POST'])
 def wyr():
     # Serve "Would You Rather" survey
