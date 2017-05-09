@@ -23,7 +23,7 @@
 
 	<form id="form" method="post" action="" style="text-align:center;">
 		<h2>Answer the security question below</h2>
-		
+		{{ form.question.choices[0] }}
 		<!-- Print security question -->
 		
 		{{ form.hidden_tag() }}
