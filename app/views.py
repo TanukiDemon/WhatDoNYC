@@ -160,6 +160,13 @@ def wyr():
 def about():
     return render_template('about.html', title="About What Do NYC")
 
+@app.route('/logout')
+def logout():
+    session['usernanme'] = None
+    session['status'] = 0
+    print("here")
+    return render_template('about.html', title="About What Do NYC")
+
 # Generates recommendations of the most popular activities
 # based on the user's personality traits
 def getRecommendationsForTraits(graph, n):
@@ -179,15 +186,7 @@ def getRecommendationsForTraits(graph, n):
     r = [[i[1], i[0]] for i in r]
     return r
 
-@app.route('/logout')
-def logout():
-    session['usernanme'] = None
-    session['status'] = 0
-    print("here")
-    return render_template('about.html', title="About What Do NYC")
-
 @app.route('/recs', methods=['GET', 'POST'])
-
 def recs():
     if session['status'] == 1:
         # Get graph object to perform Neo4j queries
