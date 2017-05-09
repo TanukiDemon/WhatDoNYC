@@ -38,7 +38,7 @@ class forgotPassword(FlaskForm):
 
 class securityQuestion(FlaskForm):
     securityAnswer = StringField('answer', validators=[InputRequired(), Length(min=1, max=35)])
-
+    question = SelectField(u'Question',choices=[], coerce = int)
     submit = SubmitField(u'Submit')
 
 class resetPassword(FlaskForm):
