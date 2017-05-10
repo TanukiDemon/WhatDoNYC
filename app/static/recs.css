@@ -6,7 +6,6 @@ html, body {
 
 body {
   font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-  background-color: black;
   text-align: center;
   width: 100%; 
   margin: 0 auto;
@@ -69,16 +68,36 @@ body {
   margin-top: 2%;
 }
 
+h4:hover {
+	cursor: pointer;
+}
+
 .photo{
   width: 90%;
   height: 40%;
   border-radius: 35%;
-   max-height: 170px;
+  max-height: 170px;
+}
 
+
+#photo1:hover {
+  cursor: pointer;
+}
+
+#photo2:hover {
+  cursor: pointer;
+}
+
+#photo3:hover {
+  cursor: pointer;
+}
+
+#photo4:hover {
+  cursor: pointer;
 }
 
 #footer {
-  color: #ffffff;
+  color: #000000;
   font-size: 12px;
   text-align: center;
 }
@@ -155,7 +174,7 @@ body {
 #new {
   background-color: blue;
   color: #ffffff;
-  width: 150px;
+  width: 200px;
   padding-top: 3px;
   padding-bottom: 3px;
   border-color: blue;
