@@ -27,3 +27,14 @@ function logout() {
   url = "/logout";
   httpGetAsync(url, mycallback);
 }
+
+// Creates pop-up window when user clicks on recommendation
+function singleRec(placeId) {
+	myWindow = window.open("singleRec?pid=" + placeId, "_blank", "toolbar=no,scrollbars=no,resizable=no,top=100,left=300,width=800,height=600");
+}
+
+// This function is used for the close button on the pop-ups to close the pop-up when clicked
+function winClose() {
+	window.close();
+}
+
