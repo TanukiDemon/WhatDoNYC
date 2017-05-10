@@ -54,7 +54,6 @@ body {
 }
 
 #recommendations {
-  padding-left: 1%; 
   color: #000000;
   text-align: center;
   width:100%;
@@ -136,4 +135,30 @@ body {
   display: inline-block;
   text-align: center;
   margin: 2%;
+}
+
+#buttons {
+  text-align: center;
+}
+
+#logout {
+  background-color: blue;
+  color: #ffffff;
+  width: 75px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: blue;
+  border-radius: 5px;
+  cursor: pointer;	
+}
+
+#new {
+  background-color: blue;
+  color: #ffffff;
+  width: 150px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: blue;
+  border-radius: 5px;
+  cursor: pointer;
 }
