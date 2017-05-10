@@ -272,6 +272,10 @@ def recs():
     else:
         return redirect ('/login')
 
+@app.route('/singleRec', methods=['GET'])
+def singleRec():
+    return render_template('singleRec.html', title='Your Recommendation')
+
 
 @app.route('/feedback')
 def feedback():
