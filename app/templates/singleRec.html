@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Your Recommendation</title>
+	<link rel="stylesheet" type="text/css" href="/static/singleRec.css">
+	<script type="text/javascript" src="/static/recs.js"></script>
+	<script>
+		function initMap() {
+    	var map = new google.maps.Map(document.getElementById('map'), {
+      	center: {lat: 40.699771, lng:  -74.029229},
+        zoom: 11
+	    });
+
+      var infowindow = new google.maps.InfoWindow();
+      var service = new google.maps.places.PlacesService(map);
+
+			var query = window.location.search.substring(1);
+			var result = query.split("=");
+			var placeId = result[1];
+
+      // Google Places API call for the recommended place
+      service.getDetails({
+        placeId: placeId
+      }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+        	  var marker = new google.maps.Marker({
+              map: map,
+              position: place.geometry.location
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + place.formatted_address + '<br>');
+              infowindow.open(map, this);
+            });
+          document.getElementById("name").innerHTML = place.name;
+					document.getElementById("address").innerHTML = place.formatted_address;
+					document.getElementById("phone").innerHTML = place.formatted_phone_number;
+					var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 350});
+					document.getElementById("photo").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
+        }
+      });
+	  }
+	</script>
+</head>
+<body>
+	<h1 id=name></h1>
+	<h4 id=address></h4>
+	<h4 id=phone></h4>
+	<div id=photo></div>
+
+	<br>
+
+	<button id=close onclick="winClose()">Close</button>
+
+	<div id="map"></div>
+
+	<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRuSAQFBz_LWWCHFH86rvmhIkewzqDwt8&libraries=places&callback=initMap">
+  </script>
+
+</body>
+</html>

@@ -123,7 +123,7 @@ def secques():
     form.question.choices = [user.securityQ]
     answer = form.securityAnswer.data    
     
-    if form.validate_on_submit() and checkIfUserExists(user.username):
+    if checkIfUserExists(user.username):
         if answer == user.securityQAnswer:
             return redirect('/reset')
 
@@ -271,6 +271,10 @@ def recs():
         return render_template('recs.html', title="Your recommendations", form=form)
     else:
         return redirect ('/login')
+
+@app.route('/singleRec', methods=['GET'])
+def singleRec():
+    return render_template('singleRec.html', title='Your Recommendation')
 
 
 @app.route('/feedback')

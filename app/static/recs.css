@@ -54,7 +54,6 @@ body {
 }
 
 #recommendations {
-  padding-left: 1%; 
   color: #000000;
   text-align: center;
   width:100%;
@@ -70,12 +69,42 @@ body {
   margin-top: 2%;
 }
 
+h4:hover {
+	cursor: pointer;
+}
+
 .photo{
   width: 90%;
   height: 40%;
   border-radius: 35%;
-   max-height: 170px;
+  max-height: 170px;
+}
 
+
+#photo1:hover {
+  cursor: pointer;
+}
+
+#photo2:hover {
+  cursor: pointer;
+}
+
+#photo3:hover {
+  cursor: pointer;
+}
+
+#photo4:hover {
+  cursor: pointer;
+}
+
+#title {
+  color: #ffffff;
+  text-align: center;
+}
+
+#requestFeedback {
+  color: #ffffff;
+  text-align: center;
 }
 
 #footer {
@@ -136,4 +165,30 @@ body {
   display: inline-block;
   text-align: center;
   margin: 2%;
+}
+
+#buttons {
+  text-align: center;
+}
+
+#logout {
+  background-color: blue;
+  color: #ffffff;
+  width: 75px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: blue;
+  border-radius: 5px;
+  cursor: pointer;	
+}
+
+#new {
+  background-color: blue;
+  color: #ffffff;
+  width: 200px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: blue;
+  border-radius: 5px;
+  cursor: pointer;
 }
