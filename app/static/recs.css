@@ -97,8 +97,18 @@ h4:hover {
   cursor: pointer;
 }
 
+#title {
+  color: #ffffff;
+  text-align: center;
+}
+
+#requestFeedback {
+  color: #ffffff;
+  text-align: center;
+}
+
 #footer {
-  color: #000000;
+  color: #ffffff;
   font-size: 12px;
   text-align: center;
 }
