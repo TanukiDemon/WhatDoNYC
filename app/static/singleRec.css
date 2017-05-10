@@ -1,0 +1,44 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  text-align: center;
+  width: 100%; 
+  margin: 0 auto;
+}
+
+#name {
+	text-align: center;
+}
+
+#address {
+	text-align: center;
+}
+
+#phone {
+	text-align: center;
+}
+
+#photo {
+	text-align: center;
+}
+
+#close {
+	text-align: center;
+	background-color: blue;
+  color: #ffffff;
+  width: 75px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: blue;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#map {
+	display: none;
+}
