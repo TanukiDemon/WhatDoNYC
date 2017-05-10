@@ -199,33 +199,33 @@
 	  
   <h2 id="title">Your Recommendations</h2>
   <h4 id="requestFeedback">Let us know what you think with a thumbs up or thumbs down</h4>
-    
+	
   <div id="recommendations">
 
         <div id="firstRec" class="rec card">
-        <span><h4>{{ form.recommendations.choices[0][1] }}</h4></span>
-        <div id=photo1></div>
+        <span><h4 onclick="singleRec(placeId1)">{{ form.recommendations.choices[0][1] }}</h4></span>
+        <div id=photo1 onclick="singleRec(placeId1)"></div>
         <p id="vicinity1"></p>
         <img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
       </div>
   
       <div id="secondRec" class="rec card">
-        <span><h4>{{ form.recommendations.choices[1][1] }}</h4><span>
-        <div id=photo2></div>
+        <span><h4 onclick="singleRec(placeId2)">{{ form.recommendations.choices[1][1] }}</h4></span>
+        <div id=photo2 onclick="singleRec(placeId2)"></div>
         <p id="vicinity2"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
       </div>
   
         <div id="thirdRec" class="rec card">
-          <span><h4>{{ form.recommendations.choices[2][1] }}</h4></span>
-        <div id=photo3></div>
+          <span><h4 onclick="singleRec(placeId3)">{{ form.recommendations.choices[2][1] }}</h4></span>
+        <div id=photo3 onclick="singleRec(placeId3)"></div>
         <p id="vicinity3"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
       </div>
 
       <div id="fourthRec" class="rec card">
-        <h4>{{ form.recommendations.choices[3][1]}}</h4>
-        <div id=photo4></div>
+        <span><h4 onclick="singleRec(placeId4)">{{ form.recommendations.choices[3][1]}}</h4></span>
+        <div id=photo4 onclick="singleRec(placeId4)"></div>
         <p id="vicinity4"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId4); src='/static/dislike2.png'"></img><br><br>
       </div>
