@@ -178,7 +178,7 @@ def logout():
     user = sqliteSession.query(User).filter(User.username == session['username']).first()
     user.status = 0
     sqliteSession.commit()
-    session['usernanme'] = None
+    session['username'] = None
     return render_template('about.html', title="About What Do NYC")
 
 # Generates recommendations of the most popular activities
