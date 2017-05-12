@@ -139,9 +139,15 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-           var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
-            document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("vicinity2").innerHTML = place.vicinity;
+	   if(place.photos[0] != "") {
+		var imageLink = place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
+        	document.getElementById("vicinity2").innerHTML = place.vicinity;
+	   } else {
+		var imageLink = "/static/like.png"; 
+		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
+        	document.getElementById("vicinity2").innerHTML = place.vicinity;
+	   }
           }
         });
         service.getDetails({
@@ -187,7 +193,7 @@
     <div id="header">
     <h1 id="name">What Do NYC</h1>
     <ul id="navigation">
-      <li class="selected"><a href={{ url_for('login') }}>recommendations</a></li>
+      <li class="selected"><a href={{ url_for('recs') }}>recommendations</a></li>
       <li>|</li>
       <li><a href={{ url_for('index') }}>spotlight</a></li>
       <li>|</li>
@@ -202,28 +208,28 @@
 	
   <div id="recommendations">
 
-        <div id="firstRec" class="rec card">
+        <div id="firstRec" class="reccard">
         <span><h4 onclick="singleRec(placeId1)">{{ form.recommendations.choices[0][1] }}</h4></span>
         <div id=photo1 onclick="singleRec(placeId1)"></div>
         <p id="vicinity1"></p>
         <img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
       </div>
   
-      <div id="secondRec" class="rec card">
+      <div id="secondRec" class="reccard">
         <span><h4 onclick="singleRec(placeId2)">{{ form.recommendations.choices[1][1] }}</h4></span>
         <div id=photo2 onclick="singleRec(placeId2)"></div>
         <p id="vicinity2"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
       </div>
   
-        <div id="thirdRec" class="rec card">
+        <div id="thirdRec" class="reccard">
           <span><h4 onclick="singleRec(placeId3)">{{ form.recommendations.choices[2][1] }}</h4></span>
         <div id=photo3 onclick="singleRec(placeId3)"></div>
         <p id="vicinity3"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
       </div>
 
-      <div id="fourthRec" class="rec card">
+      <div id="fourthRec" class="reccard">
         <span><h4 onclick="singleRec(placeId4)">{{ form.recommendations.choices[3][1]}}</h4></span>
         <div id=photo4 onclick="singleRec(placeId4)"></div>
         <p id="vicinity4"></p>
@@ -260,4 +266,3 @@
   </body>
   {% endblock %}
 </html>
-

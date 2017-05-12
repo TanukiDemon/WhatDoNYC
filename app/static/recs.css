@@ -61,7 +61,6 @@ body {
 }
 
 .review {
-  display: inline-block;
   cursor: pointer;
   height: 50px;
   width: auto;
@@ -70,7 +69,7 @@ body {
 }
 
 h4:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .photo{
@@ -78,8 +77,8 @@ h4:hover {
   height: 40%;
   border-radius: 35%;
   max-height: 170px;
+  min-height: 170px;
 }
-
 
 #photo1:hover {
   cursor: pointer;
@@ -113,50 +112,47 @@ h4:hover {
   text-align: center;
 }
 
-.rec{
-  float:left;
+.reccard{
+  display: inline-block;
   padding-left: 1%;
+  padding-top: none;
+  margin: 1%;
   height: 380px;
   width: 260px;
-  margin: 1%;
   color: #FFFFFF;
   text-align: center;
 
-}
-
-.card {
-    /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    background-color: #595959;
-    border-radius: 5%;
-
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  background-color: #595959;
+  border-radius: 5%;
 }
 
 /* On mouse-over, add a deeper shadow */
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+.reccard:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 /* Add some padding inside the card container */
 .container {
-    padding: 2px 16px;
+  padding: 2px 16px;
 }
+
 #firstRec{
-
-      background-image: url('/static/nyc1.jpg');
+  background-image: url('/static/nyc1.jpg');
 }
+
 #secondRec{
-
-      background-image: url('/static/nyc2.jpg');
+  background-image: url('/static/nyc2.jpg');
 }
+
 #thirdRec{
-
-      background-image: url('/static/nyc3.jpg');
+  background-image: url('/static/nyc3.jpg');
 }
-#fourthRec{
 
-      background-image: url('/static/nyc4.jpg');
+#fourthRec{
+  background-image: url('/static/nyc4.jpg');
 }
 
 #map {
