@@ -59,9 +59,15 @@
              {{ form.securityQ.process(request.form) }}
              <center>{{ form.submit }}</center>
 		
-                {% if form.errors %}
-                  {{ form.errors }}
-                {% endif %}
+                {% with messages = get_flashed_messages() %}
+		  {% if messages %}
+		    <ul class=flashes>
+		    {% for message in messages %}
+		      <li>{{ message }}</li>
+		    {% endfor %}
+		    </ul>
+		  {% endif %}
+		{% endwith %}
 
                 </form>                
 		<div id="gotologin">
