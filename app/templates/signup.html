@@ -20,6 +20,15 @@
 	</div>
 	<br><br><br><br><br><br>
 	<div id="signup">
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+					<h3>{{ message }}</h3>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+		
 		<h2>Create a What Do NYC Account</h2><br>
 		<form action="" method="POST">
                   {{ form.csrf_token }}
@@ -58,18 +67,10 @@
 		
              {{ form.securityQ.process(request.form) }}
              <center>{{ form.submit }}</center>
-		
-                {% with messages = get_flashed_messages() %}
-		  {% if messages %}
-		    <ul class=flashes>
-		    {% for message in messages %}
-		      <li>{{ message }}</li>
-		    {% endfor %}
-		    </ul>
-		  {% endif %}
-		{% endwith %}
 
-                </form>                
+                </form> 
+	</div>
+	
 		<div id="gotologin">
 			<br>
 			<p>Already have an account? <a href={{ url_for('login') }}>Login</a></p>
