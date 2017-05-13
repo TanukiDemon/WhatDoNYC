@@ -6,8 +6,18 @@ from .models import *
 from os import path
 from py2neo import Graph, Node
 from pandas import DataFrame, concat
+from flask_login import LoginManager, login_user, login_required, logout_user
 
 my_view = Blueprint('my_view', __name__)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(username):
+    sqliteSession = get_session()
+    user = sqliteSession.query(User).filter(User.username == username).first()
+    return user
 
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(username):
@@ -18,6 +28,16 @@ def checkIfUserExists(username):
 def checkIfEmailExists(email):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.email == email).first())
+
+def check_for_username_password(username, password):
+    sqliteSession = get_session()
+    user = sqliteSession.query(User).filter(User.username == username).first()
+    return check_password_hash(user.password, password) and user
+
+def check_password(username, password):
+    sqliteSession = get_session()
+    user = sqliteSession.query(User).filter(User.username == self.username).first()
+    return check_password_hash(user.password, self.password)
 
 def getPy2NeoSession():
     config = configparser.ConfigParser()
@@ -70,43 +90,39 @@ def signup():
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
             sqliteSession = get_session()
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data, status = 1)
+            newUser = User(username=str(form.username.data),
+                password=str(form.password.data), email=str(form.email.data),
+                name=str(form.name.data), securityQ=int(form.securityQ.data),
+                answer=str(form.securityQanswer.data), status = 1)
             newUser.set_password(form.password.data)
             sqliteSession.add(newUser)
             sqliteSession.commit()
 
             # Store the user's new username to be used in the wyr route
             session["username"] = form.username.data
-            session["status"] = 1
-
+            login_user(newUser)
             return redirect('/wyr')
-       
+
     return render_template('signup.html', title='Join us!', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    sqliteSession = get_session()
-    form = loginForm(request.form)
-    password = form.password.data
-    username = form.username.data
-    user = sqliteSession.query(User).filter(User.username == username).first()
+    form = loginForm()
     if form.validate_on_submit():
-       if checkIfUserExists(form.username.data):
-	  #store the user in a global session
-          session['username'] = form.username.data
-          user.status = 1
-          sqliteSession.commit()
+        user = User()
+        user.username = form.username.data
+        if check_for_username_password(user.username, form.password.data):
+            login_user(user)
+            session['username'] = user.username
+            return redirect('recs')
+        else:
+            flash("Username or password is incorrect")
+            return render_template('login.html', title='Incorrect login info',
+                                    form=form)
 
-          if user.check_password(password):
-              return redirect('/recs')
-          else:
-              flash("Incorrect Password")
-              return render_template('login.html', title="Incorrect Password", form=form)
-       else:
-          flash("Incorrect Username")
-          return render_template('login.html', title="Login", form=form)
-    
-    return render_template('login.html', title="Login", form=form)
+    return render_template('login.html',
+                           title='Sign In',
+                           form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPass():
@@ -116,7 +132,7 @@ def forgotPass():
     user = sqliteSession.query(User).filter(User.username == username).first()
     if form.validate_on_submit() and checkIfUserExists(form.username.data):
         session['username'] = form.username.data
-         
+
         return redirect('/secques')
     else:
         return render_template('forgot.html', title="Username does not exist", form=form)
@@ -128,8 +144,8 @@ def secques():
     user = sqliteSession.query(User).filter(User.username == session['username']).first()
     form = securityQuestion(request.form)
     form.question.choices = [user.securityQ]
-    answer = form.securityAnswer.data    
-    
+    answer = form.securityAnswer.data
+
     if checkIfUserExists(user.username):
         if answer == user.securityQAnswer:
             return redirect('/reset')
@@ -149,7 +165,7 @@ def reset():
         return redirect('/login')
     else:
         return render_template('reset.html', title = "Password do not match", form = form)
-    
+
 @app.route('/wyr', methods=['GET', 'POST'])
 def wyr():
     # Serve "Would You Rather" survey
@@ -171,15 +187,11 @@ def wyr():
 def about():
     return render_template('about.html', title="About What Do NYC")
 
-@app.route('/logout')
+@app.route("/logout")
+@login_required
 def logout():
-    sqliteSession = get_session()
-    #gets all information for current user
-    user = sqliteSession.query(User).filter(User.username == session['username']).first()
-    user.status = 0
-    sqliteSession.commit()
-    session['username'] = None
-    return render_template('about.html', title="About What Do NYC")
+    logout_user()
+    return redirect('/about')
 
 # Generates recommendations of the most popular activities
 # based on the user's personality traits
@@ -201,95 +213,88 @@ def getRecommendationsForTraits(graph, n):
     return r
 
 @app.route('/recs', methods=['GET', 'POST'])
+@login_required
 def recs():
-    sqliteSession = get_session()
-    #gets all information for current user
-    for user in sqliteSession.query(User).all():
-        if user.status == 1:
-            session['username'] = user.username
-            # Get graph object to perform Neo4j queries
-            graph = getPy2NeoSession()
-            currUser = session['username']
-            # Make a form that will be modified later on
-            form = recsForm(request.form)
+    # Get graph object to perform Neo4j queries
+    graph = getPy2NeoSession()
+    currUser = session['username']
+    # Make a form that will be modified later on
+    form = recsForm(request.form)
 
-            # Count the number of currUser's activities
-            numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                        "SET u.counter = u.counter + 1 "
-                                        "RETURN u.likedVisits", curr = currUser).evaluate()
+    # Count the number of currUser's activities
+    numActivities = graph.run("MATCH (u:User {username: {curr}} )"
+                                "SET u.counter = u.counter + 1 "
+                                "RETURN u.likedVisits", curr = currUser).evaluate()
 
-            if not numActivities:
-                # If user has no connections, get most popular activities with a positive
-                # weight that correspond to their personality traits
-                form = recsForm(request.form)
-                form.recommendations.choices = getRecommendationsForTraits(graph, 4)
-                return render_template('recs.html', title="Your recommendations", form=form)
+    if not numActivities:
+        # If user has no connections, get most popular activities with a positive
+        # weight that correspond to their personality traits
+        form = recsForm(request.form)
+        form.recommendations.choices = getRecommendationsForTraits(graph, 4)
+        return render_template('recs.html', title="Your recommendations", form=form)
 
-            # Get all users who rated the same activities as the current user
-            similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
+    # Get all users who rated the same activities as the current user
+    similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
                                     "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
                                     "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
                                     "RETURN DISTINCT other.username", cUser = currUser))
 
-            if similarUsers.empty:
-                # Get the most popular activities that correspond to user traits
-                form.recommendations.choices = getRecommendationsForTraits(graph, 4)
-                return render_template('recs.html', title="Your recommendations", form=form)
+    if similarUsers.empty:
+        # Get the most popular activities that correspond to user traits
+        form.recommendations.choices = getRecommendationsForTraits(graph, 4)
+        return render_template('recs.html', title="Your recommendations", form=form)
 
-            # Create the dataframe that will contain possible activities to recommend
-            allActivities = DataFrame()
-            # Compute similarity of all similar users
-            # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
-            for row in similarUsers.itertuples():
-                i, uname = row
+    # Create the dataframe that will contain possible activities to recommend
+    allActivities = DataFrame()
+    # Compute similarity of all similar users
+    # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
+    for row in similarUsers.itertuples():
+        i, uname = row
 
-                # Query for the activities that similar user liked but the current user
-                # has never visited
-                actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
-                                                "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
-                                                "WITH simAct as allActs "
-                                                "MATCH (allActs) "
-                                                "WHERE NOT (:User {username:{curr}})-"
-                                                "[:HAS_BEEN_TO]->(allActs) "
-                                                "RETURN allActs.placeID as aPlace, "
-                                                "allActs.name as aName",
-                                                suser = uname, curr = currUser))
+        # Query for the activities that similar user liked but the current user
+        # has never visited
+        actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
+                                        "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
+                                        "WITH simAct as allActs "
+                                        "MATCH (allActs) "
+                                        "WHERE NOT (:User {username:{curr}})-"
+                                        "[:HAS_BEEN_TO]->(allActs) "
+                                        "RETURN allActs.placeID as aPlace, "
+                                        "allActs.name as aName",
+                                        suser = uname, curr = currUser))
 
-                # 0.2 is the similarity cutoff
-                shareCount = numActivities - actsDf.shape[0]
-                if (shareCount / numActivities >= 0.2):
-                    # Since the similar user makes the cut off,
-                    # its dataframe is merged with allActivities
-                    frames = [allActivities, actsDf]
-                    allActivities = concat(frames)
+        # 0.2 is the similarity cutoff
+        shareCount = numActivities - actsDf.shape[0]
+        if (shareCount / numActivities >= 0.2):
+            # Since the similar user makes the cut off,
+            # its dataframe is merged with allActivities
+            frames = [allActivities, actsDf]
+            allActivities = concat(frames)
 
-            # All similarUsers have had their data processed and data has been
-            # merged into allActivities as needed. The duplicated rows are combined
-            # and a new column is created that that contains the number of times
-            # the a.name value appeared originally
-            mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
+    # All similarUsers have had their data processed and data has been
+    # merged into allActivities as needed. The duplicated rows are combined
+    # and a new column is created that that contains the number of times
+    # the a.name value appeared originally
+    mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
 
-            # Sort the rows based on values in counts column
-            mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
+    # Sort the rows based on values in counts column
+    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
 
-            # Choices is a list of the four location ids with the highest count values
-            form.recommendations.choices =  mostPopularDf.index.values.tolist()
+    # Choices is a list of the four location ids with the highest count values
+    form.recommendations.choices =  mostPopularDf.index.values.tolist()
 
-            # If less than four recommendations were made, then generate ones based on
-            # the user's traits
-            lngth = len(form.recommendations.choices)
-            if lngth < 4:
-                form.recommendations.choices += getRecommendationsForTraits(graph, 4-lngth)
+    # If less than four recommendations were made, then generate ones based on
+    # the user's traits
+    lngth = len(form.recommendations.choices)
+    if lngth < 4:
+        form.recommendations.choices += getRecommendationsForTraits(graph, 4-lngth)
 
-            # The most popular activities are passed along to recs.html
-            return render_template('recs.html', title="Your recommendations", form=form)
-    else:
-        return redirect ('/login')
+    # The most popular activities are passed along to recs.html
+    return render_template('recs.html', title="Your recommendations", form=form)
 
 @app.route('/singleRec', methods=['GET'])
 def singleRec():
     return render_template('singleRec.html', title='Your Recommendation')
-
 
 @app.route('/feedback')
 def feedback():
