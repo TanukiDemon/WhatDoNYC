@@ -90,7 +90,10 @@ def signup():
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
             sqliteSession = get_session()
-            newUser = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, securityQ=form.securityQ.data, answer=form.securityQanswer.data, status = 1)
+            newUser = User(username=str(form.username.data),
+                password=str(form.password.data), email=str(form.email.data),
+                name=str(form.name.data), securityQ=int(form.securityQ.data),
+                answer=str(form.securityQanswer.data), status = 1)
             newUser.set_password(form.password.data)
             sqliteSession.add(newUser)
             sqliteSession.commit()
@@ -112,6 +115,10 @@ def login():
             login_user(user)
             session['username'] = user.username
             return redirect('recs')
+        else:
+            flash("Username or password is incorrect")
+            return render_template('login.html', title='Incorrect login info',
+                                    form=form)
 
     return render_template('login.html',
                            title='Sign In',
