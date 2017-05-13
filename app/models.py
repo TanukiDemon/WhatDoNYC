@@ -21,20 +21,38 @@ class User(Base): #inherits Base
     securityQAnswer = Column(String)
     status = Column(Integer)
 
-    def __init__(self, username, password, email, name, securityQ, answer,status):
-        self.username = str(username)
-        self.password=str(password)
-        self.email = str(email)
-        self.name = str(name)
-        self.securityQ = int(securityQ)
-        self.securityQAnswer = str(answer)
-        self.status = int(status)
+    def __init__(self, username=None, password=None, email=None, name=None, securityQ=None, answer=None, status=None):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.name = name
+        self.securityQ = securityQ # this is an int
+        self.securityQAnswer = answer
+        self.status = status
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.username)  # python 2
+        except NameError:
+            return str(self.username)  # python 3
 
     def __repr__(self):
         return '<User "%d">' % (self.id)

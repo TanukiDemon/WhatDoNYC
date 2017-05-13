@@ -6,16 +6,16 @@ from .models import *
 from os import path
 from py2neo import Graph, Node
 from pandas import DataFrame, concat
-from flask_login import LoginManager, login_user
-from flask_security import login_required
-from .logUser import logUser
+from flask_login import LoginManager, login_user, login_required, logout_user
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.user_loader
-def load_user(user_id):
-    return logUser.get(user_id)
+def load_user(username):
+    sqliteSession = get_session()
+    user = sqliteSession.query(User).filter(User.username == username).first()
+    return user
 
 my_view = Blueprint('my_view', __name__)
 
@@ -103,29 +103,19 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
     form = loginForm()
     if form.validate_on_submit():
-        user = logUser()
-        if check_for_username_password(form.username.data, form.password.data):
-            user.is_authenticated = True
-            user.username = form.username.data
-        # Login and validate the user.
-        # user should be an instance of your `User` class
-        login_user(user)
+        user = User()
+        print("Username: ", form.username.data)
+        user.username = form.username.data
+        if check_for_username_password(user.username, form.password.data):
+            login_user(user)
+            session['username'] = user.username
+            return redirect('recs')
 
-        flash('Logged in successfully.')
-
-        #next = request.args.get('next')
-        # is_safe_url should check if the url is safe for redirects.
-        # See http://flask.pocoo.org/snippets/62/ for an example.
-        #if not is_safe_url(next):
-        #    return flask.abort(400)
-
-        return redirect(url_for('recs'))
-    return render_template('login.html', form=form)
+    return render_template('login.html',
+                           title='Sign In',
+                           form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgotPass():

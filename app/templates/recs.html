@@ -144,7 +144,7 @@
 		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
         	document.getElementById("vicinity2").innerHTML = place.vicinity;
 	   } else {
-		var imageLink = "/static/like.png"; 
+		var imageLink = "/static/like.png";
 		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
         	document.getElementById("vicinity2").innerHTML = place.vicinity;
 	   }
@@ -200,12 +200,12 @@
       <li><a href={{ url_for('about') }}>about</a></li>
     </ul>
   </div>
-	  
+
   <br><br><br><br><br>
-	  
+
   <h2 id="title">Your Recommendations</h2>
   <h4 id="requestFeedback">Let us know what you think with a thumbs up or thumbs down</h4>
-	
+
   <div id="recommendations">
 
         <div id="firstRec" class="reccard">
@@ -214,14 +214,14 @@
         <p id="vicinity1"></p>
         <img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
       </div>
-  
+
       <div id="secondRec" class="reccard">
         <span><h4 onclick="singleRec(placeId2)">{{ form.recommendations.choices[1][1] }}</h4></span>
         <div id=photo2 onclick="singleRec(placeId2)"></div>
         <p id="vicinity2"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
       </div>
-  
+
         <div id="thirdRec" class="reccard">
           <span><h4 onclick="singleRec(placeId3)">{{ form.recommendations.choices[2][1] }}</h4></span>
         <div id=photo3 onclick="singleRec(placeId3)"></div>
@@ -235,19 +235,23 @@
         <p id="vicinity4"></p>
         <img class="review" src="/static/like.png" onclick="getFeedback('1', placeId4); src='/static/like2.png'"></img><img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId4); src='/static/dislike2.png'"></img><br><br>
       </div>
-    
+
   </div>
-  
+
   <br>
 
-  <div id="buttons">  
+  <div id="buttons">
 
     <!-- When a user clicks on this button, the page is reloaded from the server with new recommendations if the
           user has rated the recommendations he/she was already provided -->
     <button id="new" onclick="window.location.reload(true)">New Recommendation</button>
 
     <!-- Logout button -->
-    <button id="logout" onclick="logout(); window.location.href='about'">Logout</button>
+    <form action="/logout">
+      <button type="submit" value="Logout" />
+    </form>
+
+    <!--- <button id="logout" onclick="logout()">Logout</button> -->
 
   </div>
 
