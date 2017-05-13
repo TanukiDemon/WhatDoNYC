@@ -19,6 +19,10 @@ def load_user(username):
     user = sqliteSession.query(User).filter(User.username == username).first()
     return user
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect('/login')
+
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(username):
     sqliteSession = get_session()
