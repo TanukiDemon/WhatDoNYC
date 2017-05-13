@@ -8,6 +8,8 @@ from py2neo import Graph, Node
 from pandas import DataFrame, concat
 from flask_login import LoginManager, login_user, login_required, logout_user
 
+my_view = Blueprint('my_view', __name__)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -16,8 +18,6 @@ def load_user(username):
     sqliteSession = get_session()
     user = sqliteSession.query(User).filter(User.username == username).first()
     return user
-
-my_view = Blueprint('my_view', __name__)
 
 # Used in the signup, login, and forgot routes
 def checkIfUserExists(username):
@@ -29,14 +29,6 @@ def checkIfEmailExists(email):
     sqliteSession = get_session()
     return (sqliteSession.query(User).filter(User.email == email).first())
 
-def getPy2NeoSession():
-    config = configparser.ConfigParser()
-    fn = path.join(path.dirname(__file__), 'config.ini')
-    config.read(fn)
-
-    remote_graph = Graph(config.get('global', 'py2neoAddress'))
-    return remote_graph
-
 def check_for_username_password(username, password):
     sqliteSession = get_session()
     user = sqliteSession.query(User).filter(User.username == username).first()
@@ -46,6 +38,14 @@ def check_password(username, password):
     sqliteSession = get_session()
     user = sqliteSession.query(User).filter(User.username == self.username).first()
     return check_password_hash(user.password, self.password)
+
+def getPy2NeoSession():
+    config = configparser.ConfigParser()
+    fn = path.join(path.dirname(__file__), 'config.ini')
+    config.read(fn)
+
+    remote_graph = Graph(config.get('global', 'py2neoAddress'))
+    return remote_graph
 
 @app.route('/')
 def home():
@@ -107,7 +107,6 @@ def login():
     form = loginForm()
     if form.validate_on_submit():
         user = User()
-        print("Username: ", form.username.data)
         user.username = form.username.data
         if check_for_username_password(user.username, form.password.data):
             login_user(user)
