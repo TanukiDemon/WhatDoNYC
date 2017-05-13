@@ -97,6 +97,7 @@ def signup():
 
             # Store the user's new username to be used in the wyr route
             session["username"] = form.username.data
+            login_user(newUser)
             return redirect('/wyr')
 
     return render_template('signup.html', title='Join us!', form=form)
