@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/static/recs.css">
     <link rel="stylesheet" type="text/css" href="/static/mobile-recs.css" media="screen and (max-width : 750px)">
     <script type="text/javascript" src="/static/recs.js"></script>
-    <script>
+        <script>
       function initMap() {
         // Create and load the map that is displayed on the page
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -139,15 +139,9 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-	   if(place.photos[0] != "") {
-		var imageLink = place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
-		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-        	document.getElementById("vicinity2").innerHTML = place.vicinity;
-	   } else {
-		var imageLink = "/static/like.png"; 
-		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-        	document.getElementById("vicinity2").innerHTML = place.vicinity;
-	   }
+           var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+            document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
+            document.getElementById("vicinity2").innerHTML = place.vicinity;
           }
         });
         service.getDetails({

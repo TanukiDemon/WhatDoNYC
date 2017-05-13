@@ -105,7 +105,7 @@ def login():
        else:
           flash("Incorrect Username")
           return render_template('login.html', title="Login", form=form)
-    flash("WELCOME TO WhatDoNYC")
+    
     return render_template('login.html', title="Login", form=form)
 
 @app.route('/forgot', methods=['GET', 'POST'])
