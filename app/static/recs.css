@@ -117,8 +117,8 @@ h4:hover {
   padding-left: 1%;
   padding-top: none;
   margin: 1%;
-  height: 380px;
-  width: 260px;
+  height: 440px;
+  width: 315px;
   color: #FFFFFF;
   text-align: center;
 
@@ -151,10 +151,6 @@ h4:hover {
   background-image: url('/static/nyc3.jpg');
 }
 
-#fourthRec{
-  background-image: url('/static/nyc4.jpg');
-}
-
 #map {
   height: 65%;
   width: 85%;
@@ -163,28 +159,26 @@ h4:hover {
   margin: 2%;
 }
 
-#buttons {
-  text-align: center;
-}
-
 #logout {
-  background-color: blue;
+  background-color: black;
   color: #ffffff;
-  width: 75px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  border-color: blue;
-  border-radius: 5px;
+	border: none;
+  font-size: 16px;
   cursor: pointer;	
 }
 
+#more {
+  display: inline-block;
+}
+
 #new {
-  background-color: blue;
-  color: #ffffff;
-  width: 200px;
+  display: inline-block;
+  background-color: black;
+  width: 140px;
+  height: auto;
   padding-top: 3px;
   padding-bottom: 3px;
-  border-color: blue;
+  border-color: black;
   border-radius: 5px;
   cursor: pointer;
 }
