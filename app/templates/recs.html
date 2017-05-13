@@ -100,7 +100,6 @@
         placeId1 = '{{ form.recommendations.choices[0][0] }}';
         placeId2 = '{{ form.recommendations.choices[1][0] }}';
         placeId3 = '{{ form.recommendations.choices[2][0] }}';
-        placeId4 = '{{ form.recommendations.choices[3][0] }}';
 
         var infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
@@ -121,10 +120,9 @@
                 place.formatted_address + '<br>');
               infowindow.open(map, this);
             });
-            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
+	    var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo1").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("vicinity1").innerHTML = place.vicinity;
-          }
+	    }
         });
         service.getDetails({
           placeId: placeId2
@@ -141,7 +139,6 @@
             });
            var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("vicinity2").innerHTML = place.vicinity;
           }
         });
         service.getDetails({
@@ -159,7 +156,6 @@
             });
             var imageLink= place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
             document.getElementById("photo3").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-            document.getElementById("vicinity3").innerHTML = place.vicinity;
           }
         });
       }
@@ -184,34 +180,36 @@
   <br><br><br><br><br>
 	  
   <h2 id="title">Your Recommendations</h2>
-  <h4 id="requestFeedback">Let us know what you think with a thumbs up or thumbs down</h4>
+  <h3 id="requestFeedback">Let us know what you think with a thumbs up or thumbs down</h3>
+
+	<br>
 	
   <div id="recommendations">
 
-        <div id="firstRec" class="reccard">
-        	<span><h4 onclick="singleRec(placeId1)">{{ form.recommendations.choices[0][1] }}</h4></span><br>
-        	<div id=photo1 onclick="singleRec(placeId1)"></div><br><br>
-        	<img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img>
-		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img><br><br>
-     	 </div>
-  
-      	<div id="secondRec" class="reccard">
-        	<span><h4 onclick="singleRec(placeId2)">{{ form.recommendations.choices[1][1] }}</h4></span><br>
-        	<div id=photo2 onclick="singleRec(placeId2)"></div><br><br>
-        	<img class="review" src="/static/like.png" onclick="getFeedback('1', placeId2); src='/static/like2.png'"></img>
-		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img><br><br>
-      	</div>
-  
-        <div id="thirdRec" class="reccard">
-        	<span><h4 onclick="singleRec(placeId3)">{{ form.recommendations.choices[2][1] }}</h4></span><br>
-        	<div id=photo3 onclick="singleRec(placeId3)"></div><br><br>
-        	<img class="review" src="/static/like.png" onclick="getFeedback('1', placeId3); src='/static/like2.png'"></img>
-		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img><br><br>
-    	 </div>
+	<figure>
+		<div id="photo1" onclick="singleRec(placeId1)"></div>
+		<h4><span>{{ form.recommendations.choices[0][1] }}</span></h4>
+    <img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img>
+		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img>
+	</figure>
 
-    	 <div id="more">
+	<figure>
+		<div id="photo2" onclick="singleRec(placeId2)"></div>
+		<h4><span>{{ form.recommendations.choices[1][1] }}</span></h4>
+		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId2); src='static/like2.png'"></img>
+		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img>
+	</figure>
+
+	<figure>
+		<div id="photo3" onclick="singleRec(placeId3)"></div>
+		<h4><span>{{ form.recommendations.choices[2][1] }}</span></h4>
+		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img>
+		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img>
+	</figure>		
+
+	<div id="more">
 		<img id="new" src="/static/arrow.png" onclick="window.location.reload(true)"></img>
-      	 </div>
+	</div>
     
   </div>
   
