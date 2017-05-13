@@ -43,6 +43,10 @@ body {
 	font-weight: bold;
 }
 
+#flashMessage {
+	color: red;
+}
+
 #login {
 	margin: auto;
 	padding: 10px;
