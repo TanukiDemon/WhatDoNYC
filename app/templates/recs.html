@@ -139,14 +139,9 @@
                 place.formatted_address + '</div>');
               infowindow.open(map, this);
             });
-	   if(place.photos[0] != "") {
-		var imageLink = place.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 400});
-		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-        	document.getElementById("vicinity2").innerHTML = place.vicinity;
-	   } else {
-		var imageLink = "/static/like.png"; 
-		document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
-        	document.getElementById("vicinity2").innerHTML = place.vicinity;
+	   var imageLink = "/static/like.png"; 
+	   document.getElementById("photo2").innerHTML= "<img class=\'photo\' src=\'" + imageLink + "\'></img>"
+           document.getElementById("vicinity2").innerHTML = place.vicinity;
 	   }
           }
         });
