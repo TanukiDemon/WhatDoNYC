@@ -1,184 +1,153 @@
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-  background-color: black;
-  text-align: center;
-  width: 100%; 
-  margin: 0 auto;
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	background-color: black;
+	text-align: center;
+	width: 100%; 
+	margin: 0 auto;
 }
 
 #header {
-  background-color: #000000;
-  color: #ffffff;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
+	background-color: #000000;
+	color: #ffffff;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
 }
 
 #name {
-  display: inline-block;
-  padding-left: 20px;
-  float:left;
+	display: inline-block;
+	padding-left: 20px;
+	float:left;
 }
 
 #navigation {
-  list-style-type: none;
-  display: inline-block;
-  vertical-align: middle;
-  padding-right: 50px;
-  padding-top: 15px;
-  float: right;
+	list-style-type: none;
+	display: inline-block;
+	vertical-align: middle;
+	padding-right: 50px;
+	padding-top: 15px;
+	float: right;
 }
 
 #navigation li {
-  list-style-type: none;
-  display: inline-block;
-  font-size: 16px;
-  text-transform: uppercase;
-  padding-left: 7px;
+	list-style-type: none;
+	display: inline-block;
+	font-size: 16px;
+	text-transform: uppercase;
+	padding-left: 7px;
 }
 
 #header ul li a {
-  color: #ffffff;
-  text-decoration: none;
+	color: #ffffff;
+	text-decoration: none;
 }
 
 #header ul li a:hover, #header ul li.selected a {
-  font-weight: bold;
-}
-
-#recommendations {
-  color: #000000;
-  text-align: center;
-  width:100%;
-  height: 58%;
-}
-
-.review {
-  cursor: pointer;
-  height: 50px;
-  width: auto;
-  padding:1%;
-  margin-top: 2%;
-}
-
-h4:hover {
-  cursor: pointer;
-}
-
-.photo{
-  width: 90%;
-  height: 40%;
-  border-radius: 35%;
-  max-height: 170px;
-  min-height: 170px;
-}
-
-#photo1:hover {
-  cursor: pointer;
-}
-
-#photo2:hover {
-  cursor: pointer;
-}
-
-#photo3:hover {
-  cursor: pointer;
-}
-
-#photo4:hover {
-  cursor: pointer;
-}
-
-#title {
-  color: #ffffff;
-  text-align: center;
-}
-
-#requestFeedback {
-  color: #ffffff;
-  text-align: center;
-}
-
-#footer {
-  color: #ffffff;
-  font-size: 12px;
-  text-align: center;
-}
-
-.reccard{
-  display: inline-block;
-  padding-left: 1%;
-  padding-top: none;
-  margin: 1%;
-  height: 440px;
-  width: 315px;
-  color: #FFFFFF;
-  text-align: center;
-
-  /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  background-color: #595959;
-  border-radius: 5%;
-}
-
-/* On mouse-over, add a deeper shadow */
-.reccard:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-/* Add some padding inside the card container */
-.container {
-  padding: 2px 16px;
-}
-
-#firstRec{
-  background-image: url('/static/nyc1.jpg');
-}
-
-#secondRec{
-  background-image: url('/static/nyc2.jpg');
-}
-
-#thirdRec{
-  background-image: url('/static/nyc3.jpg');
-}
-
-#map {
-  height: 65%;
-  width: 85%;
-  display: inline-block;
-  text-align: center;
-  margin: 2%;
+	font-weight: bold;
 }
 
 #logout {
-  background-color: black;
-  color: #ffffff;
+	background-color: black;
+	color: #ffffff;
 	border: none;
-  font-size: 16px;
-  cursor: pointer;	
+	font-size: 16px;
+	cursor: pointer;	
+}
+
+#title {
+	color: #ffffff;
+	text-align: center;
+}
+
+#requestFeedback {
+	color: #ffffff;
+	text-align: center;
+}
+
+#recommendations {
+	text-align: center;
+	width:100%;
+}
+
+figure {
+	display: inline-block;
+	margin: 1%;
+	padding-left: 1%;
+	cursor: pointer;
+	text-align: center;
+}
+
+img {
+	height: 400px;
+	width: 315px;
+	border-radius: 10%;
+	cursor: pointer;
+}
+
+h4 {
+	top: 260px;
+	position: absolute;
+	text-align: center;
+}
+
+span {
+	background-color: white;
+	letter-spacing: -1px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	text-align: center;
+}
+
+.review {
+	cursor: pointer;
+	height: 50px;
+	width: auto;
+	padding:1%;
+}
+
+.review:hover {
+	cursor: pointer;
 }
 
 #more {
-  display: inline-block;
+	display: inline-block;
+	verical-align: center;
 }
 
 #new {
-  display: inline-block;
-  background-color: black;
-  width: 140px;
-  height: auto;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  border-color: black;
-  border-radius: 5px;
-  cursor: pointer;
+	display: inline-block;
+	background-color: black;
+	width: 140px;
+	height: auto;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-color: black;
+	border-radius: 5px;
+	cursor: pointer;
 }
+
+#new:hover {
+	cursor: pointer;
+}
+
+#map {
+	height: 65%;
+	width: 85%;
+	display: inline-block;
+	text-align: center;
+	margin: 2%;
+}
+
+#footer {
+	color: #ffffff;
+	font-size: 12px;
+	text-align: center;
+}
+
