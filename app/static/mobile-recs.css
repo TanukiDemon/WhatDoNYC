@@ -23,7 +23,22 @@ body {
 	font-size: 12px;
 }
 
-#map {
+#placeName1 {
+	color: white;
+}
+
+#placeName2 {
+	color: white;
+}
+
+#placeName3 {
+	color: white;
+}
+
+h4 {
 	display: none;
 }
 
+#map {
+	display: none;
+}
