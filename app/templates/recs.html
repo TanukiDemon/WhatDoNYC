@@ -161,7 +161,7 @@
       }
     </script>
   </head>
-  <body onload="hideShow()">
+  <body>
     <div id="header">
     <h1 id="name">What Do NYC</h1>
     <ul id="navigation">
@@ -187,15 +187,13 @@
 	<figure>
 		<p id="placeName1">{{ form.recommendations.choices[0][1] }}</p>
 		<div id="photo1" onclick="singleRec(placeId1)"></div>
-		<h4><span>{{ form.recommendations.choices[0][1] }}</span></h4>
-    		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img>
+		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId1); src='static/like2.png'"></img>
 		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId1); src='/static/dislike2.png'"></img>
 	</figure>
 
 	<figure>
 		<p id="placeName2">{{ form.recommendations.choices[1][1] }}</p>
 		<div id="photo2" onclick="singleRec(placeId2)"></div>
-		<h4><span>{{ form.recommendations.choices[1][1] }}</span></h4>
 		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId2); src='static/like2.png'"></img>
 		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId2); src='/static/dislike2.png'"></img>
 	</figure>
@@ -203,7 +201,6 @@
 	<figure>
 		<p id="placeName3">{{ form.recommendations.choices[2][1] }}</p>
 		<div id="photo3" onclick="singleRec(placeId3)"></div>
-		<h4><span>{{ form.recommendations.choices[2][1] }}</span></h4>
 		<img class="review" src="static/like.png" onclick="getFeedback('1', placeId3); src='static/like2.png'"></img>
 		<img class="review" src="/static/dislike.png" onclick="getFeedback('0', placeId3); src='/static/dislike2.png'"></img>
 	</figure>		
