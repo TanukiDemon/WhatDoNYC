@@ -76,6 +76,21 @@ body {
 	width:100%;
 }
 
+#placeName1 {
+	color: black;
+	text-align: center;
+}
+
+#placeName2 {
+	color: black;
+	text-align: center;
+}
+
+#placeName3 {
+	color: black;
+	text-align: center;
+}
+
 figure {
 	display: inline-block;
 	margin: 1%;
@@ -92,7 +107,7 @@ img {
 }
 
 h4 {
-	top: 260px;
+	top: 300px;
 	position: absolute;
 	text-align: center;
 }
@@ -150,4 +165,3 @@ span {
 	font-size: 12px;
 	text-align: center;
 }
-
