@@ -77,17 +77,17 @@ body {
 }
 
 #placeName1 {
-	color: black;
+	color: white;
 	text-align: center;
 }
 
 #placeName2 {
-	color: black;
+	color: white;
 	text-align: center;
 }
 
 #placeName3 {
-	color: black;
+	color: white;
 	text-align: center;
 }
 
@@ -104,20 +104,6 @@ img {
 	width: 315px;
 	border-radius: 10%;
 	cursor: pointer;
-}
-
-h4 {
-	top: 300px;
-	position: absolute;
-	text-align: center;
-}
-
-span {
-	background-color: white;
-	letter-spacing: -1px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	text-align: center;
 }
 
 .review {
