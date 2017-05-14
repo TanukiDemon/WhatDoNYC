@@ -77,19 +77,33 @@ body {
 }
 
 #placeName1 {
-	color: white;
+	color: black;
 	text-align: center;
 }
 
 #placeName2 {
-	color: white;
+	color: black;
 	text-align: center;
 }
 
 #placeName3 {
-	color: white;
+	color: black;
 	text-align: center;
 }
+
+h4 {
+ 	top: 300px;
+ 	position: absolute;
+ 	text-align: center;
+ }
+ 
+ span {
+ 	background-color: white;
+ 	letter-spacing: -1px;
+ 	padding-top: 2px;
+ 	padding-bottom: 2px;
+ 	text-align: center;
+ }
 
 figure {
 	display: inline-block;
