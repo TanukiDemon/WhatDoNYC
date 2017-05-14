@@ -1,3 +1,12 @@
+// Decides which labels for recommendations to show based on size of screen
+function hideShow() {
+ 	if(window.innerWidth > 750) {
+ 		document.getElementById("placeName1").style.visibility = "hidden";
+ 		document.getElementById("placeName2").style.visibility = "hidden";
+ 		document.getElementById("placeName3").style.visibility = "hidden";
+ 	}
+ }
+
 // Asynchronous HTTP GET request for "theUrl" parameter provided to the function
 function httpGetAsync(theUrl, callback) {
 	var xmlHttp = new XMLHttpRequest();
