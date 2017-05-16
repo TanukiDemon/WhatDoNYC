@@ -210,11 +210,10 @@ def getRecommendationsForTraits(graph, n):
                                 "RETURN selectActs.placeID, selectActs.name "
                                 "LIMIT {lim}", curr = session['username'], lim = n))
 
-    # Feed the place IDs into a list before returning
+    # Feed the place IDs into a list and flip the order of
+    # the elements before returning
     r = recs.values.tolist()
-
-    r = [[i[1], i[0]] for i in r]
-    return r
+    return [[i[1], i[0]] for i in r]
 
 @app.route('/recs', methods=['GET', 'POST'])
 @login_required
@@ -234,7 +233,7 @@ def recs():
         # If user has no connections, get most popular activities with a positive
         # weight that correspond to their personality traits
         form = recsForm(request.form)
-        form.recommendations.choices = getRecommendationsForTraits(graph, 4)
+        form.recommendations.choices = getRecommendationsForTraits(graph, 3)
         return render_template('recs.html', title="Your recommendations", form=form)
 
     # Get all users who rated the same activities as the current user
@@ -245,7 +244,7 @@ def recs():
 
     if similarUsers.empty:
         # Get the most popular activities that correspond to user traits
-        form.recommendations.choices = getRecommendationsForTraits(graph, 4)
+        form.recommendations.choices = getRecommendationsForTraits(graph, 3)
         return render_template('recs.html', title="Your recommendations", form=form)
 
     # Create the dataframe that will contain possible activities to recommend
@@ -282,7 +281,7 @@ def recs():
     mergedDf = DataFrame(allActivities.groupby(['aPlace', 'aName']).size().rename('counts'))
 
     # Sort the rows based on values in counts column
-    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(4)
+    mostPopularDf = mergedDf.sort_values('counts', ascending=False).head(3)
 
     # Choices is a list of the four location ids with the highest count values
     form.recommendations.choices =  mostPopularDf.index.values.tolist()
@@ -290,8 +289,8 @@ def recs():
     # If less than four recommendations were made, then generate ones based on
     # the user's traits
     lngth = len(form.recommendations.choices)
-    if lngth < 4:
-        form.recommendations.choices += getRecommendationsForTraits(graph, 4-lngth)
+    if lngth < 3:
+        form.recommendations.choices += getRecommendationsForTraits(graph, 3-lngth)
 
     # The most popular activities are passed along to recs.html
     return render_template('recs.html', title="Your recommendations", form=form)
