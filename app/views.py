@@ -219,8 +219,8 @@ def getRecommendationsForTraits(graph, n):
     # with lists containing two empty strings as the recs template expects
     # three recommendations
     lngth = len(r)
-    if lngth < 3:
-        r += [["", ""]] * (3-lngth)
+    if lngth < n:
+        r += [["", ""]] * (n-lngth)
     return r
 
 @app.route('/recs', methods=['GET', 'POST'])
