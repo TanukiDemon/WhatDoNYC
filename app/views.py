@@ -213,7 +213,15 @@ def getRecommendationsForTraits(graph, n):
     # Feed the place IDs into a list and flip the order of
     # the elements before returning
     r = recs.values.tolist()
-    return [[i[1], i[0]] for i in r]
+    r = [[i[1], i[0]] for i in r]
+
+    # If less than three recommendations were returned, the list is filled
+    # with lists containing two empty strings as the recs template expects
+    # three recommendations
+    lngth = len(r)
+    if lngth < 3:
+        r += [["", ""]] * (3-lngth)
+    return r
 
 @app.route('/recs', methods=['GET', 'POST'])
 @login_required
