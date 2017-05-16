@@ -1,5 +1,7 @@
 body {
 	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	color: white;
+	background-color: black;
 }
 
 #header {
@@ -91,4 +93,3 @@ form ul {
 	list-style-type: none;
 	display: inline-block;
 }
-
