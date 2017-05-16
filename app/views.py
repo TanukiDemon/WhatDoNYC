@@ -36,7 +36,8 @@ def checkIfEmailExists(email):
 def check_for_username_password(username, password):
     sqliteSession = get_session()
     user = sqliteSession.query(User).filter(User.username == username).first()
-    return check_password_hash(user.password, password) and user
+    if checkIfUserExists(username):
+        return check_password_hash(user.password, password) and user
 
 def check_password(username, password):
     sqliteSession = get_session()
