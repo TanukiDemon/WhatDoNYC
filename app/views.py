@@ -38,6 +38,9 @@ def check_for_username_password(username, password):
     user = sqliteSession.query(User).filter(User.username == username).first()
     if checkIfUserExists(username):
         return check_password_hash(user.password, password) and user
+    else:
+        flash("Username does not exist")
+        return redirect('login')
 
 def check_password(username, password):
     sqliteSession = get_session()
