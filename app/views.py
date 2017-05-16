@@ -175,6 +175,7 @@ def reset():
         return render_template('reset.html', title = "Password do not match", form = form)
 
 @app.route('/wyr', methods=['GET', 'POST'])
+@login_required
 def wyr():
     # Serve "Would You Rather" survey
     form = wouldYouRatherForm(request.form)
