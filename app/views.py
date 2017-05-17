@@ -39,7 +39,7 @@ def check_for_username_password(username, password):
     if checkIfUserExists(username):
         return check_password_hash(user.password, password) and user
     else:
-        flash("Username does not exist")
+        flash('Username does not exist')
         return redirect('login')
 
 def check_password(username, password):
@@ -86,14 +86,16 @@ def li():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = signupForm(request.form)
-    form.securityQ.choices = [(1, "What was the last name of your fourth grade teacher"), (2, "What were the last four digits of your childhood telephone number?"), (3, "What was the name of the street you grew up on?")]
+    form.securityQ.choices = [(1, 'What was the last name of your fourth grade teacher'),
+        (2, 'What were the last four digits of your childhood telephone number?'),
+        (3, 'What was the name of the street you grew up on?')]
 
     if request.method == 'POST' and form.submit.data and form.validate_on_submit():
 
         if (checkIfUserExists(form.username.data) or checkIfEmailExists(form.email.data)):
         # If so, return register.html again
-            flash("Username or email already exists")
-            return render_template('signup.html', title="User already exists", form=form)
+            flash('Username or email already exists')
+            return render_template('signup.html', title='User already exists', form=form)
 
         # Otheriswe, insert the user in the sqlite database and render wyd.html
         else:
@@ -107,7 +109,7 @@ def signup():
             sqliteSession.commit()
 
             # Store the user's new username to be used in the wyr route
-            session["username"] = form.username.data
+            session['username'] = form.username.data
             login_user(newUser)
             return redirect('/wyr')
 
@@ -124,7 +126,7 @@ def login():
             session['username'] = user.username
             return redirect('recs')
         else:
-            flash("Username or password is incorrect")
+            flash('Username or password is incorrect')
             return render_template('login.html', title='Incorrect login info',
                                     form=form)
 
@@ -143,7 +145,7 @@ def forgotPass():
 
         return redirect('/secques')
     else:
-        return render_template('forgot.html', title="Username does not exist", form=form)
+        return render_template('forgot.html', title='Username does not exist', form=form)
 
 @app.route('/secques', methods = ['GET','POST'])
 def secques():
@@ -158,7 +160,7 @@ def secques():
         if answer == user.securityQAnswer:
             return redirect('/reset')
 
-    return render_template('secques.html', title="Security Question response incorrect", form=form)
+    return render_template('secques.html', title='Security Question response incorrect', form=form)
 
 @app.route('/reset', methods = ['GET','POST'])
 def reset():
@@ -172,7 +174,7 @@ def reset():
         sqliteSession.commit()
         return redirect('/login')
     else:
-        return render_template('reset.html', title = "Password do not match", form = form)
+        return render_template('reset.html', title = 'Password do not match', form = form)
 
 @app.route('/wyr', methods=['GET', 'POST'])
 @login_required
@@ -194,9 +196,9 @@ def wyr():
 
 @app.route('/about')
 def about():
-    return render_template('about.html', title="About What Do NYC")
+    return render_template('about.html', title='About What Do NYC')
 
-@app.route("/logout")
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -247,7 +249,7 @@ def recs():
         # weight that correspond to their personality traits
         form = recsForm(request.form)
         form.recommendations.choices = getRecommendationsForTraits(graph, 3)
-        return render_template('recs.html', title="Your recommendations", form=form)
+        return render_template('recs.html', title='Your recommendations', form=form)
 
     # Get all users who rated the same activities as the current user
     similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
@@ -258,7 +260,7 @@ def recs():
     if similarUsers.empty:
         # Get the most popular activities that correspond to user traits
         form.recommendations.choices = getRecommendationsForTraits(graph, 3)
-        return render_template('recs.html', title="Your recommendations", form=form)
+        return render_template('recs.html', title='Your recommendations', form=form)
 
     # Create the dataframe that will contain possible activities to recommend
     allActivities = DataFrame()
@@ -306,7 +308,7 @@ def recs():
         form.recommendations.choices += getRecommendationsForTraits(graph, 3-lngth)
 
     # The most popular activities are passed along to recs.html
-    return render_template('recs.html', title="Your recommendations", form=form)
+    return render_template('recs.html', title='Your recommendations', form=form)
 
 @app.route('/singleRec', methods=['GET'])
 def singleRec():
@@ -318,7 +320,7 @@ def feedback():
     rating = int(request.args.get('rating'))
     placeId = request.args.get('placeId')
     # Get a few values needed to run the query
-    currUser = session["username"]
+    currUser = session['username']
 
     # Add relationship in the database for user to placeId with weight rating
     # If the rating is one, then the user's likedVisits property must be incremented
@@ -333,4 +335,4 @@ def feedback():
         graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
                     "CREATE (u)-[:HAS_BEEN_TO{rating:0, recSetCounter:u.counter}]->(a)",
                     curr = currUser, pid=placeId)
-    return render_template('recs.html', title="Your recommendations")
+    return render_template('recs.html', title='Your recommendations')
