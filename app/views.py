@@ -179,14 +179,14 @@ def reset():
 @app.route('/wyr', methods=['GET', 'POST'])
 @login_required
 def wyr():
-    # Serve "Would You Rather" survey
+    # Serve 'Would You Rather' survey
     form = wouldYouRatherForm(request.form)
     username = session['username'] # Get current user's username
     if form.validate_on_submit():
         # Add user and their preferences to Neo4j database
         graph_session = getPy2NeoSession()
-        graph_session.run("CREATE (a:User {username: {uname}, trait1: {t1}, "
-                        "trait2: {t2}, trait3: {t3}, trait4: {t4}, counter: 0, likedVisits: 0})",
+        graph_session.run('CREATE (a:User {username: {uname}, trait1: {t1}, '
+                        'trait2: {t2}, trait3: {t3}, trait4: {t4}, counter: 0, likedVisits: 0})',
                         uname=username, t1=form.foodOrScience.data,
                         t2=form.artOrHistory.data, t3=form.outdoorsOrSports.data,
                         t4=form.entertainmentOrMusic.data)
@@ -208,14 +208,14 @@ def logout():
 # based on the user's personality traits
 def getRecommendationsForTraits(graph, n):
     # Get the required number of recommendations in DataFrame format
-    recs = DataFrame(graph.data("MATCH (u:User {username: {curr}}), (a:Activity) "
-                                "WHERE a.label = u.trait1 OR a.label = u.trait2 "
-                                "OR a.label = u.trait3 OR a.label = u.trait4 "
-                                "WITH a as selectActs, u as currU "
-                                "MATCH (selectActs), (currU) "
-                                "WHERE NOT (currU)-[:HAS_BEEN_TO]->(selectActs) "
-                                "RETURN selectActs.placeID, selectActs.name "
-                                "LIMIT {lim}", curr = session['username'], lim = n))
+    recs = DataFrame(graph.data('MATCH (u:User {username: {curr}}), (a:Activity) '
+                                'WHERE a.label = u.trait1 OR a.label = u.trait2 '
+                                'OR a.label = u.trait3 OR a.label = u.trait4 '
+                                'WITH a as selectActs, u as currU '
+                                'MATCH (selectActs), (currU) '
+                                'WHERE NOT (currU)-[:HAS_BEEN_TO]->(selectActs) '
+                                'RETURN selectActs.placeID, selectActs.name '
+                                'LIMIT {lim}', curr = session['username'], lim = n))
 
     # Feed the place IDs into a list and flip the order of
     # the elements before returning
@@ -227,7 +227,7 @@ def getRecommendationsForTraits(graph, n):
     # three recommendations
     lngth = len(r)
     if lngth < n:
-        r += [["", ""]] * (n-lngth)
+        r += [['', '']] * (n-lngth)
     return r
 
 @app.route('/recs', methods=['GET', 'POST'])
@@ -240,9 +240,9 @@ def recs():
     form = recsForm(request.form)
 
     # Count the number of currUser's activities
-    numActivities = graph.run("MATCH (u:User {username: {curr}} )"
-                                "SET u.counter = u.counter + 1 "
-                                "RETURN u.likedVisits", curr = currUser).evaluate()
+    numActivities = graph.run('MATCH (u:User {username: {curr}} )'
+                                'SET u.counter = u.counter + 1 '
+                                'RETURN u.likedVisits', curr = currUser).evaluate()
 
     if not numActivities:
         # If user has no connections, get most popular activities with a positive
@@ -252,10 +252,10 @@ def recs():
         return render_template('recs.html', title='Your recommendations', form=form)
 
     # Get all users who rated the same activities as the current user
-    similarUsers = DataFrame(graph.data("MATCH (u:User {username: {cUser}} )"
-                                    "-[:HAS_BEEN_TO{rating:1}]->(a:Activity)"
-                                    "<-[:HAS_BEEN_TO{rating:1}]-(other:User) "
-                                    "RETURN DISTINCT other.username", cUser = currUser))
+    similarUsers = DataFrame(graph.data('MATCH (u:User {username: {cUser}} )'
+                                    '-[:HAS_BEEN_TO{rating:1}]->(a:Activity)'
+                                    '<-[:HAS_BEEN_TO{rating:1}]-(other:User) '
+                                    'RETURN DISTINCT other.username', cUser = currUser))
 
     if similarUsers.empty:
         # Get the most popular activities that correspond to user traits
@@ -271,14 +271,14 @@ def recs():
 
         # Query for the activities that similar user liked but the current user
         # has never visited
-        actsDf = DataFrame(graph.data("MATCH (sim:User {username: {suser}})-"
-                                        "[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)"
-                                        "WITH simAct as allActs "
-                                        "MATCH (allActs) "
-                                        "WHERE NOT (:User {username:{curr}})-"
-                                        "[:HAS_BEEN_TO]->(allActs) "
-                                        "RETURN allActs.placeID as aPlace, "
-                                        "allActs.name as aName",
+        actsDf = DataFrame(graph.data('MATCH (sim:User {username: {suser}})-'
+                                        '[:HAS_BEEN_TO{rating:1}]->(simAct:Activity)'
+                                        'WITH simAct as allActs '
+                                        'MATCH (allActs) '
+                                        'WHERE NOT (:User {username:{curr}})-'
+                                        '[:HAS_BEEN_TO]->(allActs) '
+                                        'RETURN allActs.placeID as aPlace, '
+                                        'allActs.name as aName',
                                         suser = uname, curr = currUser))
 
         # 0.2 is the similarity cutoff
@@ -325,14 +325,14 @@ def feedback():
     # Add relationship in the database for user to placeId with weight rating
     # If the rating is one, then the user's likedVisits property must be incremented
     if rating == 1:
-        graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
-                    "SET u.likedVisits = u.likedVisits + 1 "
-                    "CREATE (u)-[:HAS_BEEN_TO{rating:1, recSetCounter:u.counter}]->(a)",
+        graph.run('MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) '
+                    'SET u.likedVisits = u.likedVisits + 1 '
+                    'CREATE (u)-[:HAS_BEEN_TO{rating:1, recSetCounter:u.counter}]->(a)',
                     curr = currUser, pid=placeId)
 
     # Otherwise, there is no reason to update the property
     else:
-        graph.run("MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) "
-                    "CREATE (u)-[:HAS_BEEN_TO{rating:0, recSetCounter:u.counter}]->(a)",
+        graph.run('MATCH (u:User {username:{curr}}), (a:Activity {placeID:{pid}}) '
+                    'CREATE (u)-[:HAS_BEEN_TO{rating:0, recSetCounter:u.counter}]->(a)',
                     curr = currUser, pid=placeId)
     return render_template('recs.html', title='Your recommendations')
