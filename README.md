@@ -60,12 +60,13 @@ written in Python 3.6.
 
 Databases
 ---------
-Sqlite database for user login and registration. The Neo4j graph database
+The sqlite database for user login and registration. The Neo4j graph database
 was used to generate new recommendations and create a map of the relationships
 between users.
 
 Dependency
 ==========
+  * Python 3.6.0
   * pip
   * flask
   * pandas
