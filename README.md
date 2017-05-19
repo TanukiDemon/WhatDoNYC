@@ -72,3 +72,8 @@ Dependency
   * pandas
   * py2neo
   * sqlalchemy
+  * werkzeug
+  * sqlite3
+  * flask_wtf
+  * flask_login
+  * wtforms
