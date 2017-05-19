@@ -266,6 +266,8 @@ def recs():
     allActivities = DataFrame()
     # Compute similarity of all similar users
     # Can pass in columns of dataframe into numpy vectorized function: beta.cdf(df.a, df.b, df.c)
+    # similarCount variable tracks number of users that make the similarity cutoff
+    similarCount = 0;
     for row in similarUsers.itertuples():
         i, uname = row
 
@@ -284,11 +286,18 @@ def recs():
         # 0.2 is the similarity cutoff
         shareCount = numActivities - actsDf.shape[0]
         if (shareCount / numActivities >= 0.2):
+            # Increment the number of users that make the cutoff
+            similarCount += 1
             # Since the similar user makes the cut off,
             # its dataframe is merged with allActivities
             frames = [allActivities, actsDf]
             allActivities = concat(frames)
 
+    # If not enough users make the cutoff, use getRecommendationsForTraits function for recs
+    if similarCount < 3:
+        form.recommendations.choices = getRecommendationsForTraits(graph, 3)
+        return render_template('recs.html', title='Your recommendations', form=form)
+    
     # All similarUsers have had their data processed and data has been
     # merged into allActivities as needed. The duplicated rows are combined
     # and a new column is created that that contains the number of times
