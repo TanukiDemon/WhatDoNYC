@@ -21,7 +21,8 @@ class User(Base): #inherits Base
     securityQAnswer = Column(String)
     status = Column(Integer)
 
-    def __init__(self, username=None, password=None, email=None, name=None, securityQ=None, answer=None, status=None):
+    def __init__(self, username=None, password=None, email=None, 
+                 name=None, securityQ=None, answer=None, status=None):
         self.username = username
         self.password = password
         self.email = email
